@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: set comprehension
-# key: setc
-# --
-{ ${2:exp} | ${1:x} in set ${4:s} & ${5:pred} }

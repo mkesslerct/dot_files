@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: exports all
-# key: ea
-# condition: (vdm-mode-util-is-sl)
-# --
-exports all$0

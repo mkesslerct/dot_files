@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: private access modifier
-# key: pv
-# condition: (vdm-mode-util-is-pp-or-rt)
-# --
-private$0

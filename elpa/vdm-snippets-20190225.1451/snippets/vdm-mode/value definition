@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: value definition
-# key: val
-# --
-${1:pattern} : ${2:type} = ${3:exp};$0

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: renamed
-# key: re
-# condition: (vdm-mode-util-is-sl)
-# --
-renamed$0
