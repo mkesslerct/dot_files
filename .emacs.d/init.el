@@ -16,7 +16,6 @@
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
 (setq TeX-PDF-mode t)
-;;Trying to program function to start emacs with shell command.
 ;;Cursor display
 (setq-default cursor-type 'bar) 
 
@@ -26,8 +25,11 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;;Disabling toolbar.
-;(menu-bar-mode -1)
-(setq initial-scratch-message t)
+;; (menu-bar-mode -1)
+
+;;Disabling splash screen and startup message.
+(setq inhibit-startup-message t)
+
 ;;Installing elpy (Programming python)
 
 
