@@ -1,3 +1,7 @@
+;; Getting emacs to not make shitty files.
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
+(setq backup-by-copying t)
+
 ;;-----------------------------
 ;; Setting up python in emacs.
 ;;-----------------------------

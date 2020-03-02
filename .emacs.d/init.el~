@@ -16,7 +16,6 @@
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
 (setq TeX-PDF-mode t)
-;;Trying to program function to start emacs with shell command.
 ;;Cursor display
 (setq-default cursor-type 'bar) 
 
