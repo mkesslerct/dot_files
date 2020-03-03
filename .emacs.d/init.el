@@ -1,10 +1,7 @@
-;; Getting emacs to not make shitty files.
-(setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
-(setq backup-by-copying t)
-
 ;;-----------------------------
 ;; Setting up python in emacs.
 ;;-----------------------------
+
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list
@@ -36,6 +33,8 @@
 
 ;;Installing elpy (Programming python)
 
+;;Better commenting.
+(evilnc-default-hotkeys)
 
 ;;Disabling beep sound.
 (setq visible-bell 1)
@@ -86,7 +85,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
