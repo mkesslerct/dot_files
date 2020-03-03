@@ -25,6 +25,9 @@
 ;;Answering yes or no with y and n.
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; disable automatic ~ files.
+(setq make-backup-files nil)
+
 ;;Disabling toolbar.
 ;; (menu-bar-mode -1)
 
@@ -34,7 +37,10 @@
 ;;Installing elpy (Programming python)
 
 ;;Better commenting.
-(evilnc-default-hotkeys)
+(global-set-key (kbd "M-;") 'evilnc-comment-or-uncomment-lines)
+(global-set-key (kbd "C-c l") 'evilnc-quick-comment-or-uncomment-to-the-line)
+(global-set-key (kbd "C-c c") 'evilnc-copy-and-comment-lines)
+(global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
 
 ;;Disabling beep sound.
 (setq visible-bell 1)
