@@ -26,7 +26,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; disable automatic ~ files.
-(setq make-backup-files nil)
+;; (setq make-backup-files nil)
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
 
 ;;Disabling toolbar.
 ;; (menu-bar-mode -1)
