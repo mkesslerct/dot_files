@@ -12,6 +12,11 @@
 (setq python-shell-interpreter "python3")
 (add-hook 'python-mode-hook #'(lambda () (setq py-python-command "python3")))
 ;;-----------------------------
+
+;; Definining all the acutes for spanish.
+(require 'iso-transl)
+
+
 (setq elpy-rpc-virtualenv-path 'current)
 
 (setq dired-listing-switches "-aBhl  --group-directories-first")
@@ -92,7 +97,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
