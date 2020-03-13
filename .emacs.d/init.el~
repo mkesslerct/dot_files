@@ -12,6 +12,16 @@
 (setq python-shell-interpreter "python3")
 (add-hook 'python-mode-hook #'(lambda () (setq py-python-command "python3")))
 ;;-----------------------------
+
+;; Definining all the acutes for spanish.
+(require 'iso-transl)
+
+;; Trying to add to load-path
+(add-to-list 'load-path "~/.emacs.d/flex.el")
+(require 'flex)
+(add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
+(autoload 'flex-mode "flex")
+
 (setq elpy-rpc-virtualenv-path 'current)
 
 (setq dired-listing-switches "-aBhl  --group-directories-first")
@@ -24,6 +34,10 @@
 
 ;;Answering yes or no with y and n.
 (fset 'yes-or-no-p 'y-or-n-p)
+
+;; disable automatic ~ files.
+;; (setq make-backup-files nil)
+(setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
 
 ;;Disabling toolbar.
 ;; (menu-bar-mode -1)
@@ -88,7 +102,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

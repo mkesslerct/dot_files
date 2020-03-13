@@ -16,6 +16,11 @@
 ;; Definining all the acutes for spanish.
 (require 'iso-transl)
 
+;; Trying to add to load-path
+(add-to-list 'load-path "~/.emacs.d/flex_sintax")
+(require 'flex)
+(add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
+(autoload 'flex-mode "flex")
 
 (setq elpy-rpc-virtualenv-path 'current)
 
