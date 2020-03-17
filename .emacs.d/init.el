@@ -1,7 +1,8 @@
-;;-----------------------------
-;; Setting up python in emacs.
-;;-----------------------------
+;;; package -- Summary
 
+;;; Commentary:
+
+;;; Code:
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list
@@ -22,13 +23,11 @@
 (add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
 (autoload 'flex-mode "flex")
 
-(setq elpy-rpc-virtualenv-path 'current)
-
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
 (setq TeX-PDF-mode t)
 ;;Cursor display
-(setq-default cursor-type 'bar) 
+(setq-default cursor-type 'bar)
 
 (global-set-key [f8] 'neotree-toggle)
 
@@ -44,8 +43,6 @@
 
 ;;Disabling splash screen and startup message.
 (setq inhibit-startup-message t)
-
-;;Installing elpy (Programming python)
 
 ;;Better commenting.
 (global-set-key (kbd "M-;") 'evilnc-comment-or-uncomment-lines)
@@ -102,7 +99,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -119,4 +116,18 @@
 (put 'erase-buffer 'disabled nil)
 
 
+;;-----------------------------
+;; Setting up python in emacs.
+;;-----------------------------
+(setq elpy-rpc-virtualenv-path 'current)
 (elpy-enable)
+(global-flycheck-mode)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;; ----------------------------
+
+;;; init.el ends here

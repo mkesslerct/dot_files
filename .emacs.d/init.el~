@@ -1,7 +1,3 @@
-;;-----------------------------
-;; Setting up python in emacs.
-;;-----------------------------
-
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list
@@ -17,12 +13,18 @@
 (require 'iso-transl)
 
 ;; Trying to add to load-path
-(add-to-list 'load-path "~/.emacs.d/flex.el")
+(add-to-list 'load-path "~/.emacs.d/flex_sintax")
 (require 'flex)
 (add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
 (autoload 'flex-mode "flex")
 
+;;-----------------------------
+;; Setting up python in emacs.
+;;-----------------------------
 (setq elpy-rpc-virtualenv-path 'current)
+(elpy-enable)
+
+;; ----------------------------
 
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
@@ -44,8 +46,6 @@
 
 ;;Disabling splash screen and startup message.
 (setq inhibit-startup-message t)
-
-;;Installing elpy (Programming python)
 
 ;;Better commenting.
 (global-set-key (kbd "M-;") 'evilnc-comment-or-uncomment-lines)
@@ -117,6 +117,3 @@
 ;;Number lines left.
 (global-linum-mode t)
 (put 'erase-buffer 'disabled nil)
-
-
-(elpy-enable)
