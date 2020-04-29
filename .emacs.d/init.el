@@ -130,4 +130,15 @@
 
 ;; ----------------------------
 
+;; fold-dwim keybinds.
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(load "fold-dwim")
+
+ (global-set-key (kbd "<f7>")      'fold-dwim-toggle)
+ (global-set-key (kbd "<M-f7>")    'fold-dwim-hide-all)
+ (global-set-key (kbd "<S-M-f7>")  'fold-dwim-show-all)
+
+;; Enabling hs-minor-mode
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
 ;;; init.el ends here

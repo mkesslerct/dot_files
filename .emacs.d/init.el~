@@ -1,3 +1,8 @@
+;;; package -- Summary
+
+;;; Commentary:
+
+;;; Code:
 (when (>= emacs-major-version 24)
   (require 'package)
   (add-to-list
@@ -18,19 +23,11 @@
 (add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
 (autoload 'flex-mode "flex")
 
-;;-----------------------------
-;; Setting up python in emacs.
-;;-----------------------------
-(setq elpy-rpc-virtualenv-path 'current)
-(elpy-enable)
-
-;; ----------------------------
-
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
 (setq TeX-PDF-mode t)
 ;;Cursor display
-(setq-default cursor-type 'bar) 
+(setq-default cursor-type 'bar)
 
 (global-set-key [f8] 'neotree-toggle)
 
@@ -102,7 +99,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -117,3 +114,48 @@
 ;;Number lines left.
 (global-linum-mode t)
 (put 'erase-buffer 'disabled nil)
+
+
+;;-----------------------------
+;; Setting up python in emacs.
+;;-----------------------------
+(setq elpy-rpc-virtualenv-path 'current)
+(elpy-enable)
+(global-flycheck-mode)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+(require 'yasnippet)
+(yas-global-mode 1)
+
+;; ----------------------------
+
+;; Testing code-folding
+;; (global-set-key (kbd "<f5>") 'set-selective-display-dlw)
+
+;; (defun set-selective-display-dlw (&optional level)
+;; "Fold text indented same of more than the cursor.
+;; If level is set, set the indent level to LEVEL.
+;; If 'selective-display' is already set to LEVEL, clicking
+;; F5 again will unset 'selective-display' by setting it to 0."
+;;   (interactive "P")
+;;   (if (eq selective-display (1+ (current-column)))
+;;       (set-selective-display 0)
+;;     (set-selective-display (or level (1+ (current-column))))))
+
+;; fold-dwim keybinds.
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(load "fold-dwim")
+
+ (global-set-key (kbd "<f7>")      'fold-dwim-toggle)
+ (global-set-key (kbd "<M-f7>")    'fold-dwim-hide-all)
+ (global-set-key (kbd "<S-M-f7>")  'fold-dwim-show-all)
+
+;; Enabling hs-minor-mode
+(define-globalized-minor-mode global-hs-minor-mode
+  hs-minor-mode hs-minor-mode)
+
+(global-hs-minor-mode 1)
+
+
+;;; init.el ends here
