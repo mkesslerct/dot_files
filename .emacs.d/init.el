@@ -141,4 +141,7 @@
 ;; Enabling hs-minor-mode
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
+;; Adding web_mode
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
 ;;; init.el ends here
