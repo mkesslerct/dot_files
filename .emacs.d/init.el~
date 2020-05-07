@@ -14,6 +14,8 @@
 (add-hook 'python-mode-hook #'(lambda () (setq py-python-command "python3")))
 ;;-----------------------------
 
+(require 'use-package)
+
 ;; Definining all the acutes for spanish.
 (require 'iso-transl)
 
@@ -99,7 +101,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (company-jedi company web-mode flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -115,33 +117,37 @@
 (global-linum-mode t)
 (put 'erase-buffer 'disabled nil)
 
-
 ;;-----------------------------
 ;; Setting up python in emacs.
 ;;-----------------------------
-(setq elpy-rpc-virtualenv-path 'current)
-(elpy-enable)
-(global-flycheck-mode)
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+;; (setq elpy-rpc-virtualenv-path 'current)
+;; (elpy-enable)
+;; (global-flycheck-mode)
+;; (when (require 'flycheck nil t)
+;;   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
+
 (require 'yasnippet)
 (yas-global-mode 1)
 
+;; Adding company mode and jedi for python.
+(add-hook 'after-init-hook 'global-company-mode)
+;; (defun my/python-mode-hook ()
+;;   (add-to-list 'company-backends 'company-jedi))
+
+;; (use-package company-jedi             ;;; company-mode completion back-end for Python JEDI
+;;   :config
+;;   (setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
+;;   (add-hook 'python-mode-hook 'jedi:setup)
+;;   (setq jedi:complete-on-dot t)
+;;   (setq jedi:use-shortcuts t)
+;;   (defun config/enable-company-jedi ()
+;;     (add-to-list 'company-backends 'company-jedi))
+;;  (add-hook 'python-mode-hook 'config/enable-company-jedi)) 
+
+
 ;; ----------------------------
-
-;; Testing code-folding
-;; (global-set-key (kbd "<f5>") 'set-selective-display-dlw)
-
-;; (defun set-selective-display-dlw (&optional level)
-;; "Fold text indented same of more than the cursor.
-;; If level is set, set the indent level to LEVEL.
-;; If 'selective-display' is already set to LEVEL, clicking
-;; F5 again will unset 'selective-display' by setting it to 0."
-;;   (interactive "P")
-;;   (if (eq selective-display (1+ (current-column)))
-;;       (set-selective-display 0)
-;;     (set-selective-display (or level (1+ (current-column))))))
 
 ;; fold-dwim keybinds.
 (add-to-list 'load-path "~/.emacs.d/lisp/")
@@ -152,10 +158,12 @@
  (global-set-key (kbd "<S-M-f7>")  'fold-dwim-show-all)
 
 ;; Enabling hs-minor-mode
-(define-globalized-minor-mode global-hs-minor-mode
-  hs-minor-mode hs-minor-mode)
+(add-hook 'prog-mode-hook #'hs-minor-mode)
 
-(global-hs-minor-mode 1)
+;; Adding web_mode
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
+;; Magit keybinds.
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;;; init.el ends here

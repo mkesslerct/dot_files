@@ -14,6 +14,8 @@
 (add-hook 'python-mode-hook #'(lambda () (setq py-python-command "python3")))
 ;;-----------------------------
 
+;; (require 'use-package)		   
+
 ;; Definining all the acutes for spanish.
 (require 'iso-transl)
 
@@ -99,7 +101,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (web-mode flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (company-quickhelp company-jedi company web-mode flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -115,18 +117,27 @@
 (global-linum-mode t)
 (put 'erase-buffer 'disabled nil)
 
-
 ;;-----------------------------
 ;; Setting up python in emacs.
 ;;-----------------------------
-(setq elpy-rpc-virtualenv-path 'current)
-(elpy-enable)
-(global-flycheck-mode)
-(when (require 'flycheck nil t)
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+;; (setq elpy-rpc-virtualenv-path 'current)
+;; (elpy-enable)
+;; (global-flycheck-mode)
+;; (when (require 'flycheck nil t)
+;;   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
+
 (require 'yasnippet)
 (yas-global-mode 1)
+
+;; Adding company mode and jedi for python.
+
+(require 'company)
+(global-company-mode 1)
+(add-to-list 'company-backends 'company-jedi)
+(setq company-show-numbers t)
+(company-quickhelp-mode)
 
 ;; ----------------------------
 
