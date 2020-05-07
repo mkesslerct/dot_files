@@ -101,7 +101,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (company-quickhelp company-jedi company web-mode flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -140,6 +140,19 @@
 (company-quickhelp-mode)
 
 ;; ----------------------------
+;; Web developing in emacs.
+
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook  'emmet-mode)
+(require 'rainbow-mode)
+(require 'autopair)
+(autopair-global-mode) ;; enable autopair in all buffers
+
+;; ---------------------------
 
 ;; fold-dwim keybinds.
 (add-to-list 'load-path "~/.emacs.d/lisp/")
@@ -148,12 +161,6 @@
  (global-set-key (kbd "<f7>")      'fold-dwim-toggle)
  (global-set-key (kbd "<M-f7>")    'fold-dwim-hide-all)
  (global-set-key (kbd "<S-M-f7>")  'fold-dwim-show-all)
-
-;; Enabling hs-minor-mode
-(add-hook 'prog-mode-hook #'hs-minor-mode)
-
-;; Adding web_mode
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 ;; Magit keybinds.
 (global-set-key (kbd "C-x g") 'magit-status)
