@@ -144,4 +144,7 @@
 ;; Adding web_mode
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
+;; Magit keybinds.
+(global-set-key (kbd "C-x g") 'magit-status)
+
 ;;; init.el ends here
