@@ -123,7 +123,7 @@
 
 ;; (setq elpy-rpc-virtualenv-path 'current)
 ;; (elpy-enable)
-;; (global-flycheck-mode)
+(global-flycheck-mode)
 ;; (when (require 'flycheck nil t)
 ;;   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
 ;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
@@ -138,6 +138,19 @@
 (add-to-list 'company-backends 'company-jedi)
 (setq company-show-numbers t)
 (company-quickhelp-mode)
+(setq company-dabbrev-downcase 0)
+(setq company-idle-delay 0)
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas-minor-mode)
+            (null (do-yas-expand)))
+        (if (check-expansion)
+            (company-complete-common)
+          (indent-for-tab-command)))))
+
+(global-set-key [backtab] 'tab-indent-or-complete)
 
 ;; ----------------------------
 ;; Web developing in emacs.
@@ -149,6 +162,8 @@
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'css-mode-hook  'emmet-mode)
 (require 'rainbow-mode)
+(add-hook 'css-mode-hook #'rainbow-mode)
+(add-hook 'web-mode-hook #'rainbow-mode)
 (require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers
 
@@ -164,5 +179,6 @@
 
 ;; Magit keybinds.
 (global-set-key (kbd "C-x g") 'magit-status)
+(setq magit-refresh-status-buffer nil)
 
 ;;; init.el ends here
