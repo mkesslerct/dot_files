@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: lstlisting
+# key: lstlisting
+# --
+\begin{lstlisting}[language=$1]
+\end{lstlisting}

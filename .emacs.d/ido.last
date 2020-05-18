@@ -1,0 +1,85 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/apache_server/apache2/" . "sites-enabled/")
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/apache_server/" . "apache2/")
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/" . "apache_server/")
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/" . "ficheros_config/")
+ ("/home/qkessler/Documents/SSTT_files/" . "23300350Q_Practica_SSTT_1920/")
+ ("/home/qkessler/Documents/CloudQuestions/.env/" . "bin/")
+ ("/home/qkessler/Documents/Investing/" . "ACN_Analysis/")
+ ("/home/qkessler/" . ".emacs.d/")
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/CloudQuestions_web/" . "__pycache__/")
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/" . "CloudQuestions_web/")
+ ("/home/qkessler/Documents/CloudQuestions/" . "CloudQuestions_web/")
+ ("/home/qkessler/Documents/" . "CloudQuestions/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/qkessler/.emacs.d/"
+ "/home/qkessler/Documents/SSTT_files/"
+ "/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/apache_server/apache2/sites-enabled/"
+ "/home/qkessler/Documents/CloudQuestions/.env/bin/"
+ "/home/qkessler/Documents/CloudQuestions/"
+ "/home/qkessler/Documents/Investing/"
+ "/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/CloudQuestions_web/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "init.el"
+ "23300350Q_Practica_SSTT_1920.zip"
+ "sstt0350.conf"
+ "activate"
+ "README.md"
+ "trabajo-diario.log"
+ "__init__.py"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/qkessler/.emacs.d/" (24258 39116 924506 137000) "session.10c61049c93d7cbb64157699992262938400000023320061" "session.10d6bbed928b7bb5c9158835771883662800000020400106" "session.102ed56aad33b61185157280175654616700000023200062" "session.101e4405d187a34c5f158713652515021800000025880093" "projectile-bookmarks.eld" "flex_sintax/" "session.1025e5af42b2c3f9b158541496174026600000018840085" "session.10cc0f2291bc4fb695157964312141551500000016120079" "session.106ceeb4f9779050d01575907711771200000023090062" "session.10df433abbd5dab0ca157652614487172800000015570061" "session.1046f7d52b3059eec158824503446599200000023330094" "session.10337b7ece33fef93158688066754915200000020470089" "session.10a4f170b3e7155055157744239654069000000022820061" "session.1048b0251b6d511c5158036734538994600000023730083" "session.10cb4ace58bcd98ce4158686449273474500000026630086" "session.10bd54e206f2043feb157599049466687800000014690063" "session.10e794fd0a30981b13158443468537545900000018400084" "session.106ce1fc80e578c3b1157978527868973400000022560062" "session.1028dc6ed4e219a2dd158913014725426500000023020091" "ido.last" "session.109a19f6efcdcb37415879235222002500000019650086" "session.101e3bfa9b3f1c9a9b157077618293664000000023240061" "session.10d48dcacf106072d7158470258418319400000019360096" "session.10e841b0bb76cfb210158962616730524200000020290093" "session.10301d89363637b8b4158844700833600400000019810092" "session.102bb4ac2b927fd2a015887903155018700000026150101" "session.108dbd505f96d0e6a3158799912547714400000026460102" "session.104b7ab9c2940fe93158704833150541900000020260102" "session.10355e52ad44e31afa158955858636206400000025610087" "session.10bdbb01223af7ef715856721929175200000019470093" "session.10415ae17c311534da157553344222987400000054770062" "session.107798edfc3ad819f3158583053528958400000020370089" "snippets/" "init.el" "session.10116e5363c45eb659158408984394873900000019280088" "session.1048b0251b6d511c5158037202538085000000023730085" "session.1029e1f243b6208d4f158901763938973100000024810093" "session.10794b551b752b1f46158558417512016700000019090090" "elpa/" "session.1020cc926991f7b121157224767884765300000021280062" "session.105d56aa195fdb47dc157596780653699900000014470062" "session.10cc0f2291bc4fb695157961301927858700000016120078" "session.104f0b0d2137e57dbe158326041654137900000017870084" "transient/" "auto-save-list/" "session.101a0116e1e07edfb1158920969011180900000020390095" "session.1017d6ce77ee68419a157979334474952000000015800062" "session.10ba66e2f372edb7a8158650765840823100000020700092" "session.10f929dd0ee58d1d1a158739592896997900000023090089" "session.106959dd5118d77783158944470515482800000030870095" "session.102190ee0c885a3fdf157286035576050800000023100065" "session.102d9473a28ba25b6a15804689854972700000025280090" "session.10f0fdbe25511b5bc158023915590215900000015770085" "session.10589ab096bace8ff2157971953576437200000021450063" "lisp/" "session.10803dabeabaa06412157855267826770500000024250061" "session.1053c79fec63da1b3a158843313471146200000020420098" "session.1095dc87336b9e6d8b157492584568867600000023760061" "session.102ab22ea930d9604a157069005748823100000015400061" "session.10d119933fdcf376be158575989876624000000019430085" "session.10f5cd87f542a8e1a0158686495999769100000019400085" "session.108ff0177027b5f2cd15882693932642300000019330093" ".#session.102ab22ea930d9604a157069005748823100000015400061" "session.10e130cde2b73235ea157708788037556700000014940061" "session.107e6703d75bb3a5c7158869553889742100000022920115" "session.101e8345e372adf0d5158507397757168700000018820084" "session.10c4faa106905e531a158386377180434600000018440085" "session.10f31e5b32d52d4aff158443723284835400000018330082" "session.10e12fafd13e0f154d158809128168499300000020100097" "session.104a007c87a1df7bec158584552283603700000019010086" "session.1074fc8e6a5657cfb7158722698452744000000024720090" "session.1011a507b187e94646158782843858623700000026910088" "session.10d18eea631222667515768656988189100000014730061" "session.106bffb171dedbf6f9158391230170688700000018260085" "session.1085fb4c43b6a095dc157323393957823200000015210063" "session.108fa7241e2e7c916c157072843695073700000014990062" "session.106766fdac86943249157997068965586000000025950063" "session.10134896fe35c4cd6a158953574495935400000020590102" "session.106668aaa633fb3d4158887050575550700000019370091" "session.10e17221f22f7b91f8158849694988955500000028100097" "session.10d8891eac595a44b158755518932562100000025930094" "session.10862ffa35c695499b15838244142806700000018680083" "session.10ec7d5c57b528cd8c157053274969938400000035970062" "backup/" "init.el~" "../" "./")
+
+ ("/home/qkessler/Documents/SSTT_files/" (24258 39024 677179 238000) ".git/" "../" "./" "webserver.log" "apache_server/" "traza23300350Q.pcap" "log.txt" "entrega_anticipada/" "23300350Q_Practica_SSTT_1920.zip" "23300350Q_Practica_SSTT_1920/" "entrega_final/")
+
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/apache_server/apache2/sites-enabled/" (24253 7483 414238 254000) "sstt0350.conf" "../" "./")
+
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/apache_server/apache2/" (24253 7483 414238 254000) "magic" "../" "./" "conf-available/" "mods-enabled/" "apache2.conf" "conf-enabled/" "envvars" "ports.conf" "sites-enabled/" "mods-available/" "passwords" "sites-available/")
+
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/apache_server/" (24253 7483 414238 254000) "www/" "../" "./" "apache2/")
+
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/ficheros_config/" (24253 7483 406238 273000) "../" "SSL/" "./" "apache_server/" "entrega_anticipada/" "DNS/" "IPsec/")
+
+ ("/home/qkessler/Documents/SSTT_files/23300350Q_Practica_SSTT_1920/" (24253 7041 256280 819000) "../" "./" "traza23300350Q.pcap" "23300350Q_Practica_SSTT_1920.pdf" "ficheros_config/")
+
+ ("/home/qkessler/Documents/SSII_Quique/" (24244 8279 208783 353000) "../" "./" "P1/" "P2/" "galib247-c2014/" "SSII_Quique_Script/" "pruebas/")
+
+ ("/home/qkessler/" (24258 30532 332155 603000) "Templates/" "win64" "*scratch*" "2020-04-02-16-30-55.068-VBoxSVC-20455.log" "Qkessler/" ".yarnrc" "Books/" "Desktop/" ".sudo_as_admin_successful" ".emacs.d/" ".pki/" "../" ".bashrc" ".bash_logout" "gnome-terminal/" "Videos/" "./" ".texlive2019/" ".nv/" "2020-04-02-20-21-21.043-VBoxSVC-2521.log" ".vscode/" ".angular-config.json" ".cache/" ".npm/" ".gnome/" ".aspell.en.prepl" ".yarn/" "Pictures/" "snap/" "Public/" ".selected_editor" ".bash_aliases" "Calibre Library/" ".gnupg/" ".viminfo" "udsclient.log" ".thunderbird/" "Wallpapers/" ".profile" ".local/" ".mozilla/" ".lesshst" "Downloads/" ".gitconfig" "Music/" ".python_history" ".aspell.en.pws" "lotion/" "bin/" ".ssh/" "VirtualBox VMs/" ".pylint.d/" "Documents/" ".bash_history" ".config/")
+
+ ("/home/qkessler/Documents/Investing/" (24258 13144 660348 747000) "lista_reglas/" "ListaComprobacionFinal.pdf" "checklist_balancesheet.pdf" "EPD_Analysis/" ".git/" "../" "WATCHLIST.xlsx" "THRM_Analysis/" "ListaComprobacionFinal.log" "CERN_Analysis/" "trabajo-diario.log" ".gitignore" ".plantilla.tex" "gurus_buying.md" "#trabajo-diario.log#" "./" "TXRH_Analysis/" "BA_Analysis/" "ACN_Analysis/" "README.md" "PFE_Analysis/" "F_Analysis/" "CVS_Analysis/" "circles_of_competence.png" "BTU_Analysis/" "FB_Analysis/" "ListaComprobacionFinal.aux" ".plantilla.log" "warrenBuffet-portf.ods" "listaInvestigar.md" "MPW_Analysis/" "ListaComprobacionFinal.tex" "UHS_Analysis/")
+
+ ("/home/qkessler/Documents/CloudQuestions/.env/bin/" (24257 35989 995283 293000) "coverage" "alembic" "markdown_py" "easy_install-3.8" "python3" "pyrsa-decrypt" "../" "django-admin.py" "Activate.ps1" "django-admin" "activate" "pip" "pyrsa-priv2pub" "migrate-repository" "activate.csh" "./" "mako-render" "python" "chardetect" "sqlformat" "pip3.8" "confusable_homoglyphs" "pbr" "pyjwt" "coverage-3.8" "activate.fish" "coverage3" "easy_install" "pyrsa-keygen" "pyrsa-verify" "pytest" "__pycache__/" "pip3" "pyrsa-sign" "pyrsa-encrypt" "py.test" "migrate")
+
+ ("/home/qkessler/Documents/CloudQuestions/.env/" (24250 22209 422250 501000) "../" "share/" "include/" "lib/" "./" "lib64/" "bin/" "pyvenv.cfg")
+
+ ("/home/qkessler/Documents/CloudQuestions/" (24258 27779 173662 138000) ".coverage" "requirements.txt" ".git/" "../" ".mypy_cache/" ".pytest_cache/" "./" "README.md" "testing_functionality/" ".coveragerc" "CloudQuestions_web/" ".env/")
+
+ ("/home/qkessler/Documents/" (24258 20198 660734 568000) "../" "notebooks/" "./" "Investing/" "ACmanager/" "CodeTaster-DPII/" "bdg2115-p3/" "SSTT_files/" "archivosGPDS/" "rotating_background/" "SSII_Quique/" "CloudQuestions/" "bdg2115-p2/" "100daysofWeb-files/" "test_layout.html" "archivosCOMP.zip" "archivosCOMP/" "watchlist_script/" "Configfile_emacs/")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/accounts/" (24258 13618 560566 842000) "views.py" "../" "migrations/" "src/" "./" "forms.py" "models.py" "templates/" "apps.py" "urls.py" "__pycache__/" "tests.py" "__init__.py" "admin.py")
+
+ ("/home/qkessler/Documents/Investing/ACN_Analysis/" (24248 7078 847067 516000) "HistoriaACN.pdf" "../" "HistoriaACN.log" "src/" "./" "HistoriaACN.tex" "HistoriaACN.aux" "files/")
+
+ ("/home/" (24138 39423 860836 450000) "../" "./" "qkessler/")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/CloudQuestions_web/" (24258 11312 676738 982000) "wsgi.py" "../" "./" "settings.py" "urls.py" "asgi.py" "__pycache__/" "__init__.py")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/CloudQuestions_web/__pycache__/" (24254 36738 862829 819000) "../" "./" "settings.cpython-37.pyc" "wsgi.cpython-38.pyc" "__init__.cpython-38.pyc" "urls.cpython-38.pyc" "wsgi.cpython-37.pyc" "__init__.cpython-37.pyc" "settings.cpython-38.pyc" "urls.cpython-37.pyc")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/" (24254 52814 953114 597000) "static/" "manage.py" "../" "tmp/" ".pytest_cache/" "./" "templates/" "accounts/" "CloudQuestions_web/" "questions.sqlite" "questions/")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

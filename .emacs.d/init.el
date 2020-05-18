@@ -73,12 +73,6 @@
 ;; Disabling toolbar.
 (tool-bar-mode -1)
 
-;;Configuration auto-complete.
-
-;;(require 'auto-complete)
-;;(ac-config-default)
-
-
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
@@ -101,7 +95,7 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode flycheck markdown-mode evil-nerd-commenter neotree auctex elpy magit vdm-snippets auto-complete dracula-theme))))
+    (projectile smooth-scrolling flymake pylint flycheck-pycheckers monokai-theme subatomic-theme autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode markdown-mode evil-nerd-commenter neotree auctex magit vdm-snippets auto-complete dracula-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -109,9 +103,11 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; Trying to load theme forever.
+;; THEMES:
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-(load-theme 'dracula t)
+;; (load-theme 'dracula t)
+;; (load-theme 'subatomic t)
+(load-theme 'monokai t)
 
 ;;Number lines left.
 (global-linum-mode t)
@@ -121,12 +117,9 @@
 ;; Setting up python in emacs.
 ;;-----------------------------
 
-;; (setq elpy-rpc-virtualenv-path 'current)
-;; (elpy-enable)
-(global-flycheck-mode)
-;; (when (require 'flycheck nil t)
-;;   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-;;   (add-hook 'elpy-mode-hook 'flycheck-mode))
+(global-flycheck-mode 1)
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
 
 (require 'yasnippet)
 (yas-global-mode 1)
@@ -181,4 +174,21 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 (setq magit-refresh-status-buffer nil)
 
-;;; init.el ends here
+;; Adding newline at end of file.
+(setq next-line-add-newlines t)
+
+
+;; Better buffer cycling.
+(ido-mode 1)
+(setq ido-separator "\n")
+
+;; Smooth-scrolling in emacs.
+(require 'smooth-scrolling)
+(smooth-scrolling-mode 1)
+
+;;
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
+
+
+;; init.el ends here
