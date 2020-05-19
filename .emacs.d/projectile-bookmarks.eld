@@ -1,1 +1,1 @@
-("~/Documents/SSTT_files/" "~/Documents/CloudQuestions/")
+("~/Documents/CloudQuestions/" "~/Documents/Configfile_emacs/" "~/Documents/SSTT_files/")

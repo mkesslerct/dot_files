@@ -95,7 +95,8 @@
     ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
  '(package-selected-packages
    (quote
-    (projectile smooth-scrolling flymake pylint flycheck-pycheckers monokai-theme subatomic-theme autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode markdown-mode evil-nerd-commenter neotree auctex magit vdm-snippets auto-complete dracula-theme))))
+    (elpy projectile smooth-scrolling flymake pylint monokai-theme subatomic-theme autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode markdown-mode evil-nerd-commenter neotree auctex magit vdm-snippets auto-complete dracula-theme)))
+ '(pyvenv-tracking-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -117,31 +118,22 @@
 ;; Setting up python in emacs.
 ;;-----------------------------
 
-(global-flycheck-mode 1)
-(with-eval-after-load 'flycheck
-  (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
+;; Adding elpy.
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
 
-(require 'yasnippet)
-(yas-global-mode 1)
+(add-hook 'elpy-mode-hook (lambda ()
+                            (add-hook 'before-save-hook
+                                      'elpy-autopep8-fix-code nil t)))
 
-;; Adding company mode and jedi for python.
 
-(require 'company)
-(global-company-mode 1)
-(add-to-list 'company-backends 'company-jedi)
-(setq company-show-numbers t)
-(company-quickhelp-mode)
-(setq company-dabbrev-downcase 0)
+(when (load "flycheck" t t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
 (setq company-idle-delay 0)
-(defun tab-indent-or-complete ()
-  (interactive)
-  (if (minibufferp)
-      (minibuffer-complete)
-    (if (or (not yas-minor-mode)
-            (null (do-yas-expand)))
-        (if (check-expansion)
-            (company-complete-common)
-          (indent-for-tab-command)))))
 
 (global-set-key [backtab] 'tab-indent-or-complete)
 
