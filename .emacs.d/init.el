@@ -129,6 +129,23 @@
                                       'elpy-autopep8-fix-code nil t)))
 
 
+(require 'company)
+(global-company-mode 1)
+(add-to-list 'company-backends 'company-jedi)
+(setq company-show-numbers t)
+(company-quickhelp-mode)
+(setq company-dabbrev-downcase 0)
+(setq company-idle-delay 0)
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas-minor-mode)
+            (null (do-yas-expand)))
+        (if (check-expansion)
+            (company-complete-common)
+          (indent-for-tab-command)))))
+
 (when (load "flycheck" t t)
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
