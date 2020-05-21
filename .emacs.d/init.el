@@ -90,13 +90,57 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(compilation-message-face (quote default))
  '(custom-safe-themes
    (quote
-    ("274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+    ("f9aede508e587fe21bcfc0a85e1ec7d27312d9587e686a6f5afdbb0d220eab50" "3fa65d60abd566321f93d1354f91dedae8ab795bb688a421c69e2e0f7fa3c9bc" "274fa62b00d732d093fc3f120aca1b31a6bb484492f31081c1814a858e25c72e" default)))
+ '(fci-rule-color "#3C3D37")
+ '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
+ '(highlight-tail-colors
+   (quote
+    (("#3C3D37" . 0)
+     ("#679A01" . 20)
+     ("#4BBEAE" . 30)
+     ("#1DB4D0" . 50)
+     ("#9A8F21" . 60)
+     ("#A75B00" . 70)
+     ("#F309DF" . 85)
+     ("#3C3D37" . 100))))
+ '(magit-diff-use-overlays nil)
+ '(org-fontify-whole-heading-line t)
+ '(org-hide-leading-stars t)
+ '(org-highlight-latex-and-related (quote (latex script entities)))
  '(package-selected-packages
    (quote
-    (elpy projectile smooth-scrolling flymake pylint monokai-theme subatomic-theme autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode markdown-mode evil-nerd-commenter neotree auctex magit vdm-snippets auto-complete dracula-theme)))
- '(pyvenv-tracking-mode t))
+    (org-bullets doom-modeline challenger-deep-theme elpy projectile smooth-scrolling flymake pylint monokai-theme subatomic-theme autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode markdown-mode evil-nerd-commenter neotree auctex magit vdm-snippets auto-complete dracula-theme)))
+ '(pos-tip-background-color "#FFFACE")
+ '(pos-tip-foreground-color "#272822")
+ '(pyvenv-tracking-mode t)
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#F92672")
+     (40 . "#CF4F1F")
+     (60 . "#C26C0F")
+     (80 . "#E6DB74")
+     (100 . "#AB8C00")
+     (120 . "#A18F00")
+     (140 . "#989200")
+     (160 . "#8E9500")
+     (180 . "#A6E22E")
+     (200 . "#729A1E")
+     (220 . "#609C3C")
+     (240 . "#4E9D5B")
+     (260 . "#3C9F79")
+     (280 . "#A1EFE4")
+     (300 . "#299BA6")
+     (320 . "#2896B5")
+     (340 . "#2790C3")
+     (360 . "#66D9EF"))))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   (quote
+    (unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -104,15 +148,26 @@
  ;; If there is more than one, they won't work right.
  )
 
+;; CHANGES AESTHETICS.
+;; -------------------
 ;; THEMES:
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 ;; (load-theme 'dracula t)
 ;; (load-theme 'subatomic t)
-(load-theme 'monokai t)
+;; (load-theme 'monokai t)
+(load-theme 'challenger-deep t)
 
 ;;Number lines left.
 (global-linum-mode t)
 (put 'erase-buffer 'disabled nil)
+
+(require 'doom-modeline)
+(doom-modeline-mode 1)
+(setq doom-modeline-project-detection 'project)
+(setq doom-modeline-window-width-limit fill-column)
+(require 'all-the-icons)
+
+;; -------------------
 
 ;;-----------------------------
 ;; Setting up python in emacs.
@@ -195,9 +250,36 @@
 (require 'smooth-scrolling)
 (smooth-scrolling-mode 1)
 
-;;
+;; Projectile.
 (projectile-mode +1)
 (define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
 
+;; Org-mode config.
+(setq initial-major-mode 'org-mode)
+(use-package org-bullets
+  :init
+  (add-hook 'org-mode-hook 'org-bullets-mode))
+(setq org-ellipsis "⤵")
+(setq org-src-fontify-natively t)
+(setq org-src-tab-acts-natively t)
+(setq org-src-window-setup 'current-window)
+(setq org-adapt-indentation nil)
+(setq org-latex-pdf-process
+      '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
+(setq TeX-parse-self t)
+(setq TeX-PDF-mode t)
+(add-hook 'LaTeX-mode-hook
+          (lambda ()
+            (LaTeX-math-mode)
+            (setq TeX-master t)))
+(custom-set-faces
+  '(org-level-1 ((t (:inherit outline-1 :height 1.0))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+  '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+  '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
+)
 ;; init.el ends here

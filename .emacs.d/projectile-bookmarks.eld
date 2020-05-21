@@ -1,1 +1,1 @@
-("~/Documents/archivosCOMP/" "~/Documents/Investing/" "~/Documents/CloudQuestions/" "~/Documents/Configfile_emacs/" "~/Documents/SSTT_files/")
+("~/Documents/Investing/" "~/Documents/archivosCOMP/" "~/Documents/CloudQuestions/" "~/Documents/saved_CQ/" "~/Documents/archivosGPDS/" "~/Documents/Configfile_emacs/" "~/Documents/SSTT_files/")
