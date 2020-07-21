@@ -1,0 +1,119 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/qkessler/Documents/archivosGPDS/" . "P4/")
+ ("/home/qkessler/Documents/archivosCOMP/" . "miniPascalEnriqueKessler-JULIO/")
+ ("/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/P2/" . "memoriaP2/")
+ ("/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/" . "P2/")
+ ("/home/qkessler/Downloads/contenido_practicas_windows/" . "SSII_Quique/")
+ ("/home/qkessler/Downloads/" . "contenido_practicas_windows/")
+ ("/home/qkessler/Documents/SSII_Quique/P1/" . "memoriaP1/")
+ ("/home/qkessler/Documents/SSII_Quique/P2/" . "memoriaP2/")
+ ("/home/qkessler/Documents/SSII_Quique/" . "P2/")
+ ("/home/qkessler/Documents/" . "SSII_Quique/")
+ ("/home/qkessler/" . "Documents/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/qkessler/Documents/archivosGPDS/P4/"
+ "/home/qkessler/Documents/SSII_Quique/P2/memoriaP2/"
+ "/home/qkessler/Documents/watchlist_script/"
+ "/home/qkessler/Downloads/"
+ "/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/P2/memoriaP2/"
+ "/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/P1/memoriaP1/"
+ "/home/qkessler/Downloads/Telegram Desktop/"
+ "/home/qkessler/Documents/SSII_Quique/P1/memoriaP1/"
+ "/home/qkessler/Documents/SSII_Quique/P2/"
+ "/home/qkessler/Documents/SSII_Quique/P2/archivosP2/"
+ "/home/qkessler/.emacs.d/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "memoria-p4-3.7.tex"
+ "memoriaP2.tex"
+ "secret_config.py"
+ "sintactico.y"
+ "manualUso-p1.tex"
+ "sidra.txt"
+ "manualUso.tex"
+ "program.cpp"
+ "manualUso.org"
+ "notas.org"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/qkessler/Documents/archivosGPDS/P4/" (24267 57062 126496 670000) "memoria-p4-3.7.aux" "../" "plan_de_trabajo3.7-p4.pdf" "src/" "plan_de_trabajo3.7-p4.aux" "plan_de_trabajo3.7-p4.out" "./" "plan_de_trabajo3.7-p4.tex" "P4-3.7.xlsx" "plan_de_trabajo3.7-p4.log" "memoria-p4-3.7.toc" "P4-3.7.zip" "memoria-p4-3.7.out" "memoria-p4-3.7.pdf" "memoria-p4-3.7.log" "plan_de_trabajo3.7-p4.toc" "memoria-p4-3.7.tex")
+
+ ("/home/qkessler/Documents/archivosGPDS/" (24309 48166 103441 450000) "KesslerMartínez,Enrique_práctica2.zip" ".git/" "../" "guiadoors.log" "src/" "plan_de_trabajo.tex" "FichasCambio.docx" "PlanTrabajo.pdf" "./" "plan_de_trabajo.aux" "coger_todas_sections.py" "guiadoors.tex" "SRS_Gestion bibliotecaria _corregido.doc" "guiadoors.aux" "guiadoors.out" "P3.zip" "P3/" "SRS_Gestion bibliotecaria _corregido.pdf" "SRS-CasoEstudio.pdf" "entrega-anticipada3.7.pdf" "FichasCambio.pdf" "plan_de_trabajo.pdf" "plan_de_trabajo.log" "extra/" "P4.zip" "P4/" "plan_de_trabajo.out" "DOORS.pdf" "plan_de_trabajo.toc" "Actividades3/" "sesion2-GWWE/")
+
+ ("/home/qkessler/Documents/archivosGPDS/P3/" (24309 49146 812411 628000) "plan_de_trabajo3.7.tex" "Ejercicio1.mpp" "../" "src/" "plan_de_trabajo3.7.out" "./" "documentoUso3.7.pdf" "documentoUso.tex" "Ejercicio2.mpp" "documentoUso.pdf" "Ejercicio3.mpp" "documentoUso.log" "documentoUso.aux" "documentoUso.toc" "KesslerMartínez,Enrique_práctica3.zip" "documentoUso.lof" "plan_de_trabajo3.7.log" "documentoUso.out" "plan_de_trabajo3.7.pdf" "plan_de_trabajo3.7.toc" "plan_de_trabajo3.7.aux")
+
+ ("/home/qkessler/Documents/SSII_Quique/P1/" (24297 3033 50783 997000) "feedback.log" "../" "galibdoc.pdf" "feedback.tex" "SSII_Quique.layout" "obj/" "SSII_Quique.depend" "nreinas.cpp" "materialssii.pdf" "feedback.aux" "./" "feedback.pdf" "memoriaP1/" "feedback.out" "Sudoku.cpp" "EstructurayMetodos/" "Guion-P1-_ENERO_--2019-20.pdf" "Casos/" "tabla_P1.ods" "SSII_Quique.cbp" "bin/")
+
+ ("/home/qkessler/Documents/" (24308 55565 673516 735000) "bypass-paywalls-chrome-master/" "leetCode_ejers/" "capturas_GPDS/" "../" "notebooks/" "practicasSSII_EnriqueKesslerMartínez_INCOMPLETO.zip" "practicasSSII_EnriqueKesslerMartínez/" "./" "Investing/" "ACmanager/" "CodeTaster-DPII/" "bdg2115-p3/" "SSTT_files/" "archivosGPDS/" "rotating_background/" "SSII_Quique/" "Ficheros/" "CloudQuestions/" "bdg2115-p2/" "100daysofWeb-files/" "topic_files/" "archivosCOMP/" "watchlist_script/" "Configfile_emacs/")
+
+ ("/home/qkessler/Documents/archivosCOMP/" (24301 52159 361306 861000) ".git/" "../" "practicas/" "./" "README.md" "miniPascalEnriqueKessler-JULIO.zip" "miniPascalEnriqueKessler-JULIO/")
+
+ ("/home/qkessler/Documents/watchlist_script/" (24306 60889 682797 649000) "test_script.sh" "requirements.txt" ".git/" "../" ".mypy_cache/" "./" "README.md" "secret_config.py" "watchlist.log" "client_secret.json" "send_email.py" "LICENSE" "__pycache__/" "resources/" "program.py" ".env/" "watchlist.py")
+
+ ("/home/qkessler/Documents/archivosCOMP/miniPascalEnriqueKessler-JULIO/" (24301 51984 211446 436000) "salidas_ficheros/" "listaCodigo.h" "../" "listaSimbolos.c" "listaSimbolos.h" "Makefile" "listaCodigo.c" "./" "sintactico.y" "practicasCOMP-julio.pdf" "main.c" "lexico.l")
+
+ ("/home/qkessler/Documents/archivosCOMP/practicas/minipascal/" (24301 51736 910055 382000) "miniPascalEnriqueKesslerJuanJesúsHerrero.zip" "listaCodigo.h" "test_semprueba.mp" "../" "test_sem2.mp" "listaSimbolos.c" "test_problema1.mp" "listaSimbolos.h" "test_sem1.mp" "memoria/" "Makefile" "sintactico_nacho.tab.h" "listaCodigo.c" "./" "tests/" "core" "test_cod1.mp" "sintactico.y" "minip" "output_enrique.txt" "main.c" "test.c" "testLC.c" "sintactico.tab.h" "test_sem4.mp" "lexico.l" "test_sem3.mp" "sintactico_nacho.y" "sintactico_nacho.output" "entrada~" "practicasCOMP-junio.pdf" "test_lex1.mp" "sintactico.output" "lex.yy.c" "sintactico.tab.c" "sintactico_nacho.tab.c")
+
+ ("/home/qkessler/Documents/archivosCOMP/practicas/minipascal/memoria/" (24301 51765 581752 528000) "salidas_ficheros/" "practicasCOMP-junio.aux" "../" "practicasCOMP-junio.tex" "./" "practicasCOMP-julio.pdf" "practicasCOMP-junio.log" "practicasCOMP-junio.out" "practicasCOMP-julio.aux" "practicasCOMP-julio.log" "practicasCOMP-julio.toc" "practicasCOMP-junio.pdf" "practicasCOMP-junio.toc" "practicasCOMP-julio.tex")
+
+ ("/home/qkessler/Downloads/" (24301 49613 173205 249000) "../" "./" "sintactico.y" "Telegram Desktop/" "contenido_practicas_windows/" "contenido_practicas_windows.zip" "bypass-paywalls-chrome-master.zip")
+
+ ("/home/qkessler/Documents/archivosCOMP/practicas/" (24262 21125 886736 744000) "practicaIMAILI/" "../" "ficheros-prueba/" "./" "MiniPascal_EnriqueKessler.zip" "minipascal/" "prácticasCOMP_13-2.txt")
+
+ ("/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/P2/memoriaP2/" (24301 47159 247520 590000) "memoriaP2.toc" "manualUso-p2.pdf" "manualUso.pdf" "../" "manualUso.log" "manualUso.aux" "./" "manualUso-p2.log" "texput.log" "memoriaP2.out" "manualUso-p2.aux" "memoriaP2.aux" "manualUso.org" "memoriaP2.log" "memoriaP2.tex" "manualUso-p2.tex" "memoriaP2.org" "memoriaP2.pdf")
+
+ ("/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/P2/" (24297 51206 0 0) "notas.tex" "program.exe" "../" "archivosP2/" "a.out" "makefile" "./" "memoriaP2/" "notas.org" "program" "#notas.tex#" "program.cpp")
+
+ ("/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/P1/" (24298 61928 0 0) "feedback.log" "../" "galibdoc.pdf" "feedback.tex" "SSII_Quique.layout" "obj/" "SSII_Quique.depend" "nreinas.cpp" "materialssii.pdf" "feedback.aux" "./" "feedback.pdf" "memoriaP1/" "feedback.out" "Sudoku.cpp" "EstructurayMetodos/" "Guion-P1-_ENERO_--2019-20.pdf" "Casos/" "tabla_P1.ods" "SSII_Quique.cbp" "bin/")
+
+ ("/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/P1/memoriaP1/" (24301 46791 119307 731000) "memoriaP1.log" "manualUso.pdf" "../" "memoriaP1.tex~" "manualUso.log" "manualUso.aux" "src/" "manualUso-p1.log" "memoriaP1.ilg" "memoriaP1.tex" "./" "manualUso-p1.pdf" "memoriaP1.pdf" "manualUso-p1.aux" "tabla_P1.pdf" "memoriaP1.toc" "manualUso-p1.tex" "memoriaP1.aux")
+
+ ("/home/qkessler/Downloads/contenido_practicas_windows/SSII_Quique/" (24297 51206 0 0) "../" "./" "P1/" "P2/" "galib247-c2014/" "SSII_Quique_Script/" "pruebas/")
+
+ ("/home/qkessler/Downloads/contenido_practicas_windows/" (24301 46505 783462 161000) "practicasSSII_EnriqueKesslerMartínez_INCOMPLETO/" "../" "./" "SSII_Quique/")
+
+ ("/home/qkessler/" (24301 3049 827859 82000) "Templates/" "win64" "*scratch*" "2020-04-02-16-30-55.068-VBoxSVC-20455.log" "Qkessler/" ".yarnrc" "Books/" "Desktop/" ".sudo_as_admin_successful" ".emacs.d/" ".pki/" "../" ".ivy2/" ".bashrc" ".bash_logout" "gnome-terminal/" "Videos/" "./" ".texlive2019/" ".nv/" "2020-04-02-20-21-21.043-VBoxSVC-2521.log" ".vscode/" ".angular-config.json" ".cache/" ".npm/" ".gnome/" ".aspell.en.prepl" ".sbt/" ".yarn/" "Pictures/" "snap/" "Public/" "test.tex" ".selected_editor" ".bash_aliases" "Calibre Library/" ".gnupg/" ".viminfo" "udsclient.log" ".thunderbird/" "Wallpapers/" "zaiste-theme.el" ".profile" ".local/" ".mozilla/" ".lesshst" "Downloads/" ".gitconfig" "Music/" ".python_history" ".aspell.en.pws" "lotion/" "bin/" ".ssh/" "VirtualBox VMs/" ".pylint.d/" "Documents/" ".bash_history" ".config/")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/templates/registration/" (24301 432 617999 463000) "password_reset_complete.html" "../" "password_reset_confirm.html" "password_change_done.html" "login.html" "./" "password_reset_subject.txt" "logged_out.html" "password_reset_form.html" "password_reset_email.html" "password_change_form.html" "password_reset_done.html")
+
+ ("/home/qkessler/Downloads/Telegram Desktop/" (24297 58117 263193 594000) "../" "Acta_reunion.pdf" "1911_SSTT_Adenda.pdf" "Mariano_Fernandez_trabajo-reconocimiento-digitos.Rmd" "Eloy_Andreu_trabajo-reconocimiento-digitos.Rmd" "./" "resumen ejecutivo.pdf" "guia_voluntario.pdf" "Francisco_Garcia_trabajo-reconocimiento-digitos.Rmd" "ficheros/" "llamamientoJunio20Compi.pdf" "0000_Ejercicios_analizados_en_clase_casi_igual.pdf" "sidra.txt")
+
+ ("/home/qkessler/.emacs.d/" (24299 36160 140212 752000) "session.10c61049c93d7cbb64157699992262938400000023320061" "session.10d6bbed928b7bb5c9158835771883662800000020400106" "session.102ed56aad33b61185157280175654616700000023200062" "session.101e4405d187a34c5f158713652515021800000025880093" "projectile-bookmarks.eld" "flex_sintax/" "session.1025e5af42b2c3f9b158541496174026600000018840085" "session.10cc0f2291bc4fb695157964312141551500000016120079" "session.108eab9f7dc66c9fc3159171921063789400000024050090" "session.106ceeb4f9779050d01575907711771200000023090062" "session.107779c845ed8e616b159147288975533100000020370087" "session.10df433abbd5dab0ca157652614487172800000015570061" "session.1046f7d52b3059eec158824503446599200000023330094" "session.10337b7ece33fef93158688066754915200000020470089" "session.10a4f170b3e7155055157744239654069000000022820061" "session.1048b0251b6d511c5158036734538994600000023730083" "session.10cb4ace58bcd98ce4158686449273474500000026630086" "session.10bd54e206f2043feb157599049466687800000014690063" "themes/" "session.10e794fd0a30981b13158443468537545900000018400084" "#ido.last#" "elpy/" "session.106ce1fc80e578c3b1157978527868973400000022560062" "session.1028dc6ed4e219a2dd158913014725426500000023020091" "ido.last" "session.10d2e3c4bd9043526159137756461489400000021000094" "session.109a19f6efcdcb37415879235222002500000019650086" "session.101e3bfa9b3f1c9a9b157077618293664000000023240061" "session.10d48dcacf106072d7158470258418319400000019360096" "session.10e841b0bb76cfb210158962616730524200000020290093" "session.10301d89363637b8b4158844700833600400000019810092" "session.102bb4ac2b927fd2a015887903155018700000026150101" ".#session.10d86ca52e3d666963158988979252253600000019790093" "session.108dbd505f96d0e6a3158799912547714400000026460102" "session.105edd8dd443eb95a3159092562072072100000020160098" "session.104b7ab9c2940fe93158704833150541900000020260102" "session.10355e52ad44e31afa158955858636206400000025610087" "session.10d86ca52e3d666963158988979252253600000019790093" "session.10bdbb01223af7ef715856721929175200000019470093" "session.10415ae17c311534da157553344222987400000054770062" "session.10e2c3c8b1dc42d2b4159127904620604800000024450097" "session.107798edfc3ad819f3158583053528958400000020370089" "snippets/" "init.el" "session.10116e5363c45eb659158408984394873900000019280088" "session.1048b0251b6d511c5158037202538085000000023730085" "session.1029e1f243b6208d4f158901763938973100000024810093" "session.10e2ee247652c83cd9159232338996650300000024630086" "session.10794b551b752b1f46158558417512016700000019090090" "elpa/" "session.1020cc926991f7b121157224767884765300000021280062" "session.105d56aa195fdb47dc157596780653699900000014470062" "session.10cc0f2291bc4fb695157961301927858700000016120078" "session.104f0b0d2137e57dbe158326041654137900000017870084" "transient/" "auto-save-list/" "session.101a0116e1e07edfb1158920969011180900000020390095" "session.1017d6ce77ee68419a157979334474952000000015800062" "session.10ba66e2f372edb7a8158650765840823100000020700092" "session.10f929dd0ee58d1d1a158739592896997900000023090089" "session.106959dd5118d77783158944470515482800000030870095" "session.102190ee0c885a3fdf157286035576050800000023100065" "session.102d9473a28ba25b6a15804689854972700000025280090" "session.10f0fdbe25511b5bc158023915590215900000015770085" "session.10589ab096bace8ff2157971953576437200000021450063" "lisp/" "session.10803dabeabaa06412157855267826770500000024250061" "session.1053c79fec63da1b3a158843313471146200000020420098" "session.1095dc87336b9e6d8b157492584568867600000023760061" "session.102ab22ea930d9604a157069005748823100000015400061" "session.103331d0402c0dfc4e159015632154959100000020830097" "session.10d119933fdcf376be158575989876624000000019430085" "session.10f5cd87f542a8e1a0158686495999769100000019400085" "session.108ff0177027b5f2cd15882693932642300000019330093" ".#session.102ab22ea930d9604a157069005748823100000015400061" "session.10e130cde2b73235ea157708788037556700000014940061" "session.107e6703d75bb3a5c7158869553889742100000022920115" "session.101e8345e372adf0d5158507397757168700000018820084" "session.10c4faa106905e531a158386377180434600000018440085" "session.10f31e5b32d52d4aff158443723284835400000018330082" "session.10e12fafd13e0f154d158809128168499300000020100097" "session.104a007c87a1df7bec158584552283603700000019010086" "session.1074fc8e6a5657cfb7158722698452744000000024720090" "session.105ce82858afaa3b7c159143369391298100000020800087" "session.1011a507b187e94646158782843858623700000026910088" "session.10d18eea631222667515768656988189100000014730061" "session.106bffb171dedbf6f9158391230170688700000018260085" "session.10c44484dfee1efcee159008047396764800000021430104" "session.1085fb4c43b6a095dc157323393957823200000015210063" "session.108fa7241e2e7c916c157072843695073700000014990062" "session.106766fdac86943249157997068965586000000025950063" "session.10134896fe35c4cd6a158953574495935400000020590102" "session.1035227b86e1e16d0e159180880474060300000020500087" "session.106668aaa633fb3d4158887050575550700000019370091" "session.10e17221f22f7b91f8158849694988955500000028100097" "session.10d8891eac595a44b158755518932562100000025930094" "session.10862ffa35c695499b15838244142806700000018680083" "session.10ec7d5c57b528cd8c157053274969938400000035970062" "backup/" "init.el~" "../" "./")
+
+ ("/home/qkessler/Documents/SSII_Quique/P2/archivosP2/" (24297 2572 535384 563000) "BH-F1.txt" "../" "Config-I.txt" "./" "BH-F3.txt" "BC-F.txt" "BH-I3.txt" "BH-I2.txt" "BH-F2.txt" "BH-I4.txt" "BH-I6.txt" "BH-F4.txt" "BH-I1.txt" "salidas/" "BC-I.txt" "Config-F.txt")
+
+ ("/home/qkessler/Documents/SSII_Quique/P2/memoriaP2/" (24297 2572 535384 563000) "memoriaP2.toc" "manualUso-p2.pdf" "manualUso.pdf" "../" "manualUso.log" "manualUso.aux" "./" "manualUso-p2.log" "texput.log" "memoriaP2.out" "manualUso-p2.aux" "memoriaP2.aux" "manualUso.org" "memoriaP2.log" "memoriaP2.tex" "manualUso-p2.tex" "memoriaP2.org" "memoriaP2.pdf")
+
+ ("/home/qkessler/Documents/SSII_Quique/P2/" (24297 2572 535384 563000) "notas.tex" "program.exe" "../" "archivosP2/" "a.out" "makefile" "./" "memoriaP2/" "notas.org" "program" "#notas.tex#" "program.cpp")
+
+ ("/home/qkessler/Documents/SSII_Quique/P1/memoriaP1/" (24297 2861 150623 624000) "memoriaP1.log" "manualUso.pdf" "../" "memoriaP1.tex~" "manualUso.log" "manualUso.aux" "src/" "manualUso-p1.log" "memoriaP1.ilg" "memoriaP1.tex" "./" "memoriaP1.pdf" "manualUso-p1.aux" "tabla_P1.pdf" "memoriaP1.toc" "manualUso-p1.tex" "memoriaP1.aux")
+
+ ("/home/qkessler/Documents/SSII_Quique/" (24297 2572 539384 530000) "../" "./" "P1/" "P2/" "galib247-c2014/" "SSII_Quique_Script/" "pruebas/")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/assets/" (24275 58527 381290 757000) "../" "./" "questions/")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/assets/questions/" (24293 53467 438872 196000) "search-24px.svg" "../" "./" "help_outline-24px.svg" "questions_page_help.png" "questions_page_help2.png" "question-toggle-button.png" "test-background.jpg" "style.css" "next-icon.svg")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/questions/templates/questions/" (24293 13332 98956 226000) "questions.html" "../" "#testing_crispy_forms.html#" ".#testing_crispy_forms.html" "testing_crispy_forms.html" "create_topic.html" "login.html" "./" "index.html" "random.html" "detail.html" "browse.html")
+
+ ("/home/qkessler/Documents/CloudQuestions/" (24283 54663 663771 798000) ".coverage" "requirements.txt" ".git/" "../" "./" "README.md" "pics/" "testing_functionality/" "LICENSE" ".coveragerc" "CloudQuestions_web/" ".env/")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/" (24293 4540 956955 768000) "manage.py" "../" "tmp/" "./" "templates/" "accounts/" "assets/" "CloudQuestions_web/" "questions.sqlite" "questions/")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/questions/" (24293 12718 788352 568000) "views.py" "../" "migrations/" "validators.py" "src/" "./" "forms.py" "models.py" "templates/" "apps.py" "urls.py" "__pycache__/" "sql_alchemy_auth.py" "tests.py" "admin.py")
+
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/questions/templates/" (24261 33340 409085 283000) "../" "./" "questions/")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

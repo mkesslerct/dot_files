@@ -107,12 +107,13 @@
      ("#F309DF" . 85)
      ("#3C3D37" . 100))))
  '(magit-diff-use-overlays nil)
+ '(org-agenda-files (quote ("~/Documents/test.org")))
  '(org-fontify-whole-heading-line t)
  '(org-hide-leading-stars t)
  '(org-highlight-latex-and-related (quote (latex script entities)))
  '(package-selected-packages
    (quote
-    (org-bullets doom-modeline challenger-deep-theme elpy projectile smooth-scrolling flymake pylint monokai-theme subatomic-theme autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode markdown-mode evil-nerd-commenter neotree auctex magit vdm-snippets auto-complete dracula-theme)))
+    (flatui-theme doom-themes color-theme-sanityinc-tomorrow dumb-jump org-bullets doom-modeline challenger-deep-theme elpy projectile smooth-scrolling flymake pylint monokai-theme subatomic-theme autopair rainbow-mode emmet-mode company-quickhelp company-jedi company web-mode markdown-mode evil-nerd-commenter neotree auctex magit vdm-snippets auto-complete dracula-theme)))
  '(pos-tip-background-color "#FFFACE")
  '(pos-tip-foreground-color "#272822")
  '(pyvenv-tracking-mode t)
@@ -146,16 +147,30 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(org-level-1 ((t (:inherit outline-1 :height 1.0))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+ '(org-level-5 ((t (:inherit outline-5 :height 1.0)))))
 
 ;; CHANGES AESTHETICS.
 ;; -------------------
 ;; THEMES:
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+
+;; DARK THEMES:
 ;; (load-theme 'dracula t)
-;; (load-theme 'subatomic t)
+(load-theme 'subatomic t)
 ;; (load-theme 'monokai t)
-(load-theme 'challenger-deep t)
+;; (load-theme 'challenger-deep t)
+
+;; LIGHT THEMES:
+;; (load-theme 'flatui t)
+
+;; Indentation to 4 spaces instead of tab.
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
 
 ;;Number lines left.
 (global-linum-mode t)
@@ -208,6 +223,8 @@
 (setq company-idle-delay 0)
 
 (global-set-key [backtab] 'tab-indent-or-complete)
+(yas-global-mode 1)
+
 
 ;; ----------------------------
 ;; Web developing in emacs.
@@ -255,31 +272,25 @@
 (define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
 
 ;; Org-mode config.
-(setq initial-major-mode 'org-mode)
 (use-package org-bullets
   :init
   (add-hook 'org-mode-hook 'org-bullets-mode))
-(setq org-ellipsis "⤵")
 (setq org-src-fontify-natively t)
 (setq org-src-tab-acts-natively t)
-(setq org-src-window-setup 'current-window)
-(setq org-adapt-indentation nil)
-(setq org-latex-pdf-process
-      '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-        "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+(setq org-pretty-entities t)
+(require 'ox-beamer)
 
-(setq TeX-parse-self t)
-(setq TeX-PDF-mode t)
-(add-hook 'LaTeX-mode-hook
-          (lambda ()
-            (LaTeX-math-mode)
-            (setq TeX-master t)))
-(custom-set-faces
-  '(org-level-1 ((t (:inherit outline-1 :height 1.0))))
-  '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
-  '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
-  '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
-  '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
-)
+;; Org-mode latex source code.
+(setq org-latex-listings t)
+(add-to-list 'org-latex-packages-alist '("" "listings"))
+(add-to-list 'org-latex-packages-alist '("" "xcolor"))
+
+;; Other window improvement.
+
+
 ;; init.el ends here
+
+
+
+
+

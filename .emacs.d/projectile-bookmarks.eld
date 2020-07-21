@@ -1,1 +1,1 @@
-("~/Documents/Investing/" "~/Documents/archivosCOMP/" "~/Documents/CloudQuestions/" "~/Documents/saved_CQ/" "~/Documents/archivosGPDS/" "~/Documents/Configfile_emacs/" "~/Documents/SSTT_files/")
+("~/Documents/CloudQuestions/" "~/Documents/archivosGPDS/" "~/Documents/watchlist_script/" "~/Documents/Investing/" "~/Documents/archivosCOMP/" "~/Documents/SSTT_files/" "~/Documents/rotating_background/" "~/Documents/CodeTaster-DPII/" "~/Documents/Configfile_emacs/")
