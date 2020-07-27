@@ -1,9 +1,0 @@
-# -*- mode: snippet -*-
-# name: includegraphics
-# key: includegraphics
-# --
-\vspace{4mm}
-\begin{center}
-	\includegraphics[scale=$1]{$2}
-\end{center}
-\vspace{4mm}

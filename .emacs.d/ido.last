@@ -2,50 +2,39 @@
 
 ;; ----- ido-last-directory-list -----
 (
- ("/home/qkessler/Documents/CloudQuestions/.env/" . "bin/")
- ("/home/qkessler/Documents/CloudQuestions/" . ".env/")
+ ("/home/" . "qkessler/")
+ ("/home/qkessler/" . ".emacs.d/")
 )
 
 ;; ----- ido-work-directory-list -----
 (
- "/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/accounts/templates/"
- "/home/qkessler/Documents/archivosGPDS/extra/"
- "/home/qkessler/Documents/CloudQuestions/.env/bin/"
+ "/home/qkessler/.emacs.d/"
 )
 
 ;; ----- ido-work-file-list -----
 (
- "testing.html"
- "change_email_email.html"
- "testing_verify_email.html"
- "activ_extra9.tex"
- "activated.html"
- "verify.html"
- "verify_email.html"
- "activate"
+ "init.el"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/accounts/templates/" (24333 56757 473975 33000) "../" "activated.html" "./" "register.html" "verify.html" "settings.html" "verify_email.html" "change_email_email.html")
+ ("/home/qkessler/.emacs.d/" (24350 42971 236209 53000) "projectile-bookmarks.eld" "../" "ido.last" "./" "el-get-user/" "network-security.data" "snippets/" "init.el" "elpa/" "auto-save-list/" "el-get/" "backup/" "init.el~")
 
- ("/home/qkessler/Documents/archivosGPDS/" (24335 7531 300584 75000) "plan_de_trabajo.lof" ".git/" "../" "guiadoors.log" "src/" "plan_de_trabajo.tex" "FichasCambio.docx" "./" "plan_de_trabajo.aux" "coger_todas_sections.py" "guiadoors.tex" "SRS_Gestion bibliotecaria _corregido.doc" "guiadoors.toc" "guiadoors.aux" "guiadoors.out" "P3/" "P2/" "SRS-CasoEstudio.pdf" "entrega-anticipada3.7.pdf" "FichasCambio.pdf" ".~lock.FichasCambio.docx#" "plan_de_trabajo.log" "extra/" "P4/" "guiadoors.lof" "plan_de_trabajo.out" "DOORS.pdf" "plan_de_trabajo.toc" "Actividades3/" "sesion2-GWWE/")
+ ("/home/" (24138 39423 860836 450000) "../" "./" "qkessler/")
 
- ("/home/qkessler/Documents/archivosGPDS/Actividades3/" (24217 58143 316739 875000) "ejer4.png" "juegoserio3.tex" "../" "juegoserio3.log" "./" "actividad3.pdf" "actividad3.aux" "ejer2.png" "juegoserio3.aux" "actividad3.log" "juegoserio3-Grupo3.7.pdf")
+ ("/home/qkessler/" (24350 42647 149817 299000) "Templates/" "win64" "*scratch*" "2020-04-02-16-30-55.068-VBoxSVC-20455.log" "Qkessler/" ".yarnrc" "Books/" "Desktop/" ".sudo_as_admin_successful" ".emacs.d/" ".pki/" "../" ".ivy2/" ".bashrc" ".bash_logout" "gnome-terminal/" ".python_history-09236.tmp" "Videos/" "./" ".texlive2019/" ".nv/" "2020-04-02-20-21-21.043-VBoxSVC-2521.log" ".vscode/" ".fonts/" ".angular-config.json" ".cache/" ".python_history-23481.tmp" ".npm/" ".gnome/" ".aspell.en.prepl" ".sbt/" ".yarn/" "Pictures/" "snap/" "Public/" "test.tex" ".selected_editor" ".bash_aliases" "Calibre Library/" ".snap/" ".gnupg/" ".viminfo" "udsclient.log" ".thunderbird/" "Wallpapers/" "zaiste-theme.el" ".profile" ".local/" ".mozilla/" ".lesshst" "Downloads/" ".gitconfig" "Music/" ".wget-hsts" ".python_history" ".aspell.en.pws" ".python_history-09295.tmp" "lotion/" "bin/" ".ssh/" "VirtualBox VMs/" ".pylint.d/" "Documents/" ".bash_history" ".config/")
 
- ("/home/qkessler/Documents/archivosGPDS/extra/" (24319 26290 522349 131000) "activ_extra7.out" "activ_extra4.aux" "../" "activ_extra7.tex" "activ_extra7.aux" "activ_extra6.pdf" "./" "activ_extra6.toc" "activ_extra4.out" "extra_src/" "activ_extra5.aux" "activ_extra6.log" "activ_extra4.log" "activ_extra7.log" "activ_extra6.out" "activ_extra7.pdf" "activ_extra5.pdf" "activ_extra4.pdf" "activ_extra5.out" "activ_extra4.tex" "activ_extra5.tex" "activ_extra7.toc" "activ_extra6.tex" "activ_extra6.aux" "activ_extra5.log")
+ ("/home/qkessler/Documents/CloudQuestions/" (24350 29402 185128 38000) ".coverage" "requirements.txt" ".git/" "../" "TEMPLATE_KEYS.txt" ".pytest_cache/" "./" "README.md" "pics/" "LICENSE" ".coveragerc" "CloudQuestions_web/" "pytest.ini" ".env/")
 
- ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/accounts/" (24322 804 853092 1000) "views.py" "../" "src/" ".mypy_cache/" "./" "forms.py" "models.py" "templates/" "apps.py" "urls.py" "__pycache__/" "__init__.py" "admin.py")
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/" (24350 31753 655708 948000) "manage.py" "../" ".mypy_cache/" "cloudquestions.toml" "tmp/" "./" "templates/" "accounts/" "assets/" "__pycache__/" "CloudQuestions_web/" "__init__.py" "questions.sqlite" "questions/")
 
- ("/home/qkessler/Documents/CloudQuestions/.env/bin/" (24283 50718 894877 226000) "coverage" "alembic" "markdown_py" "easy_install-3.8" "python3" "pyrsa-decrypt" "../" "django-admin.py" "Activate.ps1" "django-admin" "activate" "pip" "pyrsa-priv2pub" "migrate-repository" "activate.csh" "./" "mako-render" "python" "chardetect" "sqlformat" "pip3.8" "confusable_homoglyphs" "pbr" "pyjwt" "coverage-3.8" "activate.fish" "google-oauthlib-tool" "coverage3" "easy_install" "pyrsa-keygen" "pyrsa-verify" "pytest" "__pycache__/" "pip3" "pyrsa-sign" "pyrsa-encrypt" "py.test" "migrate")
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/questions/" (24350 30788 572303 272000) "views.py" "../" "migrations/" "validators.py" "src/" ".mypy_cache/" "./" "forms.py" "test_files/" "models.py" "templates/" "apps.py" "urls.py" "test_parsing.py" "__pycache__/" "sql_alchemy_auth.py" "admin.py" "test_question_service.py")
 
- ("/home/qkessler/Documents/CloudQuestions/.env/" (24261 33456 855674 407000) "../" "share/" "include/" "lib/" "./" "lib64/" "bin/" "pyvenv.cfg")
+ ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/questions/src/" (24350 31890 224308 130000) "parsing.py" "../" ".mypy_cache/" "./" ".coveragerc" "question_service.py" "__pycache__/" "__init__.py")
 
- ("/home/qkessler/Documents/CloudQuestions/" (24321 64579 512203 956000) ".coverage" "requirements.txt" ".git/" "../" ".pytest_cache/" "./" "README.md" "pics/" "LICENSE" ".coveragerc" "CloudQuestions_web/" "pytest.ini" ".env/")
+ ("/home/qkessler/.emacs.d/el-get-user/recipes/" (24350 38986 870308 855000) "../" "smart-comment.rcp" "./")
 
- ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/" (24321 47018 518660 178000) "manage.py" "../" ".mypy_cache/" "tmp/" "./" "templates/" "accounts/" "assets/" "__pycache__/" "CloudQuestions_web/" "__init__.py" "questions.sqlite" "questions/")
-
- ("/home/qkessler/Documents/CloudQuestions/CloudQuestions_web/CloudQuestions_web/" (24321 64703 174878 161000) "wsgi.py" "../" ".mypy_cache/" "./" "settings.py" "urls.py" "asgi.py" "__pycache__/" "__init__.py")
+ ("/home/qkessler/Documents/" (24348 30532 365832 527000) "bypass-paywalls-chrome-master/" "leetCode_ejers/" "../" "notebooks/" "practicasSSII_EnriqueKesslerMartínez/" "./" "Investing/" "ACmanager/" "CodeTaster-DPII/" "bdg2115-p3/" "SSTT_files/" "archivosGPDS/" "rotating_background/" "SSII_Quique/" "CloudQuestions/" "bdg2115-p2/" "100daysofWeb-files/" "topic_files/" "archivosCOMP/" "watchlist_script/" "Configfile_emacs/")
 )
 
 ;; ----- ido-unc-hosts-cache -----
