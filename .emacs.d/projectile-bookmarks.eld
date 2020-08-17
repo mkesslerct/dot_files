@@ -1,1 +1,0 @@
-("~/Documents/CloudQuestions/" "~/Documents/watchlist_script/" "~/Documents/rotating_background/" "~/Documents/archivosGPDS/" "~/Documents/archivosCOMP/" "~/Documents/SSTT_files/" "~/Documents/Investing/" "~/Documents/Configfile_emacs/" "~/Documents/CodeTaster-DPII/" "~/Documents/ACmanager/" "~/Documents/100daysofWeb-files/")
