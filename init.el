@@ -21,7 +21,7 @@
 (el-get-bundle elpa:rainbow-mode)
 
 (setq my-packages
-      '(all-the-icons autopair base16 cl-lib company-mode dash doom-modeline el-get eldoc-eval elpy emmet-mode epl f find-file-in-project highlight-indentation magit memoize org-mode package pkg-info projectile pyvenv rainbow-mode s shrink-path transient web-mode with-editor yasnippet))
+      '(all-the-icons autopair base16 cl-lib company-mode dash doom-modeline el-get eldoc-eval elpy emmet-mode epl f find-file-in-project highlight-indentation magit memoize package pkg-info projectile pyvenv rainbow-mode s shrink-path transient web-mode with-editor yasnippet))
 
 (el-get 'sync my-packages)
 (el-get 'sync)
@@ -113,6 +113,8 @@
 (projectile-mode +1)
 (define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
 (setq projectile-project-search-path '("~/Documents/"))
+(define-key projectile-mode-map (kbd "C-c l") nil)
+(define-key projectile-mode-map (kbd "C-c a") nil)
 (projectile-global-mode)
 
 ;; Elpy config.
@@ -121,6 +123,11 @@
   (cons (format "%sormat code"
                 (propertize "f" 'face 'bold))
         'elpy-black-fix-code))
+
+;; Org-mode config.
+(define-key global-map (kbd "C-c l") 'org-store-link)
+(define-key global-map (kbd "C-c a") 'org-agenda)
+(setq org-log-done t)
     
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -130,6 +137,9 @@
  '(custom-safe-themes
    (quote
     ("b7133876a11eb2ded01b4b144b45d9e7457f80dd5900c332241881ab261c50f4" "c968804189e0fc963c641f5c9ad64bca431d41af2fb7e1d01a2a6666376f819c" "8c1dd3d6fdfb2bee6b8f05d13d167f200befe1712d0abfdc47bb6d3b706c3434" "cea3ec09c821b7eaf235882e6555c3ffa2fd23de92459751e18f26ad035d2142" default)))
+ '(org-agenda-files
+   (quote
+    ("~/org/work.org" "~/org/school.org" "~/org/projects.org")))
  '(package-selected-packages (quote (subatomic-theme rainbow-mode)))
  '(tool-bar-mode nil))
  ;; custom-set-faces was added by Custom.
