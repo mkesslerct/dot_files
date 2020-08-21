@@ -24,6 +24,10 @@
   :ensure t
   :config (load-theme 'subatomic t))
 
+(use-package smart-comment
+  :ensure t
+  :bind ("M-;" . smart-comment))
+
 ;; Rainbow-mode: CSS colors.
 (use-package rainbow-mode
   :ensure t
@@ -158,7 +162,7 @@
  '(org-agenda-files (quote ("~/org/work.org")))
  '(package-selected-packages
         (quote
-         (projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+         (smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
