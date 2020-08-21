@@ -1,30 +1,93 @@
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
 
-(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-    (goto-char (point-max))
-    (eval-print-last-sexp)))
+(eval-when-compile
+  (require 'use-package))
 
-(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(use-package auto-package-update
+  :ensure t
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
 
-(el-get-bundle elpa:subatomic-theme
-  (load-theme 'subatomic t))
-(el-get-bundle elpa:rainbow-mode)
+;; Subatomic theme.
+(use-package subatomic-theme
+  :ensure t
+  :config (load-theme 'subatomic t))
 
-(setq my-packages
-      '(all-the-icons autopair base16 cl-lib company-mode dash doom-modeline el-get eldoc-eval elpy emmet-mode epl f find-file-in-project highlight-indentation magit memoize package pkg-info projectile pyvenv rainbow-mode s shrink-path transient web-mode with-editor yasnippet))
+;; Rainbow-mode: CSS colors.
+(use-package rainbow-mode
+  :ensure t
+  :defer t)
 
-(el-get 'sync my-packages)
-(el-get 'sync)
+;; All-the-icons.
+(use-package all-the-icons
+  :ensure t)
+
+;; Autopair brackets.
+(use-package autopair
+  :ensure t
+  :config (autopair-global-mode))
+
+;; Python IDE.
+(use-package elpy
+  :ensure t)
+(elpy-enable)
+(define-key elpy-refactor-map (kbd "f")
+  (cons (format "%sormat code"
+                (propertize "f" 'face 'bold))
+        'elpy-black-fix-code))
+        
+;; Better modeline.
+(use-package doom-modeline
+  :ensure t
+  :config
+    (doom-modeline-mode 1)
+    (setq doom-modeline-project-detection 'project)
+    (setq doom-modeline-window-width-limit fill-column))
+
+;; Emmet-mode for html tags.
+(use-package emmet-mode
+  :ensure t
+  :defer t)
+
+;; Magit.
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status)
+  :config (setq magit-refresh-status-buffer nil))
+
+;; Projectile.                            
+(use-package projectile
+  :ensure t)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
+(setq projectile-project-search-path '("~/Documents/"))
+(define-key projectile-mode-map (kbd "C-c l") nil)
+(define-key projectile-mode-map (kbd "C-c a") nil)
+(projectile-global-mode)
+
+;; Web-mode for html and css.
+(use-package web-mode
+  :ensure t
+  :mode ("\\.html?\\'" . web-mode)
+  :hook ((prog-mode . hs-minor-mode)
+         (emmet-mode)
+         (rainbow-mode)))
+
+;; Yasnippets for snippets on modes.
+(use-package yasnippet
+  :ensure t
+  :config (yas-global-mode))
 
 ;; Directories first on dired.
 (setq dired-listing-switches "-aBhl  --group-directories-first")
@@ -62,14 +125,6 @@
 ;; Disabling toolbar.
 (tool-bar-mode -1)
 
-;;  Adding theme directory.
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-    
-;;  Better modeline.
-(doom-modeline-mode 1)
-(setq doom-modeline-project-detection 'project)
-(setq doom-modeline-window-width-limit fill-column)
-
 ;; Company mode.
 (global-company-mode 1)
 (setq company-show-numbers t)
@@ -86,45 +141,11 @@
           (indent-for-tab-command)))))
 (global-set-key [backtab] 'tab-indent-or-complete)
 
-;; Yasnippet global mode.    
-(yas-global-mode 1)
-
-;; Autopair in all buffers.
-(autopair-global-mode)
-
-;; Web developing.
-(add-hook 'prog-mode-hook #'hs-minor-mode)
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'web-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook  'emmet-mode)
-(add-hook 'css-mode-hook #'rainbow-mode)
-(add-hook 'web-mode-hook #'rainbow-mode)                
-
-;; Magit.
-(global-set-key (kbd "C-x g") 'magit-status)
-(setq magit-refresh-status-buffer nil)
-
 ;; Ido-mode.
 (ido-mode 1)
 (setq ido-separator "\n")
-    
-;; Projectile.
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
-(setq projectile-project-search-path '("~/Documents/"))
-(define-key projectile-mode-map (kbd "C-c l") nil)
-(define-key projectile-mode-map (kbd "C-c a") nil)
-(projectile-global-mode)
 
-;; Elpy config.
-(elpy-enable)
-(define-key elpy-refactor-map (kbd "f")
-  (cons (format "%sormat code"
-                (propertize "f" 'face 'bold))
-        'elpy-black-fix-code))
-
-;; Org-mode config.
+;; Org-mode config.    
 (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
 (setq org-log-done t)
@@ -134,18 +155,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("b7133876a11eb2ded01b4b144b45d9e7457f80dd5900c332241881ab261c50f4" "c968804189e0fc963c641f5c9ad64bca431d41af2fb7e1d01a2a6666376f819c" "8c1dd3d6fdfb2bee6b8f05d13d167f200befe1712d0abfdc47bb6d3b706c3434" "cea3ec09c821b7eaf235882e6555c3ffa2fd23de92459751e18f26ad035d2142" default)))
- '(org-agenda-files
-   (quote
-    ("~/org/work.org" "~/org/school.org" "~/org/projects.org")))
- '(package-selected-packages (quote (subatomic-theme rainbow-mode)))
- '(tool-bar-mode nil))
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
+ '(org-agenda-files (quote ("~/org/work.org")))
+ '(package-selected-packages
+        (quote
+         (projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+ '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
