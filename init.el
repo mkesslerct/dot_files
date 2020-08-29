@@ -154,6 +154,9 @@
 (define-key global-map (kbd "C-c a") 'org-agenda)
 (setq org-log-done t)
 (setq org-agenda-files (list "~/Documents/org-files/"))
+(setq org-todo-keywords
+      '((sequence "TODO" "WAITING" "|" "DONE" "DELEGATED")))
+
     
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
