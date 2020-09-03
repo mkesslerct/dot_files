@@ -93,6 +93,9 @@
   :ensure t
   :config (yas-global-mode))
 
+(use-package yasnippet-snippets
+  :ensure t)
+
 ;; Directories first on dired.
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
@@ -165,7 +168,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+    (yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
