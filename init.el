@@ -96,6 +96,36 @@
 (use-package yasnippet-snippets
   :ensure t)
 
+;; lsp-mode for server completion.
+(use-package flycheck
+    :ensure t)
+(setq lsp-keymap-prefix "C-l")
+(use-package lsp-mode
+    ;; :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+    ;;         (XXX-mode . lsp)
+    :ensure t
+    :commands (lsp lsp-deferred))
+(use-package lsp-ui
+  :requires (flycheck)
+  :ensure t
+  :commands lsp-ui-mode)
+(use-package lsp-ivy
+  :ensure t  
+  :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs
+  :ensure t
+  :commands lsp-treemacs-errors-list)
+
+;; C++ with lsp.        
+(use-package ccls
+  :ensure t
+  :config
+  (setq ccls-executable "ccls")
+  (setq lsp-prefer-flymake nil)
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+  :hook ((c-mode c++-mode objc-mode) .
+         (lambda () (require 'ccls) (lsp))))
+
 ;; Directories first on dired.
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
@@ -167,8 +197,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+        (quote
+         (ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
