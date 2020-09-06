@@ -101,8 +101,6 @@
     :ensure t)
 (setq lsp-keymap-prefix "C-l")
 (use-package lsp-mode
-    ;; :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-    ;;         (XXX-mode . lsp)
     :ensure t
     :commands (lsp lsp-deferred))
 (use-package lsp-ui
@@ -125,6 +123,17 @@
   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp))))
+
+;; Dart with lsp.
+(use-package lsp-dart 
+  :ensure t
+  :hook (dart-mode . lsp)
+  :config(setq lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk/"))
+
+;; Java with lsp.
+(use-package lsp-java
+    :ensure t
+    :hook (java-mode . lsp))    
 
 ;; Directories first on dired.
 (setq dired-listing-switches "-aBhl  --group-directories-first")
@@ -198,7 +207,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
         (quote
-         (ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+         (lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
