@@ -42,14 +42,17 @@
   :ensure t
   :config (autopair-global-mode))
 
-;; Python IDE.
-(use-package elpy
-  :ensure t)
-(elpy-enable)
-(define-key elpy-refactor-map (kbd "f")
-  (cons (format "%sormat code"
-                (propertize "f" 'face 'bold))
-        'elpy-black-fix-code))
+;; (use-package elpy
+;;   :ensure t)
+;; (elpy-enable)
+;; (define-key elpy-refactor-map (kbd "f")
+;;   (cons (format "%sormat code"
+;;                 (propertize "f" 'face 'bold))
+;;         'elpy-black-fix-code))
+
+;; Company.
+(use-package company
+    :ensure t)        
         
 ;; Better modeline.
 (use-package doom-modeline
@@ -137,6 +140,15 @@
     :ensure t
     :hook (java-mode . lsp))    
 
+;; Python with lsp.
+(use-package lsp-jedi
+  :ensure t
+  :config
+  (with-eval-after-load "lsp-mode"
+    (add-to-list 'lsp-disabled-clients 'pyls)
+    (add-to-list 'lsp-enabled-clients 'jedi))
+  :hook (python-mode . lsp))
+
 ;; Directories first on dired.
 (setq dired-listing-switches "-aBhl  --group-directories-first")
 
@@ -208,8 +220,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-        (quote
-         (lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline elpy autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+   (quote
+    (lsp-jedi lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
