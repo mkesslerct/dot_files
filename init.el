@@ -102,11 +102,13 @@
 (setq lsp-keymap-prefix "C-l")
 (use-package lsp-mode
     :ensure t
-    :commands (lsp lsp-deferred))
+    :commands (lsp lsp-deferred)
+    :config (setq lsp-enable-links nil))
 (use-package lsp-ui
   :requires (flycheck)
   :ensure t
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :config (setq lsp-ui-sideline-show-code-actions nil))
 (use-package lsp-ivy
   :ensure t  
   :commands lsp-ivy-workspace-symbol)
