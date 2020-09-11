@@ -128,18 +128,19 @@
   (setq lsp-prefer-flymake nil)
   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
   :hook ((c-mode c++-mode objc-mode) .
-         (lambda () (require 'ccls) (lsp))))
+         (lambda () (require 'ccls) (lsp-deferred))))
 
 ;; Dart with lsp.
 (use-package lsp-dart 
   :ensure t
-  :hook (dart-mode . lsp)
-  :config(setq lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk/"))
+  :hook (dart-mode . lsp-deferred)
+  :custom (lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk")
+    (lsp-dart-flutter-sdk-dir "/home/qkessler/snap/flutter/common/flutter"))
 
 ;; Java with lsp.
 (use-package lsp-java
     :ensure t
-    :hook (java-mode . lsp))    
+    :hook (java-mode . lsp-deferred))    
 
 ;; Python with lsp.
 ;; (use-package lsp-jedi
