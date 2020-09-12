@@ -135,7 +135,17 @@
   :ensure t
   :hook (dart-mode . lsp-deferred)
   :custom (lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk")
-    (lsp-dart-flutter-sdk-dir "/home/qkessler/snap/flutter/common/flutter"))
+  (lsp-dart-flutter-sdk-dir "/home/qkessler/snap/flutter/common/flutter")
+  (lsp-dart-main-code-lens nil))
+
+;; (use-package hover
+;;   :ensure t
+;;   :after dart-mode
+;;   :custom (hover-command-path "/home/qkessler/go/bin/hover")
+;;   (hover-hot-reload-on-save t)
+;;   (hover-flutter-sdk-path "/home/qkessler/snap/flutter/common/flutter")
+;;   :bind (:map dart-mode-map ("C-M-z" . hover-run-or-hot-reload)))
+    
 
 ;; Java with lsp.
 (use-package lsp-java
