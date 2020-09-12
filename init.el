@@ -52,7 +52,8 @@
 
 ;; Company.
 (use-package company
-    :ensure t)        
+  :ensure t)
+
         
 ;; Better modeline.
 (use-package doom-modeline
@@ -136,15 +137,15 @@
   :hook (dart-mode . lsp-deferred)
   :custom (lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk")
   (lsp-dart-flutter-sdk-dir "/home/qkessler/snap/flutter/common/flutter")
-  (lsp-dart-main-code-lens nil))
+  (lsp-dart-main-code-lens nil)
+  (lsp-dart-dap-flutter-hot-reload-on-save t))
 
-;; (use-package hover
-;;   :ensure t
-;;   :after dart-mode
-;;   :custom (hover-command-path "/home/qkessler/go/bin/hover")
-;;   (hover-hot-reload-on-save t)
-;;   (hover-flutter-sdk-path "/home/qkessler/snap/flutter/common/flutter")
-;;   :bind (:map dart-mode-map ("C-M-z" . hover-run-or-hot-reload)))
+(use-package hover
+  :ensure t
+  :after dart-mode
+  :custom (hover-command-path "/home/qkessler/go/bin/hover")
+    (hover-flutter-sdk-path "/home/qkessler/snap/flutter/common/flutter")
+  :bind (:map dart-mode-map ("C-M-z" . hover-run-or-hot-reload)))
     
 
 ;; Java with lsp.
@@ -233,7 +234,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+    (hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
