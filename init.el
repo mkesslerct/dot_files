@@ -109,6 +109,11 @@
     :commands (lsp lsp-deferred)
     :config (setq lsp-enable-links nil)
     :hook (python-mode . lsp-deferred))
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024))
+(setq lsp-completion-provider :capf)
+(setq lsp-idle-delay 0.500)
+(setq lsp-enable-file-watchers nil)     
 (use-package lsp-ui
   :requires (flycheck)
   :ensure t
@@ -229,7 +234,12 @@
 
 ;; Removing scrollbars
 (when (fboundp 'set-scroll-bar-mode)
-   (set-scroll-bar-mode nil))
+  (set-scroll-bar-mode nil))
+
+;; Setting font.
+(setq default-frame-alist '((font . "Monospace-12")))
+
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
