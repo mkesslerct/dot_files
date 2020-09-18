@@ -143,7 +143,8 @@
   :custom (lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk")
   (lsp-dart-flutter-sdk-dir "/home/qkessler/snap/flutter/common/flutter")
   (lsp-dart-main-code-lens nil)
-  (dart-format-on-save t))
+  (dart-format-on-save t)
+  (lsp-dart-dap-flutter-hot-reload-on-save t))
   
 (use-package hover
   :ensure t
@@ -237,7 +238,7 @@
   (set-scroll-bar-mode nil))
 
 ;; Setting font.
-(setq default-frame-alist '((font . "Monospace-12")))
+(setq default-frame-alist '((font . "Ubuntu Mono-13")))
 
 
 
