@@ -138,8 +138,8 @@
   :custom (lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk")
   (lsp-dart-flutter-sdk-dir "/home/qkessler/snap/flutter/common/flutter")
   (lsp-dart-main-code-lens nil)
-  (lsp-dart-dap-flutter-hot-reload-on-save t))
-
+  (dart-format-on-save t))
+  
 (use-package hover
   :ensure t
   :after dart-mode
@@ -222,7 +222,7 @@
 (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
 (setq org-log-done t)
-(setq org-agenda-files (list "~/Documents/org-files/"))
+(setq org-agenda-files (list "~/Documents/org_files/"))
 (setq org-todo-keywords
       '((sequence "TODO" "WAITING" "|" "DONE" "DELEGATED")))
 
