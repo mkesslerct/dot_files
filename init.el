@@ -226,15 +226,18 @@
 (setq org-todo-keywords
       '((sequence "TODO" "WAITING" "|" "DONE" "DELEGATED")))
 
-    
+
+;; Removing scrollbars
+(when (fboundp 'set-scroll-bar-mode)
+   (set-scroll-bar-mode nil))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package)))
+   '(hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
