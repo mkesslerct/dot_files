@@ -40,7 +40,7 @@
 ;; Rainbow-mode: CSS colors.
 (use-package rainbow-mode
   :ensure t
-  :defer t)
+  :hook (rainbow-mode . css-mode-hook))
 
 ;; All-the-icons.
 (use-package all-the-icons
@@ -67,7 +67,8 @@
 ;; Emmet-mode for html tags.
 (use-package emmet-mode
   :ensure t
-  :defer t)
+  :hook ((sgml-mode-hook . emmet-mode)
+  (css-mode-hook . emmet-mode)))
 
 ;; Magit.
 (use-package magit
@@ -89,10 +90,8 @@
 (use-package web-mode
   :ensure t
   :mode ("\\.html?\\'" . web-mode)
-  :hook ((prog-mode . hs-minor-mode)
-         (emmet-mode)
-         (rainbow-mode)))
-
+  :hook (prog-mode . hs-minor-mode))
+      
 ;; Yasnippets for snippets on modes.
 (use-package yasnippet
   :ensure t
