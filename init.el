@@ -21,8 +21,14 @@
 
 ;; Subatomic theme.
 (use-package subatomic-theme
+  :ensure t)
+
+(use-package gruvbox-theme
+  :ensure t)
+
+(use-package sublime-themes
   :ensure t
-  :config (load-theme 'subatomic t))
+  :config (load-theme 'graham t))
 
 (use-package smart-comment
   :ensure t
@@ -143,8 +149,7 @@
   :custom (lsp-dart-sdk-dir "/home/qkessler/snap/flutter/common/flutter/bin/cache/dart-sdk")
   (lsp-dart-flutter-sdk-dir "/home/qkessler/snap/flutter/common/flutter")
   (lsp-dart-main-code-lens nil)
-  (dart-format-on-save t)
-  (lsp-dart-dap-flutter-hot-reload-on-save t))
+  (dart-format-on-save t))
   
 (use-package hover
   :ensure t
@@ -160,13 +165,8 @@
     :hook (java-mode . lsp-deferred))    
 
 ;; Python with lsp.
-;; (use-package lsp-jedi
-;;   :ensure t
-;;   :config
-;;   (with-eval-after-load "lsp-mode"
-;;     (add-to-list 'lsp-disabled-clients 'pyls)
-;;     (add-to-list 'lsp-enabled-clients 'jedi))
-;;   :hook (python-mode . lsp))
+;;   I'm using pyls.
+
 
 ;; Directories first on dired.
 (setq dired-listing-switches "-aBhl  --group-directories-first")
@@ -247,12 +247,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("3cd28471e80be3bd2657ca3f03fbb2884ab669662271794360866ab60b6cb6e6" "58c6711a3b568437bab07a30385d34aacf64156cc5137ea20e799984f4227265" "72a81c54c97b9e5efcc3ea214382615649ebb539cb4f2fe3a46cd12af72c7607" "c48551a5fb7b9fc019bf3f61ebf14cf7c9cdca79bcb2a4219195371c02268f11" "9b59e147dbbde5e638ea1cde5ec0a358d5f269d27bd2b893a0947c4a867e14c1" "939ea070fb0141cd035608b2baabc4bd50d8ecc86af8528df9d41f4d83664c6a" default))
  '(package-selected-packages
-   '(hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package))
+   '(gruvbox-theme hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:background nil)))))
