@@ -27,8 +27,11 @@
   :ensure t)
 
 (use-package sublime-themes
+  :ensure t)
+
+(use-package monokai-theme
   :ensure t
-  :config (load-theme 'graham t))
+  :config (load-theme 'monokai t))
 
 (use-package smart-comment
   :ensure t
@@ -250,7 +253,7 @@
  '(custom-safe-themes
    '("3cd28471e80be3bd2657ca3f03fbb2884ab669662271794360866ab60b6cb6e6" "58c6711a3b568437bab07a30385d34aacf64156cc5137ea20e799984f4227265" "72a81c54c97b9e5efcc3ea214382615649ebb539cb4f2fe3a46cd12af72c7607" "c48551a5fb7b9fc019bf3f61ebf14cf7c9cdca79bcb2a4219195371c02268f11" "9b59e147dbbde5e638ea1cde5ec0a358d5f269d27bd2b893a0947c4a867e14c1" "939ea070fb0141cd035608b2baabc4bd50d8ecc86af8528df9d41f4d83664c6a" default))
  '(package-selected-packages
-   '(gruvbox-theme hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package))
+   '(monokai-theme gruvbox-theme hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package))
  '(projectile-mode t nil (projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
