@@ -51,14 +51,6 @@
   :ensure t
   :config (autopair-global-mode))
 
-;; (use-package elpy
-;;   :ensure t)
-;; (elpy-enable)
-;; (define-key elpy-refactor-map (kbd "f")
-;;   (cons (format "%sormat code"
-;;                 (propertize "f" 'face 'bold))
-;;         'elpy-black-fix-code))
-
 ;; Company.
 (use-package company
   :ensure t)
