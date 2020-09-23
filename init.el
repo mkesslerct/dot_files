@@ -225,13 +225,14 @@
 (ido-mode 1)
 (setq ido-separator "\n")
 
-;; Org-mode config.    
+;; Org-mode config.
 (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
 (setq org-log-done t)
 (setq org-agenda-files (list "~/Documents/org_files/"))
 (setq org-todo-keywords
       '((sequence "TODO" "WAITING" "|" "DONE" "DELEGATED")))
+(setq org-agenda-window-setup 'only-window)
 
 
 ;; Removing scrollbars
