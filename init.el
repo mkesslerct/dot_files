@@ -244,7 +244,7 @@
 (setq org-agenda-files (list "~/Documents/org_files/"))
 (setq org-todo-keywords
       '((sequence "TODO" "WAITING" "|" "DONE" "DELEGATED")))
-;; (setq org-agenda-window-setup 'only-window)
+(setq org-agenda-window-setup 'only-window)
 
 
 ;; Removing scrollbars
