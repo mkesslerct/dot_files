@@ -366,7 +366,8 @@ Using desktop windows to emulate a Flutter process.
   :bind (:map dart-mode-map ("C-M-z" . hover-run-or-hot-reload)))
 #+END_SRC
 
-**** Java ProgrammingWorks with the eclipse server, not really sure if it is what I'm looking for.
+**** Java Programming
+Works with the eclipse server, not really sure if it is what I'm looking for.
 #+BEGIN_SRC emacs-lisp
 (use-package lsp-java
     :ensure t
@@ -375,4 +376,3 @@ Using desktop windows to emulate a Flutter process.
 
 **** Python programming
 I'm using pyls.
-* Custom
