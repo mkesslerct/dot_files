@@ -241,6 +241,15 @@ region everytime I want to access the mark functionality.
 (define-key global-map [remap exchange-point-and-mark] 'exchange-point-and-mark-no-activate)
 #+END_SRC
 
+** Window switching
+I'm trying ace-window in order to allow faster window switching, when working with
+multiple buffers in the same frame.
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+   :ensure t
+   :config (global-set-key (kbd "C-x o") 'ace-window))
+#+END_SRC
+
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
