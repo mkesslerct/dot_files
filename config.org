@@ -247,7 +247,10 @@ multiple buffers in the same frame.
 #+BEGIN_SRC emacs-lisp
 (use-package ace-window
    :ensure t
-   :config (global-set-key (kbd "C-x o") 'ace-window))
+   :config (global-set-key (kbd "C-x o") 'ace-window)
+   :custom(
+   (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+   (aw-background nil)))
 #+END_SRC
 
 * Org
