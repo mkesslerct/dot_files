@@ -259,6 +259,7 @@ Keybindings for org-mode as well as better defaults. Not in use-package format y
 #+BEGIN_SRC emacs-lisp
 (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
+(define-key org-mode-map (kbd "C-,") nil)
 (setq org-log-done t)
 (setq org-agenda-files (list "~/Documents/org_files/org-agenda"))
 (setq org-todo-keywords
