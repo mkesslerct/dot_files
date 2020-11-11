@@ -46,9 +46,10 @@ Deleting all the spaces but one when multiple spaces are present.
 (use-package doom-modeline
   :ensure t
   :config
-    (doom-modeline-mode 1)
-    (setq doom-modeline-project-detection 'project)
-    (setq doom-modeline-window-width-limit fill-column))
+  (progn
+  (doom-modeline-mode 1)
+  (setq doom-modeline-project-detection 'project)
+  (setq doom-modeline-window-width-limit fill-column)))
 #+END_SRC
 
 *** All-the-icons
@@ -199,8 +200,11 @@ order to provide good completion for emacs commands.
     (ivy-count-format "%d/%d ")))
 
 (use-package counsel-projectile
-    :ensure t)
-(counsel-projectile-mode)
+    :ensure t
+    :config(
+    (counsel-projectile-mode)
+    ))
+
 #+END_SRC
 
 ** Markdown
@@ -286,12 +290,14 @@ Obviously Magit
 * Project management
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
-  :ensure t)
-(define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
-(setq projectile-project-search-path '("~/Documents/"))
-(define-key projectile-mode-map (kbd "C-c l") nil)
-(define-key projectile-mode-map (kbd "C-c a") nil)
-(projectile-global-mode)
+  :ensure t
+  :config(progn 
+  (define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
+  (setq projectile-project-search-path '("~/Documents/"))
+  (define-key projectile-mode-map (kbd "C-c l") nil)
+  (define-key projectile-mode-map (kbd "C-c a") nil)
+  (projectile-global-mode)
+  ))
 #+END_SRC
 
 * Snippets
@@ -313,13 +319,13 @@ Obviously Magit
 Company is used for better completion on the fly.
 #+BEGIN_SRC emacs-lisp
 (use-package company
-  :ensure t)
-(global-company-mode 1)
-(setq company-show-numbers t)
-(setq company-dabbrev-downcase 0)
-(setq company-idle-delay 0)
-
-
+  :ensure t
+  :config (progn 
+  (global-company-mode 1)
+  (setq company-show-numbers t)
+  (setq company-dabbrev-downcase 0)
+  (setq company-idle-delay 0)
+  ))
 #+END_SRC
 
 Adding completion on tab.
@@ -423,10 +429,10 @@ Always works on C++, sometimes wrong on C programming.
 #+BEGIN_SRC emacs-lisp
 (use-package ccls
   :ensure t
-  :config
+  :config (progn
   (setq ccls-executable "ccls")
   (setq lsp-prefer-flymake nil)
-  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+  (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp-deferred))))
 #+END_SRC
@@ -436,10 +442,10 @@ Always works on C++, sometimes wrong on C programming.
 (use-package lsp-dart 
   :ensure t
   :hook (dart-mode . lsp-deferred)
-  :custom (lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
+  :custom ((lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
   (lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter")
   (lsp-dart-main-code-lens nil)
-  (dart-format-on-save t))
+  (dart-format-on-save t)))
 #+END_SRC
 
 ***** Hover
@@ -448,8 +454,8 @@ Using desktop windows to emulate a Flutter process.
 (use-package hover
   :ensure t
   :after dart-mode
-  :custom (hover-command-path "~/go/bin/hover")
-    (hover-flutter-sdk-path "~/snap/flutter/common/flutter")
+  :custom ((hover-command-path "~/go/bin/hover")
+    (hover-flutter-sdk-path "~/snap/flutter/common/flutter"))
   :bind (:map dart-mode-map ("C-M-z" . hover-run-or-hot-reload)))
 #+END_SRC
 
