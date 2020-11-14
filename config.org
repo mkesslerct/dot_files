@@ -407,6 +407,14 @@ Sintax checking on the fly.
              ))
 #+END_SRC
 
+**** Dap-mode
+Server side debugging protocol, seemed to be installed with lsp-dart,
+I'm adding the package here just to make sure, as I couldn't load
+lsp-dart or lsp-java because dap-mode wasn't available.
+#+begin_src emacs-lisp
+(use-package dap-mode
+    :ensure t)
+#+end_src
 **** lsp-ui
 Better ui for lsp-mode, adding el-doc.
 #+BEGIN_SRC emacs-lisp
@@ -453,11 +461,11 @@ Always works on C++, sometimes wrong on C programming.
 #+BEGIN_SRC emacs-lisp
 (use-package lsp-dart 
   :ensure t
-  :hook (dart-mode . lsp-deferred)
-  :custom ((lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
-  (lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter")
-  (lsp-dart-main-code-lens nil)
-  (dart-format-on-save t)))
+  :hook (dart-mode . lsp))
+(setq lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
+(setq lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter")
+(setq lsp-dart-main-code-lens nil)
+(setq dart-format-on-save t)
 #+END_SRC
 
 ***** Hover
