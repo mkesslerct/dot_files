@@ -74,8 +74,13 @@ When pointing at region, comments full region.
 Better bufler list, creating projects and groups.
 #+BEGIN_SRC emacs-lisp
 (use-package bufler
-  :ensure t)
+  :ensure t
+  :config (defhydra+ hydra:bufler ()
+  ("o" #'delete-other-windows "Full screen"))
+  :bind (:map bufler-list-mode-map
+  ("o" . delete-other-windows)))
 #+END_SRC
+
 
 Function to make bufler buffer full-screen.
 #+BEGIN_SRC emacs-lisp
@@ -84,7 +89,7 @@ Function to make bufler buffer full-screen.
   (bufler-list)
   (delete-other-windows)
 )
-(global-set-key (kbd "C-x C-b") 'bufler-one-window)
+(global-set-key (kbd "C-x C-b") 'bufler)
 #+END_SRC
 
 ** Directories
