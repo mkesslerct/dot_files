@@ -386,8 +386,8 @@ Web-mode for html and css programming.
   :hook (prog-mode . hs-minor-mode))
 #+END_SRC
 
-;; lsp-mode for server completion.
 ** Server side functionality (LSP)
+Lsp-mode for server completion.
 *** Flycheck
 Sintax checking on the fly.
 #+BEGIN_SRC emacs-lisp
@@ -408,7 +408,8 @@ Sintax checking on the fly.
              (lsp-completion-provider :capf)
              (lsp-idle-delay 0.500)
              (lsp-enable-file-watchers nil)
-             (lsp-eldoc-hook nil)
+             (lsp-signature-auto-activate t)
+             (lsp-signature-doc-lines 1)
              ))
 #+END_SRC
 
