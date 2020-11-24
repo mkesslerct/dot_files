@@ -495,3 +495,11 @@ Works with the eclipse server, not really sure if it is what I'm looking for.
 
 **** Python programming
 I'm using pyls.
+* Extra
+** Speet-test
+Practicing typing speed in emacs.
+#+BEGIN_SRC emacs-lisp
+(use-package speed-type
+    :ensure t)
+#+END_SRC
+
