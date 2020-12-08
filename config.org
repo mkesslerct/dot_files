@@ -50,6 +50,13 @@ Deleting all the spaces but one when multiple spaces are present.
   (doom-modeline-mode 1)
   (setq doom-modeline-project-detection 'project)
   (setq doom-modeline-window-width-limit fill-column)))
+(defvar doom-modeline-icon (display-graphic-p)
+  "Whether show `all-the-icons' or not.
+
+  Non-nil to show the icons in mode-line.
+  The icons may not be showed correctly in terminal and on Windows."
+)
+(setq doom-modeline-icon t)
 #+END_SRC
 
 *** All-the-icons
@@ -155,6 +162,11 @@ Removing scrollbar.
 #+BEGIN_SRC emacs-lisp
 (when (fboundp 'set-scroll-bar-mode)
   (set-scroll-bar-mode nil))
+(defun my/disable-scroll-bars (frame)
+  (modify-frame-parameters frame
+                           '((vertical-scroll-bars . nil)
+                             (horizontal-scroll-bars . nil))))
+(add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 #+END_SRC
 
 *** Fonts
@@ -259,6 +271,14 @@ multiple buffers in the same frame.
    (aw-background nil)))
 #+END_SRC
 
+** Loading config from function
+#+BEGIN_SRC emacs-lisp
+(defun my/load-config ()
+    "Load my config file linked to config.org."
+    (interactive)
+    (load-file "~/.emacs.d/init.el"))
+#+END_SRC
+
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
@@ -270,6 +290,14 @@ Keybindings for org-mode as well as better defaults. Not in use-package format y
   (setq org-todo-keywords
         '((sequence "TODO" "WAITING" "|" "DONE" "OPTIONAL" "DELEGATED")))
   ;; (setq org-agenda-window-setup 'only-window)
+(add-hook 'org-tab-first-hook
+          (lambda ()
+            (when (org-in-src-block-p t)
+              (let* ((elt (org-element-at-point))
+                     (lang (intern (org-element-property :language elt)))
+                     (langs org-babel-load-languages))
+                (unless (alist-get lang langs)
+                  (indent-to 4))))))
 #+END_SRC
 
 ** Org-roam
@@ -315,6 +343,9 @@ Obviously Magit
   (define-key projectile-mode-map (kbd "C-c a") nil)
   (projectile-global-mode)
   ))
+(with-eval-after-load 'projectile
+  (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
+  (add-to-list 'projectile-project-root-files-bottom-up "BUILD"))
 #+END_SRC
 
 * Snippets
@@ -468,6 +499,7 @@ Always works on C++, sometimes wrong on C programming.
 (use-package lsp-dart 
   :ensure t
   :hook (dart-mode . lsp))
+(setq dart-sdk-path "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
 (setq lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
 (setq lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter")
 (setq lsp-dart-main-code-lens nil)
@@ -480,8 +512,9 @@ Using desktop windows to emulate a Flutter process.
 (use-package hover
   :ensure t
   :after dart-mode
-  :custom ((hover-command-path "~/go/bin/hover")
-    (hover-flutter-sdk-path "~/snap/flutter/common/flutter"))
+    :init 
+    (setq hover-hot-reload-on-save t
+          hover-clear-buffer-on-hot-restart t)
   :bind (:map dart-mode-map ("C-M-z" . hover-run-or-hot-reload)))
 #+END_SRC
 
