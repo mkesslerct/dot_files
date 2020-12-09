@@ -279,6 +279,11 @@ multiple buffers in the same frame.
     (load-file "~/.emacs.d/init.el"))
 #+END_SRC
 
+** Fill column
+#+begin_src emacs-lisp
+(setq-default fill-column 80)
+#+end_src
+
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
