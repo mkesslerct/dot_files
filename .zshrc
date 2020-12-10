@@ -59,10 +59,10 @@ SPACESHIP_BATTERY_SHOW=false
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+DISABLE_UPDATE_PROMPT="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-export UPDATE_ZSH_DAYS=3
+UPDATE_ZSH_DAYS=3
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
@@ -114,8 +114,8 @@ PATH=~/go/bin:$PATH
 
 # Preferred editor for local and remote sessions
 export ALTERNATE_EDITOR=""
-export EDITOR="emacsclient -t"                  # $EDITOR opens in terminal
-export VISUAL='emacsclient -t'
+export EDITOR="emacsclient-one-frame.sh"                  # $EDITOR opens in terminal
+export VISUAL='emacsclient-one-frame.sh'
 
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
@@ -137,4 +137,5 @@ export VISUAL='emacsclient -t'
 
 alias ae=". .env/bin/activate"
 alias emacs="emacsclient-one-frame.sh"
+alias semacs="sudo emacs"
 alias ec="emacsclient -t" # Open emacs inside terminal.
