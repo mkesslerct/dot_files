@@ -336,6 +336,16 @@ Obviously Magit
   :bind ("C-x g" . magit-status)
   :config (setq magit-refresh-status-buffer nil))
 #+END_SRC
+** Magit forge
+Magit with the integration of Github Issues.
+#+BEGIN_SRC emacs-lisp
+(use-package forge
+  :ensure t
+  :after magit)
+
+;; Setting up forge token.
+(setq auth-sources '("~/.authinfo"))
+#+END_SRC
 
 * Project management
 #+BEGIN_SRC emacs-lisp
