@@ -215,7 +215,8 @@ order to provide good completion for emacs commands.
     (global-set-key (kbd "C-c V") 'ivy-pop-view))
     :custom(
     (ivy-use-virtual-buffers t)
-    (ivy-count-format "%d/%d ")))
+    (ivy-count-format "%d/%d ")
+    (ivy-initial-inputs-alist nil)))
 
 (use-package counsel-projectile
     :ensure t)
@@ -544,10 +545,14 @@ Works with the eclipse server, not really sure if it is what I'm looking for.
 **** Python programming
 I'm using pyls.
 * Extra
-** Speet-test
+** Speed-test
 Practicing typing speed in emacs.
 #+BEGIN_SRC emacs-lisp
 (use-package speed-type
     :ensure t)
+
+(defun my/type-test ()
+   (interactive)
+   (browse-url-firefox "https://monkeytype.com/"))
 #+END_SRC
 
