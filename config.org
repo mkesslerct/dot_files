@@ -100,6 +100,7 @@ Function to make bufler buffer full-screen.
 #+END_SRC
 
 ** Directories
+
 *** Directories first on dired.
 #+BEGIN_SRC emacs-lisp
 (setq dired-listing-switches "-aBhl  --group-directories-first")
@@ -169,6 +170,16 @@ Removing scrollbar.
 (add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
 #+END_SRC
 
+*** Menubar
+Disabling the menubar, prior to tab-mode-line configuration.
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode -1)
+#+END_SRC
+
+*** Tab configuration
+#+BEGIN_SRC 
+    
+#+END_SRC
 *** Fonts
 #+BEGIN_SRC emacs-lisp
 (setq default-frame-alist '((font . "Ubuntu Mono-13")))
@@ -215,8 +226,7 @@ order to provide good completion for emacs commands.
     (global-set-key (kbd "C-c V") 'ivy-pop-view))
     :custom(
     (ivy-use-virtual-buffers t)
-    (ivy-count-format "%d/%d ")
-    (ivy-initial-inputs-alist nil)))
+    (ivy-count-format "%d/%d ")))
 
 (use-package counsel-projectile
     :ensure t)
@@ -455,8 +465,7 @@ Sintax checking on the fly.
              (lsp-completion-provider :capf)
              (lsp-idle-delay 0.500)
              (lsp-enable-file-watchers nil)
-             (lsp-signature-auto-activate t)
-             (lsp-signature-doc-lines 1)
+             (lsp-signature-auto-activate nil)
              ))
 #+END_SRC
 
