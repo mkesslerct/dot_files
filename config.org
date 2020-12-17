@@ -274,9 +274,11 @@ region everytime I want to access the mark functionality.
 I'm trying ace-window in order to allow faster window switching, when working with
 multiple buffers in the same frame.
 #+BEGIN_SRC emacs-lisp
+(global-unset-key (kbd "C-x o"))
 (use-package ace-window
    :ensure t
-   :config (global-set-key (kbd "M-o") 'ace-window)
+   :config 
+   (global-set-key (kbd "M-o") 'ace-window)
    :custom(
    (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
    (aw-background nil)))
