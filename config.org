@@ -25,7 +25,7 @@
 #+END_SRC
 
 * Better defaults
-** Hungry-delete.
+** Hungry-delete
 Deleting all the spaces but one when multiple spaces are present.
 #+BEGIN_SRC emacs-lisp
 (use-package hungry-delete
@@ -272,9 +272,11 @@ region everytime I want to access the mark functionality.
 
 ** Window switching
 I'm trying ace-window in order to allow faster window switching, when working with
-multiple buffers in the same frame.
+multiple buffers in the same frame. Disabling also the undo command, trying to get
+used to C-/
 #+BEGIN_SRC emacs-lisp
 (global-unset-key (kbd "C-x o"))
+(global-unset-key (kbd "C-x u"))
 (use-package ace-window
    :ensure t
    :config 
@@ -297,6 +299,11 @@ multiple buffers in the same frame.
 (setq-default fill-column 80)
 #+end_src
 
+** Auto indent
+#+BEGIN_SRC emacs-lisp
+(define-key global-map (kbd "RET") 'newline-and-indent)
+#+END_SRC
+
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
@@ -311,11 +318,11 @@ intention of all capture created items to go there before correct refiling.
 #+BEGIN_SRC emacs-lisp
 (setq 
     org-directory "~/Documents/org_files"
-    org-default-notes-file (concat org-directory "/refile.org")
+    org-default-notes-file (concat org-directory "/org-agenda/refile.org")
     org-agenda-files (list (concat org-directory "/org-agenda"))
     org-archive-location (concat org-directory "/archive/%s_archive::")
-    org-refile-targets (quote ((nil :maxlevel . 1)
- 	                   (org-agenda-files :maxlevel . 1)))
+    org-refile-targets (quote ((nil :maxlevel . 3)
+ 	                   (org-agenda-files :maxlevel . 3)))
     org-columns-default-format "%50ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM"
     org-clock-out-remove-zero-time-clocks t
     org-clock-out-when-done t
@@ -347,7 +354,7 @@ a certain state.
 		    (sequence "|" "CANCELLED(c)")
             (sequence "|" "OPTIONAL(o)")
 		    (sequence "SOMEDAY(s)" "|" "CANCELLED(c)")
-		    (sequence "|" "MEETING")
+		    (sequence "MEETING(m)" "|" "DONE(d)")
 		)
 	       )
    org-todo-keyword-faces
@@ -368,23 +375,53 @@ the workflow of adding several items and refiling.
 (setq
  org-capture-templates
  '(("t" "todo" entry (file org-default-notes-file)
-    "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
+    "* TODO %? :REFILING:\n%u\n%a\n" :clock-in t :clock-resume t)
    ("m" "Meeting/Interruption" entry (file org-default-notes-file)
-    "* MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)
+    "* MEETING with %? :REFILING:MEETING:\n%t" :clock-in t :clock-resume t)
    ("i" "Idea" entry (file org-default-notes-file)
-    "* %? :IDEA: \n%t\n" :clock-in t :clock-resume t)
+    "* %? :REFILING:IDEA: \n%t\n" :clock-in t :clock-resume t)
    ("e" "Respond email" entry (file org-default-notes-file)
-    "* TODO Respond to %:from on %:subject :EMAIL: \nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+    "* TODO Write to %? on %? :REFILING:EMAIL: \nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
    ("s" "Someday" entry (file org-default-notes-file)
-    "* SOMEDAY %? :SOMEDAY: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
+    "* SOMEDAY %? :REFILING:SOMEDAY: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
    ("p" "Project entry" entry (file org-default-notes-file)
-    "* PROJECT %? :PROJECT: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
+    "* PROJECT %? :REFILING:PROJECT: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
    ("o" "Optional item" entry (file org-default-notes-file)
-    "* OPTIONAL %? :OPTIONAL: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
+    "* OPTIONAL %? :REFILING:OPTIONAL: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
    )
  ;; Keep a line between headers
  ;; org-cycle-separator-lines 1
  )
+#+END_SRC
+
+Adding hiding the tags on org agenda.
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-hide-tags-regexp (regexp-opt '(
+    "REFILING" "MEETING" "IDEA" "EMAIL" "SOMEDAY" "OPTIONAL" "PROJECT")))
+#+END_SRC
+
+Removing inherited and REFILING tags in order to use the tags correctly
+#+BEGIN_SRC emacs-lisp
+(defun my/org-remove-inherited-tag-strings ()
+    "Removes inherited tags from the headline-at-point's tag string.
+    Note this does not change the inherited tags for a headline,
+    just the tag string."
+    (org-set-tags (seq-remove (lambda (tag)
+                                (get-text-property 0 'inherited tag))
+                              (org-get-tags))))
+
+(defun my/org-remove-refiling-tag ()
+    "Remove the REFILING tag once the item has been refiled."
+    (org-toggle-tag "REFILING" 'off))
+
+(defun my/org-clean-tags ()
+  "Visit last refiled headline and remove inherited tags from tag string."
+  (save-window-excursion
+    (org-refile-goto-last-stored)
+    (my/org-remove-inherited-tag-strings)
+    (my/org-remove-refiling-tag)))
+
+(add-hook 'org-after-refile-insert-hook 'my/org-clean-tags)
 #+END_SRC
 
 Adding series of tags with the intention of tagging the items for better 
@@ -423,53 +460,52 @@ organization besides the refile file. Adding automated tasks to a tagged item.
 Adding more beautiful org-agenda view with all-icons and better configuration
 of the layout, giving me a lot more information.
 #+BEGIN_SRC emacs-lisp
-(setq org-agenda-category-icon-alist
-	`(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
-(setq org-agenda-custom-commands
-	'(				; start list
-	  ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
-				     (org-agenda-span 'day)
-				     (org-agenda-ndays 1)
-				     (org-agenda-start-on-weekday nil)
-				     (org-agenda-start-day "+0d")
-				     (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
-								       (outline-next-heading) (1- (point)))
-								      (t (org-agenda-skip-entry-if 'todo 'done))
-								      ))
-				     (org-agenda-todo-ignore-deadlines nil)))
-			 ;; Project tickle list.
-			 (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
-					 (org-tags-match-list-sublevels nil)))
-			 ;; Refiling category set file wide in file.
-			 (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
-					 (org-tags-match-list-sublevels nil)))
-			 ;; Tasks upcoming (should be similar to above?)
-			 (agenda "" ((org-agenda-overriding-header "Upcoming:")
-				     (org-agenda-span 7)
-				     (org-agenda-start-day "+1d")
-				     (org-agenda-start-on-weekday nil)
-				     (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
-								       (outline-next-heading) (1- (point)))
-								      (t (org-agenda-skip-entry-if 'todo 'done))
-								      ))
-				     ;; I should set this next one to true, so that deadlines are ignored...?
-				     (org-agenda-todo-ignore-deadlines nil)))
-			 ;; Tasks that are unscheduled
-			 (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
-				       (org-tags-match-list-sublevels nil)
-				       ;; (org-agenda-skip-entry-if 'scheduled 'deadline)
-				       (org-agenda-todo-ignore-scheduled 'all)
-				       ))
-			 ;; Tasks that are waiting or someday
-			 (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
-					 (org-tags-match-list-sublevels nil)))
-			 )
-	   )
-	  )				; end list
+  (setq org-agenda-category-icon-alist
+      `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
+  (setq org-agenda-custom-commands
+      '(				; start list
+        ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
+                       (org-agenda-span 'day)
+                       (org-agenda-ndays 1)
+                       (org-agenda-start-on-weekday nil)
+                       (org-agenda-start-day "+0d")
+                       (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
+                                         (outline-next-heading) (1- (point)))
+                                        (t (org-agenda-skip-entry-if 'todo 'done))
+                                        ))
+                       (org-agenda-todo-ignore-deadlines nil)))
+               ;; Project tickle list.
+               (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
+                       (org-tags-match-list-sublevels nil)))
+               ;; Refiling category set file wide in file.
+               (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
+                       (org-tags-match-list-sublevels nil)))
+               ;; Tasks upcoming (should be similar to above?)
+               (agenda "" ((org-agenda-overriding-header "Upcoming:")
+                       (org-agenda-span 7)
+                       (org-agenda-start-day "+1d")
+                       (org-agenda-start-on-weekday nil)
+                       (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
+                                         (outline-next-heading) (1- (point)))
+                                        (t (org-agenda-skip-entry-if 'todo 'done))
+                                        ))
+                       ;; I should set this next one to true, so that deadlines are ignored...?
+                       (org-agenda-todo-ignore-deadlines nil)))
+               ;; Tasks that are unscheduled
+               (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
+                         (org-tags-match-list-sublevels nil)
+                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                         ))
+               ;; Tasks that are waiting or someday
+               (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
+                       (org-tags-match-list-sublevels nil)))
+               )
+         )
+        )				; end list
 
-	;; If an item has a (near) deadline, and is scheduled, only show the deadline.
-	org-agenda-skip-scheduled-if-deadline-is-shown t
-	)
+      ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
+      org-agenda-skip-scheduled-if-deadline-is-shown t
+      )
 #+END_SRC
 
 Tabs on org-mode source blocks try to find the language added.
@@ -484,6 +520,67 @@ add 4 spaces.
                      (langs org-babel-load-languages))
                 (unless (alist-get lang langs)
                   (indent-to 4))))))
+#+END_SRC
+
+Adding custom agenda commands, with the intention of making the refiling and
+tagging workflow a bit faster, as C-c C-w might be cumbersome to write in agenda-view.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+                  (local-set-key (kbd "r") 'org-agenda-refile)))
+#+END_SRC
+
+Creating function which archives all files which contain only done (not necessarily
+in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
+
+#+BEGIN_SRC emacs-lisp
+(defun my/archive-done-org-files ()
+"Cycles all org files through checking function."
+(interactive) 
+(save-excursion
+(mapc 'check-org-file-finito (directory-files (concat org-directory "/org-agenda") t ".org$"))
+))
+
+(defun check-org-file-finito (f)
+"Checks TODO keyword items are DONE then archives."
+(find-file f)
+;; Shows open Todo items whether agenda or todo
+(let (
+(kwd-re
+  (cond (org-not-done-regexp)
+    (
+     (let ((kwd
+        (completing-read "Keyword (or KWD1|KWD2|...): "
+                 (mapcar #'list org-todo-keywords-1))))
+       (concat "\\("
+           (mapconcat 'identity (org-split-string kwd "|") "\\|")
+           "\\)\\>")))
+    ((<= (prefix-numeric-value) (length org-todo-keywords-1))
+     (regexp-quote (nth (1- (prefix-numeric-value))
+                org-todo-keywords-1)))
+    (t (user-error "Invalid prefix argument: %s")))))
+ (if (= (org-occur (concat "^" org-outline-regexp " *" kwd-re )) 0)
+ (rename-file-buffer-to-org-archive)
+     (kill-buffer (current-buffer))
+   )))
+
+(defun rename-file-buffer-to-org-archive ()
+"Renames current buffer and file it's visiting."
+(let ((name (buffer-name))
+    (filename (buffer-file-name))
+)
+(if (not (and filename (file-exists-p filename)))
+    (error "Buffer '%s' is not visiting a file!" name)
+  (let ((new-name (concat (file-name-sans-extension filename) ".org_archive")))
+    (if (get-buffer new-name)
+        (error "A buffer named '%s' already exists!" new-name)
+      (rename-file filename new-name 1)
+      (rename-buffer new-name)
+      (set-visited-file-name new-name)
+      (set-buffer-modified-p nil)
+  (kill-buffer (current-buffer))
+  (message "File '%s' successfully archived as '%s'."
+               name (file-name-nondirectory new-name)))))))
 #+END_SRC
 
 ** Org-roam
@@ -637,6 +734,7 @@ Sintax checking on the fly.
              (lsp-idle-delay 0.500)
              (lsp-enable-file-watchers nil)
              (lsp-signature-auto-activate nil)
+             (lsp-headerline-breadcrumb-enable nil)
              ))
 #+END_SRC
 
