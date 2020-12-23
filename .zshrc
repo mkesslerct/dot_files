@@ -136,6 +136,6 @@ export VISUAL='emacsclient-one-frame.sh'
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias ae=". .env/bin/activate"
-alias emacs="emacsclient-one-frame.sh"
+alias ec="emacsclient-one-frame.sh"
 alias semacs="sudo emacs"
-alias ec="emacsclient -t" # Open emacs inside terminal.
+alias ect="emacsclient -t" # Open emacs inside terminal.
