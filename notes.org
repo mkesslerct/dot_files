@@ -1,0 +1,8 @@
+* links
+These links are what I use to move the setup between machines.
+
+https://www.reddit.com/r/emacs/comments/bddz3i/problems_with_emacs_deamon_emacsclient_cant_find/
+https://www.taingram.org/blog/emacs-client.html
+
+Super interesting blog option created from org.
+https://github.com/taingra/blog
