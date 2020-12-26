@@ -25,6 +25,15 @@
 #+END_SRC
 
 * Better defaults
+** Try
+Package that allows to try emacs packages without installing them.
+What it really does is installing the files in a temp directory and
+removing them later.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package try
+    :ensure t)
+#+END_SRC
 ** Hungry-delete
 Deleting all the spaces but one when multiple spaces are present.
 #+BEGIN_SRC emacs-lisp
@@ -375,19 +384,19 @@ the workflow of adding several items and refiling.
 (setq
  org-capture-templates
  '(("t" "todo" entry (file org-default-notes-file)
-    "* TODO %? :REFILING:\n%u\n%a\n" :clock-in t :clock-resume t)
+    "* TODO %? :REFILING:\n%a\n" :clock-in t :clock-resume t)
    ("m" "Meeting/Interruption" entry (file org-default-notes-file)
-    "* MEETING with %? :REFILING:MEETING:\n%t" :clock-in t :clock-resume t)
+    "* MEETING %? :REFILING:MEETING:\n" :clock-in t :clock-resume t)
    ("i" "Idea" entry (file org-default-notes-file)
-    "* %? :REFILING:IDEA: \n%t\n" :clock-in t :clock-resume t)
+    "* %? :REFILING:IDEA:\n" :clock-in t :clock-resume t)
    ("e" "Respond email" entry (file org-default-notes-file)
     "* TODO Write to %? on %? :REFILING:EMAIL: \nSCHEDULED: %t\n%U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
    ("s" "Someday" entry (file org-default-notes-file)
-    "* SOMEDAY %? :REFILING:SOMEDAY: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
+    "* SOMEDAY %? :REFILING:SOMEDAY:\n" :clock-in t :clock-resume t :empty-lines 1)
    ("p" "Project entry" entry (file org-default-notes-file)
-    "* PROJECT %? :REFILING:PROJECT: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
+    "* PROJECT %? :REFILING:PROJECT:\n" :clock-in t :clock-resume t :empty-lines 1)
    ("o" "Optional item" entry (file org-default-notes-file)
-    "* OPTIONAL %? :REFILING:OPTIONAL: \n%u\n" :clock-in t :clock-resume t :empty-lines 1)
+    "* OPTIONAL %? :REFILING:OPTIONAL:\n" :clock-in t :clock-resume t :empty-lines 1)
    )
  ;; Keep a line between headers
  ;; org-cycle-separator-lines 1
@@ -834,3 +843,12 @@ Practicing typing speed in emacs.
    (browse-url-firefox "https://monkeytype.com/"))
 #+END_SRC
 
+
+** Snow for Christmas
+Package which uses ascii symbols in order to create a
+snowy environment in emacs!
+
+#+BEGIN_SRC emacs-lisp
+(use-package snow
+    :ensure t)
+#+END_SRC
