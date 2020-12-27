@@ -313,6 +313,16 @@ used to C-/
 (define-key global-map (kbd "RET") 'newline-and-indent)
 #+END_SRC
 
+** pdf tools
+   pdf tools so that pages are created on demand instead of preloading the entire file, which
+   may freeze emacs. Also adding the hook in order to autorevert the pdf buffer when compiling
+    with auctex.
+   #+BEGIN_SRC emacs-lisp
+     (use-package pdf-tools
+       :ensure t
+       :config (pdf-tools-install))
+    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+   #+END_SRC
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
