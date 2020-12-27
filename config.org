@@ -321,7 +321,9 @@ used to C-/
      (use-package pdf-tools
        :ensure t
        :config (pdf-tools-install))
-    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+     (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+     (add-hook 'pdf-view-mode-hook (lambda ()
+                                   (linum-mode -1)))
    #+END_SRC
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
