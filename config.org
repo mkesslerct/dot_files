@@ -121,9 +121,65 @@ Function to make bufler buffer full-screen.
 #+END_SRC
 
 ** Latex
-PDF mode on latex by default.
+Adding auctex which is a specific package with the intention of
+making the latex ide experience.
 #+BEGIN_SRC emacs-lisp
-(setq TeX-PDF-mode t)
+  (use-package auctex-latexmk
+    :ensure t
+    :config
+    (auctex-latexmk-setup)
+    (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+
+#+END_SRC
+
+Adding reference connection made easier with reftex.
+#+BEGIN_SRC emacs-lisp
+(use-package reftex
+  :ensure t
+  :defer t
+  :config
+  (setq reftex-cite-prompt-optional-args t))
+#+END_SRC
+
+Adding autodictionary in order to get completion on the words
+that have been miss-typed.
+#+BEGIN_SRC emacs-lisp
+  (use-package auto-dictionary
+    :ensure t
+    :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
+#+END_SRC
+  
+Adding company backend support to auctex in order to get completions
+on the fly.
+#+BEGIN_SRC emacs-lisp
+(use-package company-auctex
+  :ensure t
+  :init (company-auctex-init))
+#+END_SRC
+
+Adding general configuration for tex files and latex-mode better defaults.
+#+BEGIN_SRC emacs-lisp
+  (use-package tex
+  :ensure auctex
+  :mode ("\\.tex\\'" . latex-mode)
+  :config (progn
+	    (setq TeX-source-correlate-mode t)
+	    (setq TeX-source-correlate-method 'synctex)
+	    (setq TeX-auto-save t)
+	    (setq TeX-parse-self t)
+	    (setq-default TeX-master nil)
+	    (setq reftex-plug-into-AUCTeX t)
+	    (pdf-tools-install)
+	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		  TeX-source-correlate-start-server t)
+	    ;; Update PDF buffers after successful LaTeX runs
+	    (add-hook 'TeX-after-compilation-finished-functions
+		      #'TeX-revert-document-buffer)
+	    (add-hook 'LaTeX-mode-hook
+		      (lambda ()
+			(reftex-mode t)
+			(flyspell-mode t)))
+	    ))
 #+END_SRC
 
 ** Appearence
@@ -172,11 +228,11 @@ Removing scrollbar.
 #+BEGIN_SRC emacs-lisp
 (when (fboundp 'set-scroll-bar-mode)
   (set-scroll-bar-mode nil))
-(defun my/disable-scroll-bars (frame)
+(defun qk/disable-scroll-bars (frame)
   (modify-frame-parameters frame
                            '((vertical-scroll-bars . nil)
                              (horizontal-scroll-bars . nil))))
-(add-hook 'after-make-frame-functions 'my/disable-scroll-bars)
+(add-hook 'after-make-frame-functions 'qk/disable-scroll-bars)
 #+END_SRC
 
 *** Menubar
@@ -297,7 +353,7 @@ used to C-/
 
 ** Loading config from function
 #+BEGIN_SRC emacs-lisp
-(defun my/load-config ()
+(defun qk/load-config ()
     "Load my config file linked to config.org."
     (interactive)
     (load-file "~/.emacs.d/init.el"))
@@ -320,10 +376,14 @@ used to C-/
    #+BEGIN_SRC emacs-lisp
      (use-package pdf-tools
        :ensure t
-       :config (pdf-tools-install))
-     (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-     (add-hook 'pdf-view-mode-hook (lambda ()
-                                   (linum-mode -1)))
+       :config (pdf-tools-install)
+       (setq-default pdf-view-display-size 'fit-page)
+       (setq pdf-annot-activate-created-annotations t)
+       (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+       (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
+       (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+       (add-hook 'pdf-view-mode-hook (lambda ()
+                                       (linum-mode -1))))
    #+END_SRC
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
@@ -423,7 +483,7 @@ Adding hiding the tags on org agenda.
 
 Removing inherited and REFILING tags in order to use the tags correctly
 #+BEGIN_SRC emacs-lisp
-(defun my/org-remove-inherited-tag-strings ()
+(defun qk/org-remove-inherited-tag-strings ()
     "Removes inherited tags from the headline-at-point's tag string.
     Note this does not change the inherited tags for a headline,
     just the tag string."
@@ -431,18 +491,18 @@ Removing inherited and REFILING tags in order to use the tags correctly
                                 (get-text-property 0 'inherited tag))
                               (org-get-tags))))
 
-(defun my/org-remove-refiling-tag ()
+(defun qk/org-remove-refiling-tag ()
     "Remove the REFILING tag once the item has been refiled."
     (org-toggle-tag "REFILING" 'off))
 
-(defun my/org-clean-tags ()
+(defun qk/org-clean-tags ()
   "Visit last refiled headline and remove inherited tags from tag string."
   (save-window-excursion
     (org-refile-goto-last-stored)
-    (my/org-remove-inherited-tag-strings)
-    (my/org-remove-refiling-tag)))
+    (qk/org-remove-inherited-tag-strings)
+    (qk/org-remove-refiling-tag)))
 
-(add-hook 'org-after-refile-insert-hook 'my/org-clean-tags)
+(add-hook 'org-after-refile-insert-hook 'qk/org-clean-tags)
 #+END_SRC
 
 Adding series of tags with the intention of tagging the items for better 
@@ -555,7 +615,7 @@ Creating function which archives all files which contain only done (not necessar
 in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
 
 #+BEGIN_SRC emacs-lisp
-(defun my/archive-done-org-files ()
+(defun qk/archive-done-org-files ()
 "Cycles all org files through checking function."
 (interactive) 
 (save-excursion
@@ -850,7 +910,7 @@ Practicing typing speed in emacs.
 (use-package speed-type
     :ensure t)
 
-(defun my/type-test ()
+(defun qk/type-test ()
    (interactive)
    (browse-url-firefox "https://monkeytype.com/"))
 #+END_SRC
