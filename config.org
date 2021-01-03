@@ -407,7 +407,6 @@ Files created when you haven't saved a file yet.
 #+end_src
 
 
-
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
@@ -947,3 +946,4 @@ snowy environment in emacs!
 (use-package snow
     :ensure t)
 #+END_SRC
+
