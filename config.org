@@ -406,7 +406,6 @@ Files created when you haven't saved a file yet.
       auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
 #+end_src
 
-
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
