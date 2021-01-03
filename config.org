@@ -298,6 +298,21 @@ order to provide good completion for emacs commands.
 (counsel-projectile-mode 1)
 
 #+END_SRC
+*** Prescient
+Better sorting mechanism focusing on user data, working better than default
+systems using heuristics as time passes. Following lines are added with
+the intention of providing prescient magic to other frameworks that I have installed,
+like ivy and company.
+
+#+begin_src emacs-lisp
+(use-package prescient
+    :ensure t
+    :init (prescient-persist-mode))
+(use-package ivy-prescient
+    :ensure t
+    :init (ivy-prescient-mode))
+#+end_src
+
 
 ** Markdown
 Markdown command, not installed by default.
@@ -785,6 +800,15 @@ Adding completion on tab.
           (indent-for-tab-command)))))
 (global-set-key [backtab] 'tab-indent-or-complete)
 #+END_SRC
+
+Adding prescient sorting and filtering mechanism with the intention
+of enabling a better candidate mechanism.
+#+begin_src emacs-lisp
+(use-package company-prescient
+    :ensure t
+    :init (company-prescient-mode))
+#+end_src
+
 
 ** Web programming
 *** CSS
