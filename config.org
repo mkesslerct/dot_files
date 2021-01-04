@@ -307,10 +307,10 @@ like ivy and company.
 #+begin_src emacs-lisp
 (use-package prescient
     :ensure t
-    :init (prescient-persist-mode))
+    :config (prescient-persist-mode 1))
 (use-package ivy-prescient
     :ensure t
-    :init (ivy-prescient-mode))
+    :config (ivy-prescient-mode 1))
 #+end_src
 
 
@@ -806,7 +806,7 @@ of enabling a better candidate mechanism.
 #+begin_src emacs-lisp
 (use-package company-prescient
     :ensure t
-    :init (company-prescient-mode))
+    :config (company-prescient-mode 1))
 #+end_src
 
 
@@ -959,7 +959,6 @@ Practicing typing speed in emacs.
    (interactive)
    (browse-url-firefox "https://monkeytype.com/"))
 #+END_SRC
-
 
 ** Snow for Christmas
 Package which uses ascii symbols in order to create a
