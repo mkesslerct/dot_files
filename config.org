@@ -41,15 +41,12 @@ being by default the current directory.
 Files created with the tilde extension, used to track changes to files, being able to 
 recover them on system crash.
 #+begin_src emacs-lisp
-(setq backup-directory-alist `(("." . ,(no-littering-expand-var-file-name "backups/" user-emacs-directory))))
+(setq backup-directory-alist `(("." . ,(no-littering-expand-var-file-name "backups/"))))
 #+end_src
 
 *** Auto save files
 Files created when you haven't saved a file yet.
 #+begin_src emacs-lisp
-;; auto-save-mode doesn't create the path automatically!
-(make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
-
 (setq auto-save-list-file-prefix (no-littering-expand-var-file-name "auto-saves/sessions/")
       auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-saves/") t)))
 #+end_src
@@ -73,19 +70,6 @@ removing them later.
   (use-package try
     :ensure t)
 #+END_SRC
-** Hungry-delete
-Deleting all the spaces but one when multiple spaces are present.
-#+BEGIN_SRC emacs-lisp
-  (use-package smart-hungry-delete
-  :ensure t
-  :bind (("<backspace>" . smart-hungry-delete-backward-char)
-         ("C-d" . smart-hungry-delete-forward-char))
-  :defer nil ;; dont defer so we can add our functions to hooks 
-  :config (smart-hungry-delete-add-default-hooks)
-  )
-
-#+END_SRC
-
 ** Autopair
 #+BEGIN_SRC emacs-lisp
 (use-package autopair
@@ -314,32 +298,31 @@ Ido-mode makes better default commands.
 Both are from the same family, Counsel uses Ivy functionality in
 order to provide good completion for emacs commands.
 #+BEGIN_SRC emacs-lisp
-(use-package counsel
-    :ensure t
-    :config 
-    (progn 
-    (ivy-mode 1)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key "\C-s" 'swiper)
-    (global-set-key "\C-r" 'swiper-isearch-backward)
-    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-    (global-set-key (kbd "M-y") 'counsel-yank-pop)
-    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-    (global-set-key (kbd "<f1> l") 'counsel-find-library)
-    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-    (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-    (global-set-key (kbd "C-c v") 'ivy-push-view)
-    (global-set-key (kbd "C-c V") 'ivy-pop-view))
-    :custom(
-    (ivy-use-virtual-buffers t)
-    (ivy-count-format "%d/%d ")))
-
-(use-package counsel-projectile
-    :ensure t)
-(counsel-projectile-mode 1)
+      (use-package counsel
+          :ensure t
+          :config 
+          (progn 
+          (ivy-mode 1)
+          (global-set-key (kbd "M-x") 'counsel-M-x)
+          (global-set-key "\C-s" 'swiper)
+          (global-set-key "\C-r" 'swiper-isearch-backward)
+          (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+          (global-set-key (kbd "M-y") 'counsel-yank-pop)
+          (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+          (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+          (global-set-key (kbd "<f1> l") 'counsel-find-library)
+          (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+          (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+          (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+          (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+          (global-set-key (kbd "C-c v") 'ivy-push-view)
+          (global-set-key (kbd "C-c V") 'ivy-pop-view))
+          :custom(
+          (ivy-use-virtual-buffers t)
+          (ivy-count-format "%d/%d ")))
+      (use-package counsel-projectile
+          :ensure t)
+      (counsel-projectile-mode 1)
 
 #+END_SRC
 *** Prescient
@@ -356,6 +339,19 @@ like ivy and company.
     :ensure t
     :config (ivy-prescient-mode 1))
 #+end_src
+
+** Hungry-delete
+Deleting all the spaces but one when multiple spaces are present.
+#+BEGIN_SRC emacs-lisp :tangle no
+    (use-package smart-hungry-delete
+    :ensure t
+    :bind (("<backspace>" . smart-hungry-delete-backward-char)
+           ("C-d" . smart-hungry-delete-forward-char)
+           ("<DEL>" . smart-hungry-delete-forward-char))
+    :defer nil ;; dont defer so we can add our functions to hooks 
+    :config (smart-hungry-delete-add-default-hooks))
+
+#+END_SRC
 
 ** Markdown
 Markdown command, not installed by default.
