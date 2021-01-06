@@ -139,3 +139,4 @@ alias ae=". .env/bin/activate"
 alias ec="emacsclient-one-frame.sh"
 alias semacs="sudo emacs"
 alias ect="emacsclient -t" # Open emacs inside terminal.
+alias pa="ls | xargs -P10 -I{} git -C {} pull" # Pulling everything inside a directory.
