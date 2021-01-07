@@ -138,6 +138,19 @@ Function to make bufler buffer full-screen.
 
 ** Directories
 
+*** Dired
+Dired is the "package" that gives us all the functionality
+to a dired buffer which in essence is the same as the output
+of ls. Adding an especial command for dired-up-directory as 
+the default keybinding is ^ which I find difficult to reach.
+
+#+begin_src emacs-lisp
+(use-package dired
+   :bind (:map dired-mode-map 
+   ("b" . dired-up-directory)))
+#+end_src
+
+
 *** Directories first on dired.
 #+BEGIN_SRC emacs-lisp
 (setq dired-listing-switches "-aBhl  --group-directories-first")
