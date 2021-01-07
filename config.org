@@ -440,6 +440,17 @@ used to C-/
                                        (linum-mode -1))))
    #+END_SRC
 
+* Terminal
+Configuration related to terminal emulators and modes. Recently, 
+I started using vterm which is faster than any of the others.
+
+** vterm
+#+begin_src emacs-lisp
+(use-package vterm
+   :ensure t
+   :custom (vterm-max-scrollback 10000))
+#+end_src
+
 * Org
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
