@@ -332,7 +332,9 @@ order to provide good completion for emacs commands.
           (global-set-key (kbd "C-c V") 'ivy-pop-view))
           :custom(
           (ivy-use-virtual-buffers t)
-          (ivy-count-format "%d/%d ")))
+          (ivy-count-format "%d/%d ")
+          (find-program "fd")
+          (counsel-file-jump-args (split-string "-L --type f --hidden"))))
       (use-package counsel-projectile
           :ensure t)
       (counsel-projectile-mode 1)
