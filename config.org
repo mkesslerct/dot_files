@@ -453,6 +453,21 @@ used to C-/
                                        (linum-mode -1))))
    #+END_SRC
 
+** Which key
+Which key is the pinnacle of keybinding packages, with
+a helpful minibuffer that states the keybindings 
+available for a certain prefix you start typing.
+#+begin_src emacs-lisp
+(use-package which-key
+   :ensure t
+   :custom
+   ((which-key-show-early-on-C-h t)
+    (which-key-idle-delay 10000)
+    (which-key-idle-secondary-delay 0.05)
+    (which-key-popup-type 'minibuffer))
+   :config (which-key-mode))
+#+end_src
+
 * Terminal
 Configuration related to terminal emulators and modes. Recently, 
 I started using vterm which is faster than any of the others.
