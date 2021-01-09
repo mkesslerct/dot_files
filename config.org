@@ -468,6 +468,15 @@ available for a certain prefix you start typing.
    :config (which-key-mode))
 #+end_src
 
+** Ripgrep
+Adding ripgrep configuration to be able to 
+access the functionality from emacs.
+#+begin_src emacs-lisp
+(use-package rg
+   :ensure t
+   :config (rg-enable-default-bindings))
+#+end_src
+
 * Terminal
 Configuration related to terminal emulators and modes. Recently, 
 I started using vterm which is faster than any of the others.
@@ -806,11 +815,8 @@ Magit with the integration of Github Issues.
 (use-package projectile
   :ensure t
   :config(progn 
-  (define-key projectile-mode-map (kbd "C-c") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq projectile-project-search-path '("~/Documents/"))
-  (define-key projectile-mode-map (kbd "C-c l") nil)
-  (define-key projectile-mode-map (kbd "C-c a") nil)
-  (define-key projectile-mode-map (kbd "C-c c") nil)
   (projectile-global-mode)
   ))
 (with-eval-after-load 'projectile
