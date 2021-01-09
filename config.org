@@ -333,7 +333,7 @@ order to provide good completion for emacs commands.
           :custom(
           (ivy-use-virtual-buffers t)
           (ivy-count-format "%d/%d ")
-          (find-program "fd")
+          (find-program "fdfind")
           (counsel-file-jump-args (split-string "-L --type f --hidden"))))
       (use-package counsel-projectile
           :ensure t)
