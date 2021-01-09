@@ -814,6 +814,8 @@ Magit with the integration of Github Issues.
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
   :ensure t
+;; Working on ubuntu, if you are not, change fdfind to fd.
+  :custom (projectile-generic-command "fdfind . -0 --type f --color=never")
   :config(progn 
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq projectile-project-search-path '("~/Documents/"))
