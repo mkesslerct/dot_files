@@ -491,6 +491,7 @@ I started using vterm which is faster than any of the others.
 #+end_src
 
 * Org
+** Keybindings
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
 (define-key global-map (kbd "C-c l") 'org-store-link)
@@ -499,6 +500,7 @@ Keybindings for org-mode as well as better defaults. Not in use-package format y
 (define-key org-mode-map (kbd "C-,") nil)
 #+END_SRC
 
+** Initial configuration
 Initial configuration of org-directory and refile.org, with the
 intention of all capture created items to go there before correct refiling.
 #+BEGIN_SRC emacs-lisp
@@ -516,6 +518,7 @@ intention of all capture created items to go there before correct refiling.
 (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
 #+END_SRC
 
+** Refiling
 Refiling setup, using the file name as header. Last line is
 so that we ensure that tasks cannot be tagged as completed
 before subtasks have been done so.
@@ -555,6 +558,7 @@ a certain state.
 )
 #+END_SRC
 
+** Org capture
 Capture templates are used with the intention of improving
 the workflow of adding several items and refiling.
 #+BEGIN_SRC emacs-lisp
@@ -580,6 +584,7 @@ the workflow of adding several items and refiling.
  )
 #+END_SRC
 
+** Org agenda
 Adding hiding the tags on org agenda.
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-hide-tags-regexp (regexp-opt '(
@@ -695,6 +700,7 @@ of the layout, giving me a lot more information.
       )
 #+END_SRC
 
+** Org source blocks
 Tabs on org-mode source blocks try to find the language added.
 If for some reason the language on the source tag doesn't exist
 add 4 spaces.
@@ -793,6 +799,7 @@ org-roam a chance.
               (("C-c n I" . org-roam-insert-immediate))))
 #+END_SRC
 
+** Org-pomodoro
 * Version control
 Obviously Magit
 #+BEGIN_SRC emacs-lisp
