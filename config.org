@@ -800,6 +800,13 @@ org-roam a chance.
 #+END_SRC
 
 ** Org-pomodoro
+Adding pomodoro implementation with the intention of keeping everything
+I use inside of emacs, according to the OS emacs mindset.
+#+begin_src emacs-lisp
+(use-package org-pomodoro
+    :ensure t)
+#+end_src
+
 * Version control
 Obviously Magit
 #+BEGIN_SRC emacs-lisp
