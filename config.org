@@ -887,7 +887,6 @@ of enabling a better candidate mechanism.
     :config (company-prescient-mode 1))
 #+end_src
 
-
 ** Web programming
 *** CSS
 Rainbow-mode: CSS colors on the sideline.
@@ -1026,6 +1025,14 @@ Works with the eclipse server, not really sure if it is what I'm looking for.
 
 **** Python programming
 I'm using pyls.
+** Elf-mode
+Adding elf command output when the file is a binary file
+and the mode elf-mode is triggered, could be used as a standalone function. 
+The package was created by abo-abo and is in melpa.
+#+begin_src emacs-lisp
+(use-package elf-mode
+    :ensure t)
+#+end_src
 * Extra
 ** Speed-test
 Practicing typing speed in emacs.
