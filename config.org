@@ -518,7 +518,7 @@ intention of all capture created items to go there before correct refiling.
 (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
 (defvar org-book-list-file (concat org-directory "/book_list.org"))
 #+END_SRC
-
+    
 ** Refiling
 Refiling setup, using the file name as header. Last line is
 so that we ensure that tasks cannot be tagged as completed
@@ -730,53 +730,53 @@ Creating function which archives all files which contain only done (not necessar
 in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
 
 #+BEGIN_SRC emacs-lisp
-(defun qk/archive-done-org-files ()
-"Cycles all org files through checking function."
-(interactive) 
-(save-excursion
-(mapc 'check-org-file-finito (directory-files (concat org-directory "/org-agenda") t ".org$"))
-))
+  (defun qk/archive-done-org-files ()
+  "Cycles all org files through checking function."
+  (interactive) 
+  (save-excursion
+  (mapc 'check-org-file-finito (directory-files (concat org-directory "/org-agenda") t ".org$"))
+  ))
 
-(defun check-org-file-finito (f)
-"Checks TODO keyword items are DONE then archives."
-(find-file f)
-;; Shows open Todo items whether agenda or todo
-(let (
-(kwd-re
-  (cond (org-not-done-regexp)
-    (
-     (let ((kwd
-        (completing-read "Keyword (or KWD1|KWD2|...): "
-                 (mapcar #'list org-todo-keywords-1))))
-       (concat "\\("
-           (mapconcat 'identity (org-split-string kwd "|") "\\|")
-           "\\)\\>")))
-    ((<= (prefix-numeric-value) (length org-todo-keywords-1))
-     (regexp-quote (nth (1- (prefix-numeric-value))
-                org-todo-keywords-1)))
-    (t (user-error "Invalid prefix argument: %s")))))
- (if (= (org-occur (concat "^" org-outline-regexp " *" kwd-re )) 0)
- (rename-file-buffer-to-org-archive)
-     (kill-buffer (current-buffer))
-   )))
+  (defun check-org-file-finito (f)
+  "Checks TODO keyword items are DONE then archives."
+  (find-file f)
+  ;; Shows open Todo items whether agenda or todo
+  (let (
+  (kwd-re
+    (cond (org-not-done-regexp)
+      (
+       (let ((kwd
+          (completing-read "Keyword (or KWD1|KWD2|...): "
+                   (mapcar #'list org-todo-keywords-1))))
+         (concat "\\("
+             (mapconcat 'identity (org-split-string kwd "|") "\\|")
+             "\\)\\>")))
+      ((<= (prefix-numeric-value) (length org-todo-keywords-1))
+       (regexp-quote (nth (1- (prefix-numeric-value))
+                  org-todo-keywords-1)))
+      (t (user-error "Invalid prefix argument: %s")))))
+   (if (= (org-occur (concat "^" org-outline-regexp " *" kwd-re )) 0)
+   (rename-file-buffer-to-org-archive)
+       (kill-buffer (current-buffer))
+     )))
 
-(defun rename-file-buffer-to-org-archive ()
-"Renames current buffer and file it's visiting."
-(let ((name (buffer-name))
-    (filename (buffer-file-name))
-)
-(if (not (and filename (file-exists-p filename)))
-    (error "Buffer '%s' is not visiting a file!" name)
-  (let ((new-name (concat (file-name-sans-extension filename) ".org_archive")))
-    (if (get-buffer new-name)
-        (error "A buffer named '%s' already exists!" new-name)
-      (rename-file filename new-name 1)
-      (rename-buffer new-name)
-      (set-visited-file-name new-name)
-      (set-buffer-modified-p nil)
-  (kill-buffer (current-buffer))
-  (message "File '%s' successfully archived as '%s'."
-               name (file-name-nondirectory new-name)))))))
+  (defun rename-file-buffer-to-org-archive ()
+  "Renames current buffer and file it's visiting."
+  (let ((name (buffer-name))
+      (filename (buffer-file-name))
+  )
+  (if (not (and filename (file-exists-p filename)))
+      (error "Buffer '%s' is not visiting a file!" name)
+    (let ((new-name (concat (file-name-sans-extension filename) ".org_archive")))
+      (if (get-buffer new-name)
+          (error "A buffer named '%s' already exists!" new-name)
+        (rename-file filename new-name 1)
+        (rename-buffer new-name)
+        (set-visited-file-name new-name)
+        (set-buffer-modified-p nil)
+    (kill-buffer (current-buffer))
+    (message "File '%s' successfully archived as '%s'."
+                 name (file-name-nondirectory new-name)))))))
 #+END_SRC
 
 ** Org-roam
@@ -801,6 +801,15 @@ org-roam a chance.
               (("C-c n i" . org-roam-insert))
               (("C-c n I" . org-roam-insert-immediate))))
 #+END_SRC
+
+*** Hooks
+Adding the execution of certain functions when the org-roam-file-setup-hook
+is run, for example, adding spelling correction functionality.
+#+begin_src emacs-lisp
+(add-hook 'org-roam-file-setup-hook (lambda ()
+                                       (flyspell-mode t)))
+#+end_src
+
 
 * Version control
 Obviously Magit
@@ -1126,6 +1135,7 @@ a possible keymap inside of eww.
               ("p" . previous-line)
               ("f" . forward-char)
               ("b" . backward-char)
+              ("a" . org-eww-copy-for-org-mode)
               ("B" . eww-back-url)
               ("N" . eww-next-url)
               ("P" . eww-previous-url)))
