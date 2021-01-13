@@ -1054,3 +1054,89 @@ snowy environment in emacs!
     :ensure t)
 #+END_SRC
 
+
+** Eww
+Eww is the emacs browser, which can have different integrations and
+workflows, specially if you are reading text, as it has a great
+html parser which could be customizable. For eww settings I'm using
+the configuration that Prot shows on his [[https://protesilaos.com/dotemacs/#h:4523c31a-d638-4ab2-bc2c-4bdeadc2c86b][website]].
+
+*** HTML parser
+Configuring the html parser in order to avoid colors, which may not
+be working correctly, anyway.
+#+begin_src emacs-lisp
+(use-package shr
+  :custom
+  (shr-use-fonts nil)
+  (shr-use-colors nil)
+  (shr-max-image-proportion 0.7)
+  (shr-image-animate nil)
+  (shr-width (current-fill-column)))
+#+end_src
+
+*** Custom functions regarding keymaps and browse history
+#+begin_src emacs-lisp
+  (defun prot/eww-visit-history (&optional arg)
+      "Revisit a URL from `eww-prompt-history' using completion.
+    With \\[universal-argument] produce a new buffer."
+      (interactive "P")
+      (let ((history eww-prompt-history)  ; eww-bookmarks
+            (new (if arg t nil)))
+        (eww
+         (completing-read "Visit website from history: " history nil t)
+         new)))
+    (defvar qk/eww-mode-global-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "s" 'eww-search-words)
+        (define-key map "o" 'eww-open-in-new-buffer)
+        (define-key map "f" 'eww-open-file)
+        (define-key map "w" 'prot/eww-visit-history)
+        map)
+      "Key map to scope `eww' bindings for global usage.
+  The idea is to bind this to a prefix sequence, so that its
+  defined keys follow the pattern of <PREFIX> <KEY>.")
+#+end_src
+
+*** Eww configuration
+Adding all the configuration regarding the eww variables and
+a possible keymap inside of eww.
+
+#+begin_src emacs-lisp
+  (use-package eww
+    :custom
+    (eww-restore-desktop nil)
+    (eww-desktop-remove-duplicates t)
+    (eww-header-line-format "%u")
+    (eww-search-prefix "https://duckduckgo.com/html/?q=")
+    (eww-download-directory "~/Downloads/")
+    (eww-suggest-uris
+     '(eww-links-at-point
+       thing-at-point-url-at-point))
+    (eww-bookmarks-directory "~/.emacs.d/eww-bookmarks/")
+    (eww-history-limit 150)
+    (eww-use-external-browser-for-content-type
+     "\\`\\(video/\\|audio/\\|application/pdf\\)")
+    (eww-browse-url-new-window-is-tab nil)
+    (eww-form-checkbox-selected-symbol "[X]")
+    (eww-form-checkbox-symbol "[ ]")
+
+    :bind-keymap ("C-c w" . qk/eww-mode-global-map)
+  :bind (:map eww-mode-map
+              ("n" . next-line)
+              ("p" . previous-line)
+              ("f" . forward-char)
+              ("b" . backward-char)
+              ("B" . eww-back-url)
+              ("N" . eww-next-url)
+              ("P" . eww-previous-url)))
+#+end_src
+
+Also adding eww as the default browser for the browse-url
+package inside emacs.
+#+begin_src emacs-lisp
+(use-package browse-url
+  :after eww
+  :custom
+  (browse-url-browser-function 'eww-browse-url))
+#+end_src
+
