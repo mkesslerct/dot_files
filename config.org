@@ -485,9 +485,10 @@ I started using vterm which is faster than any of the others.
 
 ** vterm
 #+begin_src emacs-lisp
-(use-package vterm
-   :ensure t
-   :custom (vterm-max-scrollback 10000))
+  (use-package vterm
+     :ensure t
+     :custom (vterm-max-scrollback 10000)
+     :bind ("C-c x" . vterm))
 #+end_src
 
 * Org
@@ -1143,7 +1144,7 @@ a possible keymap inside of eww.
 
 Also adding eww as the default browser for the browse-url
 package inside emacs.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package browse-url
   :after eww
   :custom
