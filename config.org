@@ -483,13 +483,24 @@ access the functionality from emacs.
 Configuration related to terminal emulators and modes. Recently, 
 I started using vterm which is faster than any of the others.
 
-** vterm
+** Vterm
 #+begin_src emacs-lisp
   (use-package vterm
      :ensure t
      :custom (vterm-max-scrollback 10000)
-     :bind ("C-c x" . vterm))
+     )
 #+end_src
+
+*** Vterm toggle
+Package which gives us the possibility to toggle between the terminal and
+the current buffer easily, without distorting the page and allowing for vterm
+buffer creation if the buffer was non-existing.
+#+begin_src emacs-lisp
+  (use-package vterm-toggle
+    :ensure t
+     :bind ("C-c x" . vterm-toggle-cd))
+#+end_src
+
 
 * Org
 ** Keybindings
@@ -1044,6 +1055,19 @@ The package was created by abo-abo and is in melpa.
     :ensure t)
 #+end_src
 * Extra
+** Mu
+   Adding email integration for the email indexer mu, called mu4e.
+*** Lookup password
+Lookup password function in order to get emacsclient to access the password
+from the encryped gpg file.
+#+begin_src emacs-lisp
+(defun efs/lookup-password (&rest keys)
+    (let ((result (apply #'auth-source-search keys)))
+      (if result
+          (funcall (plist-get (car result) :secret))
+          nil)))
+#+end_src
+
 ** Speed-test
 Practicing typing speed in emacs.
 #+BEGIN_SRC emacs-lisp
