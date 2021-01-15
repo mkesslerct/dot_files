@@ -500,7 +500,8 @@ buffer creation if the buffer was non-existing.
     :ensure t
     :bind ("C-c x" . vterm-toggle-cd)
     :custom
-    (vterm-toggle-reset-window-configration-after-exit t))
+    (vterm-toggle-reset-window-configration-after-exit 'kill-window-only)
+    (vterm-toggle-hide-method 'delete-window))
 #+end_src
 
 * Org
