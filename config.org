@@ -1097,12 +1097,11 @@ that the mu4e version is in sync with the mu binary from my distro.
     (mu4e-view-show-addresses t)
     (mu4e-display-update-status-in-modeline t)
     (mu4e-view-show-images nil)
+    (mu4e-context-policy 'pick-first)
     (mu4e-maildir-shortcuts
-                  '(("/Inbox"             . ?i)
-                    ("/Gmail/Personal/[Gmail]/Sent Mail" . ?s)
-                    ("/Gmail/Personal/[Gmail]/Trash"     . ?t)
-                    ("/Gmail/Personal/[Gmail]/Drafts"    . ?d)
-                    ("/Gmail/Personal/[Gmail]/All Mail"  . ?a)))
+          '( (:maildir "/Gmail/Personal/[Gmail]/All Mail"     :key  ?p)
+             (:maildir "/Gmail/Work/[Gmail]/All Mail"   :key  ?w)
+             (:maildir "/UMU/Inbox"     :key  ?u)))
     (mu4e-contexts
      (list
       ;; Personal account
@@ -1117,12 +1116,7 @@ that the mu4e version is in sync with the mu binary from my distro.
                (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
                (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
                (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
-               (mu4e-bookmarks . '(
-                                  ("maildir:/Gmail/Personal/Inbox" "Inbox" ?i)
-                                  ("flag:unread AND to:qkessler@gmail.com" "Unread messages" ?u)
-                                  ("date:today..now AND to:qkessler@gmail.com" "Today's messages" ?t)
-                                  ("date:7d..now AND to:qkessler@gmail.com" "Last 7 days" ?w)))))
+               (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")))
       (make-mu4e-context
        :name "Work"
        :match-func
@@ -1134,12 +1128,7 @@ that the mu4e version is in sync with the mu binary from my distro.
                (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
                (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
                (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
-               (mu4e-bookmarks . '(
-                              ("maildir:/Gmail/Work/Inbox" "Inbox" ?i)
-                              ("flag:unread AND to:enrique.kesslerm@gmail.com" "Unread messages" ?u)
-                              ("date:today..now AND to:enrique.kesslerm@gmail.com" "Today's messages" ?t)
-                              ("date:7d..now AND to:enrique.kesslerm@gmail.com" "Last 7 days" ?w)))))
+               (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")))
       (make-mu4e-context
        :name "UMU"
        :match-func
@@ -1151,12 +1140,28 @@ that the mu4e version is in sync with the mu binary from my distro.
                (mu4e-drafts-folder  . "/UMU/Drafts")
                (mu4e-sent-folder  . "/UMU/Sent")
                (mu4e-refile-folder  . "/UMU/All Mail")
-               (mu4e-trash-folder  . "/UMU/Trash")
-               (mu4e-bookmarks . '(
-                             ("maildir:/UMU/Inbox" "Inbox" ?i)
-                             ("flag:unread AND to:enrique.kesslerm@um.es" "Unread messages" ?u)
-                             ("date:today..now AND to:enrique.kesslerm@um.es" "Today's messages" ?t)
-                             ("date:7d..now AND to:enrique.kesslerm@um.es" "Last 7 days" ?w)))))))
+               (mu4e-trash-folder  . "/UMU/Trash")))))
+    (mu4e-bookmarks
+     '((:name "Today's messages" :query "d:today..now" :key ?t)
+       (:name "Last 7 days" :query "d:7d..now" :key ?w)
+       (:name "Work Unread"
+              :query `,"to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
+              :key ?s)
+       (:name "Work Inbox"
+              :query `,"to:enrique.kesslerm@gmail.com"
+              :key ?S)
+       (:name "Personal Unread"
+              :query `,"to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
+              :key ?p)
+       (:name "Personal Inbox"
+              :query `,"to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
+              :key ?P)
+       (:name "UMU Unread"
+              :query `,"to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
+              :key ?u)
+       (:name "UMU Inbox"
+              :query `,"to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
+              :key ?U)))
     :config (mu4e t))
 #+end_src
 
