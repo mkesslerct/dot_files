@@ -1,21 +1,68 @@
-IMAPAccount gmail
+IMAPAccount gmail-personal
 Host imap.gmail.com
 User qkessler@gmail.com
 PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"gmail.com\\\" :user \\\"qkessler\\\")\" | cut -d '\"' -f2"
+PipelineDepth 50
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore gmail-remote
-Account gmail
+IMAPStore gmail-personal-remote
+Account gmail-personal
 
-MaildirStore gmail-local
+MaildirStore gmail-personal-local
 Subfolders Verbatim
-Path ~/Mail/Gmail
-Inbox ~/Mail/Gmail/Inbox
+Path ~/Mail/Gmail/Personal/
+Inbox ~/Mail/Gmail/Personal/Inbox
 
-Channel gmail
-Master :gmail-remote:
-Slave :gmail-local:
+Channel gmail-personal
+Master :gmail-personal-remote:
+Slave :gmail-personal-local:
 Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Trash"
+Create Both
+SyncState *
+
+IMAPAccount gmail-work
+Host imap.gmail.com
+User enrique.kesslerm@gmail.com
+PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"gmail.com\\\" :user \\\"enrique.kesslerm\\\")\" | cut -d '\"' -f2"
+PipelineDepth 50
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore gmail-work-remote
+Account gmail-work
+
+MaildirStore gmail-work-local
+Subfolders Verbatim
+Path ~/Mail/Gmail/Work/
+Inbox ~/Mail/Gmail/Work/Inbox
+
+Channel gmail-work
+Master :gmail-work-remote:
+Slave :gmail-work-local:
+Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Trash"
+Create Both
+SyncState *
+
+IMAPAccount umu
+Host imap.um.es
+User enrique.kesslerm@um.es
+PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"um.es\\\" :user \\\"enrique.kesslerm\\\")\" | cut -d '\"' -f2"
+PipelineDepth 50
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore umu-remote
+Account umu
+
+MaildirStore umu-local
+Subfolders Verbatim
+Path ~/Mail/UMU/
+Inbox ~/Mail/UMU/Inbox
+
+Channel umu
+Master :umu-remote:
+Slave :umu-local:
+Patterns *
 Create Both
 SyncState *
