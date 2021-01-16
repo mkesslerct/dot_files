@@ -1081,13 +1081,18 @@ that the mu4e version is in sync with the mu binary from my distro.
     :defer 20
     :bind (("C-c m" . mu4e)
            :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
+    :hook (mu4e-compose-mode-hook . flyspell-mode)
     :custom
     (mu4e-maildir "~/Mail")
     (mu4e-attachment-dir "~/Downloads")
     (mu4e-get-mail-command "mbsync -a")
     (mu4e-change-filenames-when-moving t)
+    (mu4e-completing-read-function 'ivy-completing-read)
+    (mu4e-headers-show-threads nil)
+    (mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain")
     (mu4e-update-interval (* 5 60))
     (mu4e-hide-index-messages t)
+    (mail-user-agent 'mu4e-user-agent)
     (mu4e-headers-fields
      '((:human-date . 12)
        (:flags . 6)
@@ -1097,11 +1102,11 @@ that the mu4e version is in sync with the mu binary from my distro.
     (mu4e-view-show-addresses t)
     (mu4e-display-update-status-in-modeline t)
     (mu4e-view-show-images nil)
-    (mu4e-context-policy 'pick-first)
+    (mu4e-context-policy 'ask-if-none)
     (mu4e-maildir-shortcuts
-          '( (:maildir "/Gmail/Personal/[Gmail]/All Mail"     :key  ?p)
-             (:maildir "/Gmail/Work/[Gmail]/All Mail"   :key  ?w)
-             (:maildir "/UMU/Inbox"     :key  ?u)))
+     '( (:maildir "/Gmail/Personal/[Gmail]/All Mail"     :key  ?p)
+        (:maildir "/Gmail/Work/[Gmail]/All Mail"   :key  ?w)
+        (:maildir "/UMU/Inbox"     :key  ?u)))
     (mu4e-contexts
      (list
       ;; Personal account
@@ -1116,7 +1121,8 @@ that the mu4e version is in sync with the mu binary from my distro.
                (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
                (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
                (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")))
+               (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
+               (mu4e-sent-messages-behavior 'delete)))
       (make-mu4e-context
        :name "Work"
        :match-func
@@ -1128,7 +1134,8 @@ that the mu4e version is in sync with the mu binary from my distro.
                (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
                (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
                (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")))
+               (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
+               (mu4e-sent-messages-behavior 'delete)))
       (make-mu4e-context
        :name "UMU"
        :match-func
@@ -1154,15 +1161,17 @@ that the mu4e version is in sync with the mu binary from my distro.
               :query `,"to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
               :key ?p)
        (:name "Personal Inbox"
-              :query `,"to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
+              :query `,"to:qkessler@gmail.com"
               :key ?P)
        (:name "UMU Unread"
               :query `,"to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
               :key ?u)
        (:name "UMU Inbox"
-              :query `,"to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
+              :query `,"to:enrique.kesslerm@um.es"
               :key ?U)))
-    :config (mu4e t))
+    :config
+    (mu4e t)
+    (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser)))
 #+end_src
 
 ** Speed-test
