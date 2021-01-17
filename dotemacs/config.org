@@ -1073,7 +1073,7 @@ from the encryped gpg file.
 Adding mu4e configuration that was configured with mbsync.
 We have installed it with the package manager, in order to make sure
 that the mu4e version is in sync with the mu binary from my distro.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
@@ -1092,6 +1092,7 @@ that the mu4e version is in sync with the mu binary from my distro.
     (mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain")
     (mu4e-update-interval (* 5 60))
     (mu4e-hide-index-messages t)
+    (mu4e-confirm-quit nil)
     (mail-user-agent 'mu4e-user-agent)
     (mu4e-headers-fields
      '((:human-date . 12)
