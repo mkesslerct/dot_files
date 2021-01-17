@@ -1073,7 +1073,7 @@ from the encryped gpg file.
 Adding mu4e configuration that was configured with mbsync.
 We have installed it with the package manager, in order to make sure
 that the mu4e version is in sync with the mu binary from my distro.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
@@ -1173,6 +1173,79 @@ that the mu4e version is in sync with the mu binary from my distro.
     (mu4e t)
     (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser)))
 #+end_src
+
+** RSS/Atom feed reader
+Following the need of separating my email in a more organized and
+distraction free way, I found my self looking for a efficient enough
+messure to read all the mailing lists I was subscribed to. A lot of
+free knowledge is being distributed (specially given the amount of
+amazing people on the internet this days) and it would be a shame to
+pass the opportunity. That said, I settled on Elfeed, which seems to
+have become the standard de facto on the community, while still being
+highly customizable and well documented. I followed the Protesilaos
+configuration, as I believe the workflow he implements is similar to
+the one I aspire to achieve.
+
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :ensure t
+    :custom
+    (elfeed-use-curl t)
+    (elfeed-curl-max-connections 10)
+    (elfeed-db-directory "~/.emacs.d/elfeed/")
+    (elfeed-enclosure-default-dir "~/Downloads/")
+    (elfeed-search-filter "@4-months-ago +unread")
+    (elfeed-sort-order 'descending)
+    (elfeed-search-clipboard-type 'CLIPBOARD)
+    (elfeed-search-title-max-width 100)
+    (elfeed-search-title-min-width 30)
+    (elfeed-search-trailing-width 25)
+    (elfeed-show-truncate-long-urls t)
+    (elfeed-show-unique-buffers t)
+    (elfeed-search-date-format '("%F %R" 16 :left))
+    :bind (("C-c e" . elfeed)
+           :map elfeed-search-mode-map
+           ("w" . elfeed-search-yank)
+           ("g" . elfeed-update)
+           ("G" . elfeed-search-update--force)
+           :map elfeed-show-mode-map
+           ("w" . elfeed-show-yank)))  
+#+end_src
+
+*** Protesilaos personal configuration
+In order to access the personal protesilaos elfeed configuration I
+decided on adding the .el file to the load-path, in order to
+avoid cluttering this config file.
+
+A lot of functionality implemented regards the configuration of mpv and
+bongo, which I don't currently use, a revision will follow in order to
+remove those entries.
+#+begin_src emacs-lisp
+  (use-package prot-elfeed
+  :ensure nil ;; the code is already in the load-path.
+  :custom (prot-elfeed-tag-faces t)
+  :config
+  (prot-elfeed-fontify-tags)
+  :hook (elfeed-search-mode-hook . prot-elfeed-load-feeds)
+  :bind ( :map elfeed-search-mode-map
+          ("s" . prot-elfeed-search-tag-filter)
+          ("o" . prot-elfeed-search-open-other-window)
+          ("q" . prot-elfeed-kill-buffer-close-window-dwim)
+          ("v" . prot-elfeed-mpv-dwim)
+          ("+" . prot-elfeed-toggle-tag)
+          ("!" . (lambda ()
+                   (interactive)
+                   (prot-elfeed-toggle-tag 'important)))
+          ("b" . prot-elfeed-bongo-insert-item)
+          ("h" . prot-elfeed-bongo-switch-to-playlist) ; "hop" mnemonic
+          :map elfeed-show-mode-map
+          ("a" . prot-elfeed-show-archive-entry)
+          ("e" . prot-elfeed-show-eww)
+          ("q" . prot-elfeed-kill-buffer-close-window-dwim)
+          ("b" . prot-elfeed-bongo-insert-item)
+          ("v" . prot-elfeed-mpv-dwim)))
+#+end_src
+
 
 ** Speed-test
 Practicing typing speed in emacs.
