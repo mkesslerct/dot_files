@@ -1202,14 +1202,35 @@ the one I aspire to achieve.
     (elfeed-search-trailing-width 25)
     (elfeed-show-truncate-long-urls t)
     (elfeed-show-unique-buffers t)
-    (elfeed-search-date-format '("%F %R" 16 :left))
+    (elfeed-search-date-format '("%F %R" 16 :left)))  
+  (defun elfeed-ivy-filter ()
+    (interactive)
+    (let ((filtered-tag (ivy-completing-read "Choose Tags: " (elfeed-db-get-all-tags))))
+      (progn
+        (setq elfeed-search-filter (concat elfeed-search-filter " +" filtered-tag))
+        (elfeed-search-update--force))))
+  (use-package elfeed
     :bind (("C-c e" . elfeed)
            :map elfeed-search-mode-map
            ("w" . elfeed-search-yank)
            ("g" . elfeed-update)
            ("G" . elfeed-search-update--force)
+           ("f" . elfeed-search-show-entry)
+           ("s" . elfeed-ivy-filter)
            :map elfeed-show-mode-map
-           ("w" . elfeed-show-yank)))  
+           ("w" . elfeed-show-yank)
+           ("s" . elfeed-ivy-filter)))
+#+end_src
+
+*** Elfeed org
+Adding the possibility to read the feeds from an org file, which
+gives us easier control of the tags, making use of regexp and
+inherited tags.
+#+begin_src emacs-lisp
+  (use-package elfeed-org
+    :ensure t
+  :custom (rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org.gpg")))
+    :config (elfeed-org))
 #+end_src
 
 *** Protesilaos personal configuration
@@ -1222,28 +1243,22 @@ bongo, which I don't currently use, a revision will follow in order to
 remove those entries.
 #+begin_src emacs-lisp
   (use-package prot-elfeed
-  :ensure nil ;; the code is already in the load-path.
-  :custom (prot-elfeed-tag-faces t)
-  :config
-  (prot-elfeed-fontify-tags)
-  :hook (elfeed-search-mode-hook-hook . prot-elfeed-load-feeds)
-  :bind ( :map elfeed-search-mode-map
-          ("s" . prot-elfeed-search-tag-filter)
-          ("o" . prot-elfeed-search-open-other-window)
-          ("q" . prot-elfeed-kill-buffer-close-window-dwim)
-          ("v" . prot-elfeed-mpv-dwim)
-          ("+" . prot-elfeed-toggle-tag)
-          ("!" . (lambda ()
-                   (interactive)
-                   (prot-elfeed-toggle-tag 'important)))
-          ("b" . prot-elfeed-bongo-insert-item)
-          ("h" . prot-elfeed-bongo-switch-to-playlist) ; "hop" mnemonic
-          :map elfeed-show-mode-map
-          ("a" . prot-elfeed-show-archive-entry)
-          ("e" . prot-elfeed-show-eww)
-          ("q" . prot-elfeed-kill-buffer-close-window-dwim)
-          ("b" . prot-elfeed-bongo-insert-item)
-          ("v" . prot-elfeed-mpv-dwim)))
+    :ensure nil ;; the code is already in the load-path.
+    :custom (prot-elfeed-tag-faces t)
+    :config
+    (prot-elfeed-fontify-tags)
+    :bind ( :map elfeed-search-mode-map
+            ;; ("s" . prot-elfeed-search-tag-filter)
+            ("o" . prot-elfeed-search-open-other-window)
+            ("q" . prot-elfeed-kill-buffer-close-window-dwim)
+            ("+" . prot-elfeed-toggle-tag)
+            ("!" . (lambda ()
+                     (interactive)
+                     (prot-elfeed-toggle-tag 'important)))
+            :map elfeed-show-mode-map
+            ("a" . prot-elfeed-show-archive-entry)
+            ("e" . prot-elfeed-show-eww)
+            ("q" . prot-elfeed-kill-buffer-close-window-dwim)))
 #+end_src
 
 
