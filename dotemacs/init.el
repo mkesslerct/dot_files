@@ -19,7 +19,7 @@
   (setq auto-package-update-delete-old-versions t)
   (setq auto-package-update-hide-results t)
   (auto-package-update-maybe))
-
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
 
 (custom-set-variables
