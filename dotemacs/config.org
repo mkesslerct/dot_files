@@ -1226,7 +1226,7 @@ remove those entries.
   :custom (prot-elfeed-tag-faces t)
   :config
   (prot-elfeed-fontify-tags)
-  :hook (elfeed-search-mode-hook . prot-elfeed-load-feeds)
+  :hook (elfeed-search-mode-hook-hook . prot-elfeed-load-feeds)
   :bind ( :map elfeed-search-mode-map
           ("s" . prot-elfeed-search-tag-filter)
           ("o" . prot-elfeed-search-open-other-window)
