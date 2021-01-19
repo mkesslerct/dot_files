@@ -1167,19 +1167,19 @@ different contexts.
      '((:name "Today's messages" :query "d:today..now" :key ?t)
        (:name "Last 7 days" :query "d:7d..now" :key ?w)
        (:name "Work Unread"
-              :query `,"to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
+              :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
               :key ?s)
        (:name "Work Inbox"
               :query `,"to:enrique.kesslerm@gmail.com"
               :key ?S)
        (:name "Personal Unread"
-              :query `,"to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
+              :query "to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
               :key ?p)
        (:name "Personal Inbox"
               :query `,"to:qkessler@gmail.com"
               :key ?P)
        (:name "UMU Unread"
-              :query `,"to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
+              :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
               :key ?u)
        (:name "UMU Inbox"
               :query `,"to:enrique.kesslerm@um.es"
