@@ -1117,9 +1117,9 @@ different contexts.
       (mu4e-compose-format-flowed t)
       (mu4e-sent-messages-behavior 'delete)
       (mu4e-maildir-shortcuts
-       '( (:maildir "/Gmail/Personal/Inbox"     :key  ?p)
-          (:maildir "/Gmail/Work/Inbox"   :key  ?w)
-          (:maildir "/UMU/Inbox"     :key  ?u)))
+       '( (:maildir "/Gmail/Personal/Inbox"     :key  ?p :hide-unread t)
+          (:maildir "/Gmail/Work/Inbox"   :key  ?w :hide-unread t)
+          (:maildir "/UMU/Inbox"     :key  ?u :hide-unread t)))
       (mu4e-contexts
        (list
         ;; Personal account
@@ -1174,21 +1174,12 @@ different contexts.
          (:name "Work Unread"
                 :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
                 :key ?s)
-         (:name "Work Inbox"
-                :query `,"to:enrique.kesslerm@gmail.com"
-                :key ?S)
          (:name "Personal Unread"
                 :query "to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
                 :key ?p)
-         (:name "Personal Inbox"
-                :query `,"to:qkessler@gmail.com"
-                :key ?P)
          (:name "UMU Unread"
                 :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
-                :key ?u)
-         (:name "UMU Inbox"
-                :query `,"to:enrique.kesslerm@um.es"
-                :key ?U)))
+                :key ?u)))
       :config
       (mu4e t)
       (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
