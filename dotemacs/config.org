@@ -889,8 +889,7 @@ Company is used for better completion on the fly.
   (global-company-mode 1)
   (setq company-show-numbers t)
   (setq company-dabbrev-downcase 0)
-  (setq company-idle-delay 0)
-  ))
+  (setq company-idle-delay 0)))
 #+END_SRC
 
 Adding completion on tab.
@@ -953,20 +952,23 @@ Sintax checking on the fly.
 
 *** lsp-mode
 #+BEGIN_SRC emacs-lisp
-(setq lsp-keymap-prefix "C-l")
-(use-package lsp-mode
+  (use-package lsp-mode
     :ensure t
     :commands (lsp lsp-deferred)
-    :config (setq lsp-enable-links nil)
-    :hook (python-mode . lsp-deferred)
-    :custom ((gc-cons-threshold 100000000)
-             (read-process-output-max (* 1024 1024))
-             (lsp-completion-provider :capf)
-             (lsp-idle-delay 0.500)
-             (lsp-enable-file-watchers nil)
-             (lsp-signature-auto-activate nil)
-             (lsp-headerline-breadcrumb-enable nil)
-             ))
+    :hook
+    (python-mode . lsp-deferred)
+    (lsp-mode . lsp-enable-which-key-integration)
+    :init
+    (setq gc-cons-threshold 100000000)
+    (setq read-process-output-max (* 1024 1024))
+    (setq lsp-completion-provider :capf)
+    (setq lsp-idle-delay 0.500)
+    (setq lsp-enable-file-watchers nil)
+    (setq lsp-signature-auto-activate nil)
+    (setq lsp-headerline-breadcrumb-enable nil)
+    (setq lsp-enable-links nil)
+    :config (setq lsp-keymap-prefix "C-l"))
+
 #+END_SRC
 
 **** Dap-mode
@@ -984,7 +986,7 @@ Better ui for lsp-mode, adding el-doc.
   :requires (flycheck)
   :ensure t
   :commands lsp-ui-mode
-  :config (setq lsp-ui-sideline-show-code-actions nil))
+  :custom (lsp-ui-sideline-show-code-actions nil))
 #+END_SRC
 
 **** lsp-ivy
@@ -993,17 +995,6 @@ Buffer cycling and find-files quicker. Close to helm.
 (use-package lsp-ivy
   :ensure t  
   :commands lsp-ivy-workspace-symbol)
-#+END_SRC
-
-**** lsp-treemacs
-#+BEGIN_SRC emacs-lisp
-(use-package lsp-treemacs
-  :ensure t
-  :commands lsp-treemacs-errors-list)
-(use-package treemacs
-  :defer t
-  :bind (:map global-map
-              ("<f8>" . treemacs)))
 #+END_SRC
 
 **** C++/C programming.
@@ -1021,14 +1012,16 @@ Always works on C++, sometimes wrong on C programming.
 
 **** Dart/Flutter programming
 #+BEGIN_SRC emacs-lisp
-(use-package lsp-dart 
-  :ensure t
-  :hook (dart-mode . lsp))
-(setq dart-sdk-path "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
-(setq lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
-(setq lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter")
-(setq lsp-dart-main-code-lens nil)
-(setq dart-format-on-save t)
+  (use-package lsp-dart 
+    :ensure t
+    :hook (dart-mode . lsp-deferred)
+    :custom
+    (dart-sdk-path "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
+    (lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
+    (lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter")
+    (lsp-dart-main-code-lens nil)
+    (dart-format-on-save t))
+
 #+END_SRC
 
 ***** Hover
@@ -1052,7 +1045,15 @@ Works with the eclipse server, not really sure if it is what I'm looking for.
 #+END_SRC
 
 **** Python programming
-I'm using pyls.
+Adding pip-requirements in order to benefit from syntax
+and completion for pip requirements files.
+#+begin_src emacs-lisp
+  (use-package pip-requirements
+    :demand t
+    :ensure t)  
+#+end_src
+
+
 ** Elf-mode
 Adding elf command output when the file is a binary file
 and the mode elf-mode is triggered, could be used as a standalone function. 
