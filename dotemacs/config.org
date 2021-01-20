@@ -1177,8 +1177,9 @@ different contexts.
                  (smtpmail-smtp-server . "smtp.um.es")
                  (smtpmail-smtp-service . 587)))))
       (mu4e-bookmarks
-       '((:name "Today's messages" :query `,"d:today..now" :key ?t)
+       '(
          (:name "Last 7 days" :query `,"d:7d..now" :key ?w)
+         (:name "Today's messages" :query "d:today..now" :key ?t)
          (:name "Work Unread"
                 :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
                 :key ?s)
