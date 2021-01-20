@@ -976,8 +976,9 @@ Server side debugging protocol, seemed to be installed with lsp-dart,
 I'm adding the package here just to make sure, as I couldn't load
 lsp-dart or lsp-java because dap-mode wasn't available.
 #+begin_src emacs-lisp
-(use-package dap-mode
+  (use-package dap-mode
     :ensure t)
+  (use-package dap-python)
 #+end_src
 **** lsp-ui
 Better ui for lsp-mode, adding el-doc.
@@ -1052,7 +1053,6 @@ and completion for pip requirements files.
     :demand t
     :ensure t)  
 #+end_src
-
 
 ** Elf-mode
 Adding elf command output when the file is a binary file
