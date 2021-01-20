@@ -1117,8 +1117,8 @@ different contexts.
       (mu4e-compose-format-flowed t)
       (mu4e-sent-messages-behavior 'delete)
       (mu4e-maildir-shortcuts
-       '( (:maildir "/Gmail/Personal/[Gmail]/All Mail"     :key  ?p)
-          (:maildir "/Gmail/Work/[Gmail]/All Mail"   :key  ?w)
+       '( (:maildir "/Gmail/Personal/Inbox"     :key  ?p)
+          (:maildir "/Gmail/Work/Inbox"   :key  ?w)
           (:maildir "/UMU/Inbox"     :key  ?u)))
       (mu4e-contexts
        (list
@@ -1169,8 +1169,8 @@ different contexts.
                  (smtpmail-smtp-server . "smtp.um.es")
                  (smtpmail-smtp-service . 587)))))
       (mu4e-bookmarks
-       '((:name "Today's messages" :query "d:today..now" :key ?t)
-         (:name "Last 7 days" :query "d:7d..now" :key ?w)
+       '((:name "Today's messages" :query `,"d:today..now" :key ?t)
+         (:name "Last 7 days" :query `,"d:7d..now" :key ?w)
          (:name "Work Unread"
                 :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
                 :key ?s)
