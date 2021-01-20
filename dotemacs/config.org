@@ -1046,6 +1046,14 @@ Works with the eclipse server, not really sure if it is what I'm looking for.
 #+END_SRC
 
 **** Python programming
+Making sure the executable for python is not longer "python",
+but default to using the "python3" binary.
+#+begin_src emacs-lisp
+    (use-package python-mode
+      :custom (python-shell-interpreter "python3"))
+#+end_src
+>
+
 Adding pip-requirements in order to benefit from syntax
 and completion for pip requirements files.
 #+begin_src emacs-lisp
