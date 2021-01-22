@@ -513,7 +513,7 @@ buffer creation if the buffer was non-existing.
 ** Keybindings
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
-(define-key global-map (kbd "C-c l") 'org-store-link)
+(define-key global-map (kbd "C-c o l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
 (define-key global-map (kbd "C-c c") 'org-capture)
 (define-key org-mode-map (kbd "C-,") nil)
@@ -958,6 +958,7 @@ Sintax checking on the fly.
     :hook
     (python-mode . lsp-deferred)
     (lsp-mode . lsp-enable-which-key-integration)
+    (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
     :init
     (setq gc-cons-threshold 100000000)
     (setq read-process-output-max (* 1024 1024))
@@ -967,7 +968,7 @@ Sintax checking on the fly.
     (setq lsp-signature-auto-activate nil)
     (setq lsp-headerline-breadcrumb-enable nil)
     (setq lsp-enable-links nil)
-    :config (setq lsp-keymap-prefix "C-l"))
+    :config (setq lsp-keymap-prefix "C-c l"))
 
 #+END_SRC
 
