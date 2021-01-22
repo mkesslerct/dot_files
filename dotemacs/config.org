@@ -1311,7 +1311,6 @@ remove those entries.
             ("q" . prot-elfeed-kill-buffer-close-window-dwim)))
 #+end_src
 
-
 ** Speed-test
 Practicing typing speed in emacs.
 #+BEGIN_SRC emacs-lisp
@@ -1331,7 +1330,6 @@ snowy environment in emacs!
 (use-package snow
     :ensure t)
 #+END_SRC
-
 
 ** Eww
 Eww is the emacs browser, which can have different integrations and
@@ -1417,5 +1415,24 @@ package inside emacs.
   :after eww
   :custom
   (browse-url-browser-function 'eww-browse-url))
+#+end_src
+
+Configuring mailcap mime data in order to be able to view pdfs
+from eww buffers, using the pdf-view-mode of pdf-tools.
+#+begin_src emacs-lisp
+  (use-package mailcap
+    :config (add-to-list 'mailcap-user-mime-data
+               '((type . "application/pdf")
+                 (viewer . pdf-view-mode))))  
+#+end_src
+
+
+** Emojify
+Adding emoji support in order to be able to use it in
+org-mode files, with using them in a blog post in sight.
+#+begin_src emacs-lisp
+  (use-package emojify
+    :ensure t
+    :hook (after-init . global-emojify-mode))  
 #+end_src
 
