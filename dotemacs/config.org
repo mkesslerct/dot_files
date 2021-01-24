@@ -853,8 +853,7 @@ a seemless integration with org-mode.
   (use-package org-download
     :ensure t
     :defer t
-    :init
-    ;; Add handlers for drag-and-drop when Org is loaded.
+    :init ;; Add handlers for drag-and-drop when Org is loaded.
     (with-eval-after-load 'org
       (org-download-enable)))
 #+end_src
