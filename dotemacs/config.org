@@ -853,12 +853,7 @@ a seemless integration with org-mode.
   (use-package org-download
     :ensure t
     :defer t
-<<<<<<< HEAD
     :init ;; Add handlers for drag-and-drop when Org is loaded.
-=======
-    :init
-    ;; Add handlers for drag-and-drop when Org is loaded.
->>>>>>> 0cae3b5... Adding org-download in order to get access to images from org-files
     (with-eval-after-load 'org
       (org-download-enable)))
 #+end_src
