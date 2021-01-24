@@ -1112,6 +1112,7 @@ different contexts.
     (mu4e-compose-signature "Enrique Kessler Martínez\n")
     (mu4e-compose-signature-auto-include t)
     (mu4e-confirm-quit nil)
+    (message-send-mail-function 'smtpmail-send-it)
     (mu4e-headers-auto-update t)
     (mu4e-headers-skip-duplicates t)
     (mu4e-headers-fields
@@ -1218,8 +1219,12 @@ with emacs.
 *** SMTP
 SMTP configuration in order to be able to send messages via smtp,
 adding the async functionality.
-#+begin_src emacs-lisp
+
+:warning: UPDATE 24/01/21: async server has problems atm, will untangle the file and
+connect mu4e to the synchronous smtpmail-send.
+#+begin_src emacs-lisp :tangle no
 (use-package smtpmail-async
+
   :after smtpmail
   :custom
   (send-mail-function 'async-smtpmail-send-it)
