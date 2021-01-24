@@ -608,7 +608,6 @@ the workflow of adding several items and refiling.
    )
   ;; Keep a line between headers
   ;; org-cycle-separator-lines 1
-  )
 #+END_SRC
 
 ** Org agenda
@@ -813,25 +812,27 @@ close to a month. As a way of improving this workflow, I decided to give
 org-roam a chance.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-roam
-    :ensure t
-    :hook
-    (after-init . org-roam-mode)
-    :custom
-    (org-roam-directory "~/Documents/org_files/slip-box/")
-    (org-roam-capture-templates '(
-                                  ("d" "default" plain (function org-roam--capture-get-point)
-                                   "%?"
-                                   :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                   :head "#+title: ${title}\n#+roam_key: \n#+roam_tags: \n"
-                                   :unnarrowed t)))
-    :bind (:map org-roam-mode-map
-                (("C-c n l" . org-roam)
-                 ("C-c n f" . org-roam-find-file)
-                 ("C-c n g" . org-roam-graph))
-                :map org-mode-map
-                (("C-c n i" . org-roam-insert))
-                (("C-c n I" . org-roam-insert-immediate))))
+    (use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/Documents/org_files/slip-box/")
+      (org-roam-capture-templates '(
+                                    ("d" "default" plain (function org-roam--capture-get-point)
+                                     "%?"
+                                     :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                     :head "#+title: ${title}\n#+roam_key: \n#+roam_tags: \n"
+                                     :unnarrowed t)))
+      :bind (:map org-roam-mode-map
+             (("C-c n l" . org-roam)
+              ("C-c n f" . org-roam-find-file)
+              ("C-c n g" . org-roam-graph))
+             :map org-mode-map
+             (("C-c n i" . org-roam-insert)
+              ("C-c n I" . org-roam-insert-immediate))
+             :map org-roam-backlinks-mode-map
+             ("w" . visual-line-mode)))
 #+END_SRC
 
 *** Hooks
