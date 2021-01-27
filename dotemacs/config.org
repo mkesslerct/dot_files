@@ -445,21 +445,21 @@ used to C-/
 #+END_SRC
 
 ** pdf tools
-   pdf tools so that pages are created on demand instead of preloading the entire file, which
-   may freeze emacs. Also adding the hook in order to autorevert the pdf buffer when compiling
-    with auctex.
-   #+BEGIN_SRC emacs-lisp
-     (use-package pdf-tools
-       :ensure t
-       :config (pdf-tools-install)
-       (setq-default pdf-view-display-size 'fit-page)
-       (setq pdf-annot-activate-created-annotations t)
-       (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-       (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
-       (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-       (add-hook 'pdf-view-mode-hook (lambda ()
-                                       (linum-mode -1))))
-   #+END_SRC
+pdf tools so that pages are created on demand instead of preloading the entire file, which
+may freeze emacs. Also adding the hook in order to autorevert the pdf buffer when compiling
+with auctex.
+#+BEGIN_SRC emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :config (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-page)
+    (setq pdf-annot-activate-created-annotations t)
+    (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+    (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
+    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+    (add-hook 'pdf-view-mode-hook (lambda ()
+                                    (linum-mode -1))))
+#+END_SRC
 
 ** Which key
 Which key is the pinnacle of keybinding packages, with
@@ -857,6 +857,17 @@ a seemless integration with org-mode.
     (with-eval-after-load 'org
       (org-download-enable)))
 #+end_src
+
+** Org-pdftools
+Org-pdftools is the mantained version of the package org-pdfview, which allos for annotations
+and org-links to different pages of the pdf, instead of giving the normal 500 kilometers wide
+slug that org-mode gives.
+#+begin_src emacs-lisp
+  (use-package org-pdftools
+    :ensure t
+    :hook (org-mode . org-pdftools-setup-link))
+#+end_src
+
 
 * Version control
 Obviously Magit
@@ -1396,6 +1407,7 @@ be working correctly, anyway.
         (define-key map "o" 'eww-open-in-new-buffer)
         (define-key map "f" 'eww-open-file)
         (define-key map "w" 'prot/eww-visit-history)
+        (define-key map "c" 'browse-url-chromium)
         map)
       "Key map to scope `eww' bindings for global usage.
   The idea is to bind this to a prefix sequence, so that its
@@ -1448,7 +1460,10 @@ package inside emacs.
 
 Configuring mailcap mime data in order to be able to view pdfs
 from eww buffers, using the pdf-view-mode of pdf-tools.
-#+begin_src emacs-lisp
+
+:warning: Update 26/01/21: Untangling this config, testing if the eww configuration
+is enough to open the pdfs in the browser, avoiding problems.
+#+begin_src emacs-lisp :tangle no
   (use-package mailcap
     :config (add-to-list 'mailcap-user-mime-data
                '((type . "application/pdf")
