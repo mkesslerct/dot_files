@@ -1164,7 +1164,6 @@ different contexts.
     (mu4e-view-show-images nil)
     (mu4e-context-policy 'pick-first)
     (mu4e-compose-format-flowed t)
-    (mu4e-sent-messages-behavior 'delete)
     (mu4e-maildir-shortcuts
      '( (:maildir "/Gmail/Personal/Inbox"     :key  ?p :hide-unread t)
         (:maildir "/Gmail/Work/Inbox"   :key  ?w :hide-unread t)
@@ -1186,6 +1185,7 @@ different contexts.
                (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
                (smtpmail-default-smtp-server . "smtp.gmail.com")
                (smtpmail-smtp-server . "smtp.gmail.com")
+               (mu4e-sent-messages-behavior . 'delete)
                (smtpmail-smtp-service . 587)))
       (make-mu4e-context
        :name "Work"
@@ -1200,6 +1200,7 @@ different contexts.
                (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
                (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
                (smtpmail-default-smtp-server . "smtp.gmail.com")
+               (mu4e-sent-messages-behavior . 'delete)
                (smtpmail-smtp-server . "smtp.gmail.com")
                (smtpmail-smtp-service . 587)))
       (make-mu4e-context
@@ -1214,6 +1215,7 @@ different contexts.
                (mu4e-sent-folder  . "/UMU/Sent")
                (mu4e-refile-folder  . "/UMU/All Mail")
                (mu4e-trash-folder  . "/UMU/Trash")
+               (mu4e-sent-messages-behavior . 'sent)
                (smtpmail-default-smtp-server . "smtp.um.es")
                (smtpmail-smtp-server . "smtp.um.es")
                (smtpmail-smtp-service . 587)))))
@@ -1258,11 +1260,12 @@ SMTP configuration in order to be able to send messages via smtp,
 adding the async functionality.
 
 #+begin_src emacs-lisp
-(use-package smtpmail-async
-  :after smtpmail
-  :custom
-  (send-mail-function 'async-smtpmail-send-it)
-  (message-send-mail-function 'async-smtpmail-send-it)) 
+  (use-package async
+    :ensure t)
+  (use-package smtpmail-async
+    :ensure nil
+    :custom (send-mail-function 'async-smtpmail-send-it)
+    (message-send-mail-function 'async-smtpmail-send-it))
 #+end_src
 
 ** RSS/Atom feed reader
