@@ -844,6 +844,15 @@ is run, for example, adding spelling correction functionality.
                                        (flyspell-mode t)))
 #+end_src
 
+*** Org-roam protocol
+After having configured the org-protocol, the org-roam-protocol will open the links
+that have been created with the org-roam-graph function in order to allow for faster
+browsing when outilining blog posts or articles.
+#+begin_src emacs-lisp
+  (use-package org-roam-protocol
+    :ensure nil)
+#+end_src
+
 ** Org-download
 Org download is one interesting package, which allows drag-and-drop functionality
 for org files, saving the downloaded image to the org-download-dir. This is crucial
@@ -868,6 +877,14 @@ slug that org-mode gives.
     :hook (org-mode . org-pdftools-setup-link))
 #+end_src
 
+** Exporting to epub
+This is an attempt to have org-mode export to epub, in order to produce ebooks
+that I can later convert to mobi in order to include in my kindle. The books
+that was interested in converting would most likely be collections of blog posts.
+#+begin_src emacs-lisp
+  (use-package ox-epub
+    :ensure t)
+#+end_src
 
 * Version control
 Obviously Magit
@@ -1151,6 +1168,7 @@ different contexts.
     (mu4e-compose-signature "Enrique Kessler Martínez\n")
     (mu4e-compose-signature-auto-include t)
     (mu4e-confirm-quit nil)
+    (mu4e-sent-messages-behavior 'sent)
     (mu4e-headers-auto-update t)
     (mu4e-headers-skip-duplicates t)
     (mu4e-headers-fields
@@ -1185,7 +1203,6 @@ different contexts.
                (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
                (smtpmail-default-smtp-server . "smtp.gmail.com")
                (smtpmail-smtp-server . "smtp.gmail.com")
-               (mu4e-sent-messages-behavior . 'delete)
                (smtpmail-smtp-service . 587)))
       (make-mu4e-context
        :name "Work"
@@ -1200,7 +1217,6 @@ different contexts.
                (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
                (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
                (smtpmail-default-smtp-server . "smtp.gmail.com")
-               (mu4e-sent-messages-behavior . 'delete)
                (smtpmail-smtp-server . "smtp.gmail.com")
                (smtpmail-smtp-service . 587)))
       (make-mu4e-context
@@ -1213,9 +1229,7 @@ different contexts.
                (user-full-name    . "Enrique Kessler Martínez")
                (mu4e-drafts-folder  . "/UMU/Drafts")
                (mu4e-sent-folder  . "/UMU/Sent")
-               (mu4e-refile-folder  . "/UMU/All Mail")
                (mu4e-trash-folder  . "/UMU/Trash")
-               (mu4e-sent-messages-behavior . 'sent)
                (smtpmail-default-smtp-server . "smtp.um.es")
                (smtpmail-smtp-server . "smtp.um.es")
                (smtpmail-smtp-service . 587)))))
