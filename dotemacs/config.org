@@ -1104,7 +1104,10 @@ Works with the eclipse server, not really sure if it is what I'm looking for.
 
 **** Python programming
 Making sure the executable for python is not longer "python",
-but default to using the "python3" binary.
+but default to using the "python3" binary. Remember that pip3,
+when installing python-language-server saves the information in
+~/.local/bin, which may not be in your path, check the "echo $PATH"
+output.
 #+begin_src emacs-lisp
     (use-package python
       :custom (python-shell-interpreter "python3"))
