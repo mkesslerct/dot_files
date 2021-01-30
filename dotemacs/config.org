@@ -61,6 +61,15 @@ the intention this modification is the clean workspace directories.
    kept-old-versions 2
    version-control t)
 #+end_src
+** Setting faces easily
+Found the face-spec-set, which is the easiest way to configure the faces for especific
+modes, specially using use-package. The code is from the [[https://se30.xyz/conf.html][Alexm website]].
+#+begin_src emacs-lisp
+  (defun alexm/set-faces-by-spec (&rest specs)
+    "Maps SPECS through face-spec-set."
+    (mapc #'(lambda (f) (apply #'face-spec-set f)) specs))
+#+end_src
+
 ** Try
 Package that allows to try emacs packages without installing them.
 What it really does is installing the files in a temp directory and
@@ -375,10 +384,48 @@ Deleting all the spaces but one when multiple spaces are present.
 #+END_SRC
 
 ** Markdown
-Markdown command, not installed by default.
+Markdown configuration, which I use specially often when editing README files
+on Github. The are some interesting options like the change of the markdown-command
+to pandoc which is way better at compiling html5. After that, we are using
+impatient-mode which is a package that allows for life preview of the file as you are
+editing it, which is amazing. Last but not least, we are configuring a markdown filter
+in order to get the Github look when "markdowning". The configuration has be harvested
+from the [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][bits and bobs blog post.]]
 #+BEGIN_SRC emacs-lisp
-(custom-set-variables
-  '(markdown-command "/usr/bin/markdown"))
+  (use-package simple-httpd
+    :ensure t
+    :custom
+    (httpd-port 7070)
+    (httpd-host (system-name)))
+
+  (use-package impatient-mode
+    :ensure t
+    :commands impatient-mode)
+
+  (use-package markdown-mode
+    :ensure nil
+    :mode ("\\.md\\'" . gfm-mode)
+    :commands (markdown-mode gfm-mode)
+    :custom (markdown-command "pandoc -t html5")
+    :bind ("C-c r" . bb/markdown-preview)
+    :init
+    (defun bb/markdown-filter (buffer)
+      (princ
+       (with-temp-buffer
+         (let ((tmp (buffer-name)))
+           (set-buffer buffer)
+           (set-buffer (markdown tmp))
+           (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/>
+  <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
+       (current-buffer)))
+    (defun bb/markdown-preview ()
+      "Preview markdown."
+      (interactive)
+      (unless (process-status "httpd")
+        (httpd-start))
+      (impatient-mode)
+      (imp-set-user-filter 'bb/markdown-filter)
+      (imp-visit-buffer)))
 #+END_SRC
 
 ** Mark commands
@@ -898,8 +945,8 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
     :ensure t
     :custom
     (org-pomodoro-keep-killed-pomodoro-time t)
-    (org-pomodoro-start-sound . (concat user-emacs-directory "extra/loud-bell.wav"))
-    (org-pomodoro-short-break-sound . (concat user-emacs-directory "extra/bell.wav"))
+    (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
+    (org-pomodoro-short-break-sound (concat user-emacs-directory "extra/bell.wav"))
     :bind-keymap("C-c o p" . qk/org-pomodoro-mode-global-map)
     :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
     :init 
@@ -1542,3 +1589,16 @@ org-mode files, with using them in a blog post in sight.
     :hook (after-init . global-emojify-mode))  
 #+end_src
 
+** Accounting from emacs
+Thanks to the amazing Ledger command line tool, which is an double-entry
+accounting system that allows for fast queries and reports we are able to
+connect our emacs --and ledger files-- to the amazing ledger-mode.
+#+begin_src emacs-lisp
+  (use-package ledger-mode
+    :mode "\\.ledger\\'"
+    :custom (ledger-clear-whole-transactions t)
+    :config
+    (alexm/set-faces-by-spec
+     '(ledger-occur-xact-face
+       ((t (:background "#222324" :inherit nil))))))  
+#+end_src
