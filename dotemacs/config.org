@@ -1605,6 +1605,7 @@ connect our emacs --and ledger files-- to the amazing ledger-mode.
   (use-package ledger-mode
     :mode "\\.ledger\\'"
     :custom (ledger-clear-whole-transactions t)
+    :ensure t
     :config
     (alexm/set-faces-by-spec
      '(ledger-occur-xact-face
