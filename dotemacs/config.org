@@ -561,10 +561,11 @@ buffer creation if the buffer was non-existing.
 ** Keybindings
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
-(define-key global-map (kbd "C-c o l") 'org-store-link)
-(define-key global-map (kbd "C-c a") 'org-agenda)
-(define-key global-map (kbd "C-c c") 'org-capture)
-(define-key org-mode-map (kbd "C-,") nil)
+  (define-key global-map (kbd "C-c o l") 'org-store-link)
+  (define-key global-map (kbd "C-c a") 'org-agenda)
+  (define-key global-map (kbd "C-c c") 'org-capture)
+  (define-key org-mode-map (kbd "C-c o c") 'org-columns)
+  (define-key org-mode-map (kbd "C-,") nil)
 #+END_SRC
 
 ** Initial configuration
@@ -962,7 +963,7 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
     :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
     :init 
     (defvar shu/org-pomodoro-columns-format
-      "%22SCHEDULED %CATEGORY %42ITEM %3Effort(E){:} %3CLOCKSUM_T(R)")
+      "%22SCHEDULED %CATEGORY %42ITEM %3Effort(Effort){:} %4CLOCKSUM_T(Time)")
     (defun shu/org-pomodoro-columns ()
       (interactive)
       (org-columns shu/org-pomodoro-columns-format))
@@ -976,7 +977,6 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
         (define-key map "I" 'org-pomodoro)
         (define-key map "a" 'shu/org-pomodoro-agenda-columns)
         (define-key map "c" 'shu/org-pomodoro-columns)
-        (define-key map "i" 'shu/org-pomodoro-record-interuptions)
         map)
       "Key map to scope `org-pomodoro' bindings for global usage.
                 The idea is to bind this to a prefix sequence, so that its
