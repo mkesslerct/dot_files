@@ -167,7 +167,7 @@ the default keybinding is ^ which I find difficult to reach.
 
 #+begin_src emacs-lisp
   (use-package dired
-    :hook (dire-mode-hook . org-download-enable)
+    :hook (dire-mode . org-download-enable)
     :bind (:map dired-mode-map 
                 ("b" . dired-up-directory)))
 #+end_src
@@ -946,14 +946,14 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
 #+begin_src emacs-lisp
   (use-package org-pomodoro
     :ensure t
-    :hook (org-pomodoro-break-finished-hook .
-                                            (lambda ()
-                                              (interactive)
-                                              (point-to-register 1)
-                                              (org-clock-goto)
-                                              (org-pomodoro)
-                                              (register-to-point 1)
-                                              ))
+    :hook (org-pomodoro-break-finished .
+                                       (lambda ()
+                                         (interactive)
+                                         (point-to-register 1)
+                                         (org-clock-goto)
+                                         (org-pomodoro)
+                                         (register-to-point 1)
+                                         ))
     :custom
     (org-pomodoro-keep-killed-pomodoro-time t)
     (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
