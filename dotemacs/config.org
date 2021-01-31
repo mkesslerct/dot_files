@@ -167,7 +167,7 @@ the default keybinding is ^ which I find difficult to reach.
 
 #+begin_src emacs-lisp
   (use-package dired
-    :hook (dire-mode . org-download-enable)
+    :hook (dired-mode . org-download-enable)
     :bind (:map dired-mode-map 
                 ("b" . dired-up-directory)))
 #+end_src
@@ -557,7 +557,7 @@ buffer creation if the buffer was non-existing.
     (vterm-toggle-hide-method 'delete-window))
 #+end_src
 
-* Org
+* Org-mode
 ** Keybindings
 Keybindings for org-mode as well as better defaults. Not in use-package format yet.
 #+BEGIN_SRC emacs-lisp
@@ -592,6 +592,9 @@ intention of all capture created items to go there before correct refiling.
   (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
   (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
   (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               (append org-babel-load-languages
+                                       '((ledger . t))))
 #+END_SRC
     
 ** Refiling
