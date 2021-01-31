@@ -588,6 +588,9 @@ intention of all capture created items to go there before correct refiling.
    )
   (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
   (defvar org-book-list-file (concat org-directory "/book_list.org"))
+  (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
+  (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
+  (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
 #+END_SRC
     
 ** Refiling
@@ -943,6 +946,14 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
 #+begin_src emacs-lisp
   (use-package org-pomodoro
     :ensure t
+    :hook (org-pomodoro-break-finished-hook .
+                                            (lambda ()
+                                              (interactive)
+                                              (point-to-register 1)
+                                              (org-clock-goto)
+                                              (org-pomodoro)
+                                              (register-to-point 1)
+                                              ))
     :custom
     (org-pomodoro-keep-killed-pomodoro-time t)
     (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
@@ -968,11 +979,8 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
         (define-key map "i" 'shu/org-pomodoro-record-interuptions)
         map)
       "Key map to scope `org-pomodoro' bindings for global usage.
-              The idea is to bind this to a prefix sequence, so that its
-              defined keys follow the pattern of <PREFIX> <KEY>.")
-    (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
-    (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
-    (add-hook 'org-clock-out-hook 'org-save-all-org-buffers))
+                The idea is to bind this to a prefix sequence, so that its
+                defined keys follow the pattern of <PREFIX> <KEY>."))
 #+end_src
 
 * Version control
@@ -1238,7 +1246,7 @@ that the mu4e version is in sync with the mu binary from my distro.
 
 In order to be able to send email, we need to configure smtp in the
 different contexts.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
