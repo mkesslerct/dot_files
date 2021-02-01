@@ -566,6 +566,7 @@ Keybindings for org-mode as well as better defaults. Not in use-package format y
   (define-key global-map (kbd "C-c c") 'org-capture)
   (define-key org-mode-map (kbd "C-c o c") 'org-columns)
   (define-key org-mode-map (kbd "C-,") nil)
+  (define-key org-mode-map (kbd "C-c o t") 'org-babel-tangle)
 #+END_SRC
 
 ** Initial configuration
@@ -579,6 +580,7 @@ intention of all capture created items to go there before correct refiling.
    org-archive-location (concat org-directory "/archive/%s_archive::")
    org-refile-targets (quote ((nil :maxlevel . 3)
                               (org-agenda-files :maxlevel . 3)))
+   org-src-fontify-natively t
    org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
    org-clock-out-remove-zero-time-clocks t
    org-clock-out-when-done t
@@ -947,9 +949,21 @@ that was interested in converting would most likely be collections of blog posts
 ** Org-pomodoro
 Adding pomodoro support to emacs, with the intention of adding the effort
 column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxiao9058/dotemacs.d/raw/master/dotemacs.d/lisp/init-pomodoro.el][shuxiao9058]] config.
+
+I'm also adding a function to be able to set the effort in pomodoros, to avoid
+possible missunderstandings.
 #+begin_src emacs-lisp
+  (defun ndk/org-set-effort-in-pomodoros (&optional n)
+    (interactive "P")
+    (setq n (or n (string-to-number (read-from-minibuffer "How many pomodoros: " nil nil nil nil "1" nil))))
+    (let* ((mins-per-pomodoro-prop (org-entry-get (point) "MINUTES_PER_POMODORO" t))
+           (mins-per-pomodoro (if mins-per-pomodoro-prop
+                                  (string-to-number mins-per-pomodoro-prop)
+                                25)))
+      (org-set-effort nil (org-duration-from-minutes (* n mins-per-pomodoro)))))
   (use-package org-pomodoro
     :ensure t
+    :demand t
     :hook (org-pomodoro-break-finished .
                                        (lambda ()
                                          (interactive)
@@ -963,10 +977,11 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
     (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
     (org-pomodoro-short-break-sound (concat user-emacs-directory "extra/bell.wav"))
     :bind-keymap("C-c o p" . qk/org-pomodoro-mode-global-map)
-    :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
+    :bind (:map org-agenda-mode-map ("P" . org-pomodoro)
+                ("e" . ndk/org-set-effort-in-pomodoros))
     :init 
     (defvar shu/org-pomodoro-columns-format
-      "%22SCHEDULED %CATEGORY %42ITEM %3Effort(Effort){:} %4CLOCKSUM_T(Time)")
+      "%22SCHEDULED %CATEGORY %42ITEM %4Effort(Effort){:} %4CLOCKSUM_T(Time)")
     (defun shu/org-pomodoro-columns ()
       (interactive)
       (org-columns shu/org-pomodoro-columns-format))
@@ -980,10 +995,10 @@ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxia
         (define-key map "I" 'org-pomodoro)
         (define-key map "a" 'shu/org-pomodoro-agenda-columns)
         (define-key map "c" 'shu/org-pomodoro-columns)
-        map)
+        (define-key map "e" 'ndk/org-set-effort-in-pomodoros) map)
       "Key map to scope `org-pomodoro' bindings for global usage.
-                The idea is to bind this to a prefix sequence, so that its
-                defined keys follow the pattern of <PREFIX> <KEY>."))
+                  The idea is to bind this to a prefix sequence, so that its
+                  defined keys follow the pattern of <PREFIX> <KEY>."))
 #+end_src
 
 * Version control
@@ -1249,7 +1264,7 @@ that the mu4e version is in sync with the mu binary from my distro.
 
 In order to be able to send email, we need to configure smtp in the
 different contexts.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
