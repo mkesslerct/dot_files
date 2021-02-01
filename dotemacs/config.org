@@ -977,8 +977,7 @@ possible missunderstandings.
     (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
     (org-pomodoro-short-break-sound (concat user-emacs-directory "extra/bell.wav"))
     :bind-keymap("C-c o p" . qk/org-pomodoro-mode-global-map)
-    :bind (:map org-agenda-mode-map ("P" . org-pomodoro)
-                ("e" . ndk/org-set-effort-in-pomodoros))
+    :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
     :init 
     (defvar shu/org-pomodoro-columns-format
       "%22SCHEDULED %CATEGORY %42ITEM %4Effort(Effort){:} %4CLOCKSUM_T(Time)")
