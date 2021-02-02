@@ -532,6 +532,24 @@ access the functionality from emacs.
    :config (rg-enable-default-bindings))
 #+end_src
 
+** Flyspelling
+Flyspelling is a process that checks the current buffer and highlights all
+the words that have been misspelled. This is key to good spelling in formal
+texts as well as blog post, or note making.
+#+begin_src emacs-lisp
+  (defun fd-switch-dictionary()
+    (interactive)
+    (let* ((dic ispell-current-dictionary)
+           (change (if (string= dic "english") "spanish" "english")))
+      (ispell-change-dictionary change)
+      (message "Dictionary switched from %s to %s" dic change)
+      ))
+  (defun flyspell-buffer-after-pdict-save (&rest _)
+    (flyspell-buffer))
+
+  (advice-add 'ispell-pdict-save :after #'flyspell-buffer-after-pdict-save)
+#+end_src
+
 * Terminal
 Configuration related to terminal emulators and modes. Recently, 
 I started using vterm which is faster than any of the others.
