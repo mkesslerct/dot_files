@@ -789,6 +789,15 @@ of the layout, giving me a lot more information.
         )
 #+END_SRC
 
+Adding custom agenda commands, with the intention of making the refiling and
+tagging workflow a bit faster, as C-c C-w might be cumbersome to write in agenda-view.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+                  (local-set-key (kbd "r") 'org-agenda-refile)))
+#+END_SRC
+
+
 ** Org source blocks
 Tabs on org-mode source blocks try to find the language added.
 If for some reason the language on the source tag doesn't exist
@@ -804,14 +813,7 @@ add 4 spaces.
                   (indent-to 4))))))
 #+END_SRC
 
-Adding custom agenda commands, with the intention of making the refiling and
-tagging workflow a bit faster, as C-c C-w might be cumbersome to write in agenda-view.
-#+BEGIN_SRC emacs-lisp
-(add-hook 'org-agenda-mode-hook
-          (lambda ()
-                  (local-set-key (kbd "r") 'org-agenda-refile)))
-#+END_SRC
-
+** Archiving of files
 Creating function which archives all files which contain only done (not necessarily
 in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
 
