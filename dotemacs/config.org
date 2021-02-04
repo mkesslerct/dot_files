@@ -1142,23 +1142,23 @@ Sintax checking on the fly.
 
 *** lsp-mode
 #+BEGIN_SRC emacs-lisp
-  (use-package lsp-mode
-    :ensure t
-    :commands (lsp lsp-deferred)
-    :hook
-    (python-mode . lsp-deferred)
-    (lsp-mode . lsp-enable-which-key-integration)
-    (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
-    :init
-    (setq gc-cons-threshold 100000000)
-    (setq read-process-output-max (* 1024 1024))
-    (setq lsp-completion-provider :capf)
-    (setq lsp-idle-delay 0.500)
-    (setq lsp-enable-file-watchers nil)
-    (setq lsp-signature-auto-activate nil)
-    (setq lsp-headerline-breadcrumb-enable nil)
-    (setq lsp-enable-links nil)
-    :config (setq lsp-keymap-prefix "C-c l"))
+    (use-package lsp-mode
+      :ensure t
+      :commands (lsp lsp-deferred)
+      :hook
+      (python-mode . lsp-deferred)
+      (lsp-mode . lsp-enable-which-key-integration)
+      (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
+      :init
+      (setq gc-cons-threshold 100000000)
+      (setq read-process-output-max (* 1024 1024))
+      (setq lsp-completion-provider :capf)
+      (setq lsp-idle-delay 0.500)
+      (setq lsp-enable-file-watchers nil)
+      (setq lsp-signature-auto-activate nil)
+      (setq lsp-headerline-breadcrumb-enable nil)
+      (setq lsp-enable-links nil)
+      :bind-keymap ("C-c l" . lsp-command-map))
 
 #+END_SRC
 
@@ -1214,18 +1214,6 @@ Always works on C++, sometimes wrong on C programming.
     (lsp-dart-main-code-lens nil)
     (dart-format-on-save t))
 
-#+END_SRC
-
-***** Hover
-Using desktop windows to emulate a Flutter process.
-#+BEGIN_SRC emacs-lisp
-(use-package hover
-  :ensure t
-  :after dart-mode
-    :init 
-    (setq hover-hot-reload-on-save t
-          hover-clear-buffer-on-hot-restart t)
-  :bind (:map dart-mode-map ("C-M-z" . hover-run-or-hot-reload)))
 #+END_SRC
 
 **** Java Programming
