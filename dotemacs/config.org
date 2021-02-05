@@ -550,6 +550,22 @@ texts as well as blog post, or note making.
   (advice-add 'ispell-pdict-save :after #'flyspell-buffer-after-pdict-save)
 #+end_src
 
+** Syncing .profile env variables
+Emacs daemon doesn't seem to look for environment variables in the
+usual places like .profile and such. Installing the package
+exec-path-from-shell, we make sure that those important config files
+are loaded.
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :ensure t)
+#+end_src
+I added the following inside the init.el file, :warning: not tangling this:
+#+begin_src emacs-lisp :tangle no
+  (when (daemonp)
+    (exec-path-from-shell-initialize))  
+#+end_src
+
+
 * Terminal
 Configuration related to terminal emulators and modes. Recently, 
 I started using vterm which is faster than any of the others.
