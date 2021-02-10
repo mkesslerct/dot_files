@@ -123,7 +123,8 @@ removing them later.
   :ensure t)
 #+END_SRC
 
-** Smart-comment
+** Commenting
+*** Smart comments
 When at the end of the line, creates a end-line comment.
 When at the beginning or middle of the line, comments line.
 When pointing at region, comments full region.
@@ -133,6 +134,24 @@ When pointing at region, comments full region.
   :ensure t
   :bind ("M-;" . smart-comment))
 #+END_SRC
+
+*** Copy and comment
+Custom function created with the intention of using the commented
+lines in order to make sure that we are not forgetting any additional
+code. I used to have a package that did all of the comment stuff, but
+it seems to have been deprecated.
+#+begin_src emacs-lisp
+  (defun dr/copy-and-comment-region (beg end &optional arg)
+    "Duplicate the region and comment-out the copied text.
+    See `comment-region' for behavior of a prefix arg."
+    (interactive "r\nP")
+    (copy-region-as-kill beg end)
+    (goto-char end)
+    (yank)
+    (comment-region beg end arg))
+  (global-set-key (kbd "C-M-;") 'dr/copy-and-comment-region)
+#+end_src
+
 
 ** Buffers
 *** Bufler
