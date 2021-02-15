@@ -171,7 +171,7 @@ export NVM_DIR="$HOME/.nvm"
 alias ae=". .env/bin/activate"
 alias ec="emacsclient-one-frame.sh"
 alias semacs="sudo emacs"
-alias uemacs = "killall -USR2 emacs" # Unfreezing emacs.
+alias uemacs="killall -USR2 emacs" # Unfreezing emacs.
 alias ect="emacsclient -t" # Open emacs inside terminal.
 # Pulling everything inside a directory.
 alias pa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;" 
