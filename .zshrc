@@ -107,7 +107,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-PATH=~/go/bin:$PATH
+# PATH=~/go/bin:$PATH
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -162,8 +162,16 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
     alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
 fi
 
+# nvm configuration
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
 alias ae=". .env/bin/activate"
 alias ec="emacsclient-one-frame.sh"
 alias semacs="sudo emacs"
+alias uemacs = "killall -USR2 emacs" # Unfreezing emacs.
 alias ect="emacsclient -t" # Open emacs inside terminal.
-alias pa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;" # Pulling everything inside a directory.
+# Pulling everything inside a directory.
+alias pa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;" 
