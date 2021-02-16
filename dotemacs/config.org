@@ -1141,31 +1141,6 @@ of enabling a better candidate mechanism.
 #+end_src
 
 ** Web programming
-*** CSS
-Rainbow-mode: CSS colors on the sideline.
-#+BEGIN_SRC emacs-lisp
-(use-package rainbow-mode
-  :ensure t
-  :hook (rainbow-mode . css-mode-hook))
-#+END_SRC
-
-*** Emmet-mode: NOT WORKING ATM.  
-Better completion for html tags, very good documentation.
-#+BEGIN_SRC emacs-lisp
-(use-package emmet-mode
-  :ensure t
-  :hook ((sgml-mode-hook . emmet-mode)
-  (css-mode-hook . emmet-mode)))
-#+END_SRC
-
-*** Web-mode: NOT WORKING ATM.
-Web-mode for html and css programming.
-#+BEGIN_SRC emacs-lisp
-(use-package web-mode
-  :ensure t
-  :mode ("\\.html?\\'" . web-mode)
-  :hook (prog-mode . hs-minor-mode))
-#+END_SRC
 
 ** Server side functionality (LSP)
 Lsp-mode for server completion.
@@ -1178,23 +1153,25 @@ Sintax checking on the fly.
 
 *** lsp-mode
 #+BEGIN_SRC emacs-lisp
-    (use-package lsp-mode
-      :ensure t
-      :commands (lsp lsp-deferred)
-      :hook
-      (python-mode . lsp-deferred)
-      (lsp-mode . lsp-enable-which-key-integration)
-      (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
-      :init
-      (setq gc-cons-threshold 100000000)
-      (setq read-process-output-max (* 1024 1024))
-      (setq lsp-completion-provider :capf)
-      (setq lsp-idle-delay 0.500)
-      (setq lsp-enable-file-watchers nil)
-      (setq lsp-signature-auto-activate nil)
-      (setq lsp-headerline-breadcrumb-enable nil)
-      (setq lsp-enable-links nil)
-      :bind-keymap ("C-c l" . lsp-command-map))
+  (use-package lsp-mode
+    :ensure t
+    :commands (lsp lsp-deferred)
+    :hook
+    (html-mode . lsp-deferred)
+    (css-mode . lsp-deferred)
+    (python-mode . lsp-deferred)
+    (lsp-mode . lsp-enable-which-key-integration)
+    (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
+    :init
+    (setq gc-cons-threshold 100000000)
+    (setq read-process-output-max (* 1024 1024))
+    (setq lsp-completion-provider :capf)
+    (setq lsp-idle-delay 0.500)
+    (setq lsp-enable-file-watchers nil)
+    (setq lsp-signature-auto-activate nil)
+    (setq lsp-headerline-breadcrumb-enable nil)
+    (setq lsp-enable-links nil)
+    :bind-keymap ("C-c l" . lsp-command-map))
 
 #+END_SRC
 
@@ -1278,6 +1255,22 @@ and completion for pip requirements files.
     :demand t
     :ensure t)  
 #+end_src
+
+**** Web programming
+Css programming is helped with the lsp-mode server: css-ls, installed with
+the command M-x lsp-install-server RET css-ls RET.
+
+Exactly the same with the html server, installed with lsp-install-server: html-ls.
+Trying to install emmet-mode, but the package is deprecated.
+***** Emmet-mode
+Better completion for html tags, very good documentation.
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package emmet-mode
+    :ensure t
+    :hook
+    (sgml-mode . emmet-mode)
+    (css-mode . emmet-mode))
+#+END_SRC
 
 ** Elf-mode
 Adding elf command output when the file is a binary file
@@ -1665,10 +1658,17 @@ connect our emacs --and ledger files-- to the amazing ledger-mode.
 #+begin_src emacs-lisp
   (use-package ledger-mode
     :mode "\\.ledger\\'"
-    :custom (ledger-clear-whole-transactions t)
-    :ensure t
-    :config
-    (alexm/set-faces-by-spec
-     '(ledger-occur-xact-face
-       ((t (:background "#222324" :inherit nil))))))  
+    :custom
+    (ledger-clear-whole-transactions t)
+    (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal")
+                      ("reg" "%(binary) -f %(ledger-file) reg")
+                      ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                      ("account" "%(binary) -f %(ledger-file) reg %(account)")
+                      ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
+  \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")))
+                    :ensure t
+                    :config
+                    (alexm/set-faces-by-spec
+                     '(ledger-occur-xact-face
+                       ((t (:background "#222324" :inherit nil))))))
 #+end_src
