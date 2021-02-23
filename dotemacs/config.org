@@ -1157,7 +1157,7 @@ Sintax checking on the fly.
     :ensure t
     :commands (lsp lsp-deferred)
     :hook
-    (html-mode . lsp-deferred)
+    (mhtml-mode . lsp-deferred)
     (css-mode . lsp-deferred)
     (python-mode . lsp-deferred)
     (lsp-mode . lsp-enable-which-key-integration)
@@ -1266,8 +1266,10 @@ Trying to install emmet-mode, but the package is deprecated.
 Better completion for html tags, very good documentation.
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package emmet-mode
+    :demand t
     :ensure t
     :hook
+    (html-mode . emmet-mode)
     (sgml-mode . emmet-mode)
     (css-mode . emmet-mode))
 #+END_SRC
