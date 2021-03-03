@@ -582,9 +582,10 @@ are loaded.
 I added the following inside the init.el file, :warning: not tangling this:
 #+begin_src emacs-lisp :tangle no
   (when (daemonp)
-    (exec-path-from-shell-initialize))  
+    (exec-path-from-shell-initialize))
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
 #+end_src
-
 
 * Terminal
 Configuration related to terminal emulators and modes. Recently, 
@@ -609,6 +610,27 @@ buffer creation if the buffer was non-existing.
     :custom
     (vterm-toggle-reset-window-configration-after-exit 'kill-window-only)
     (vterm-toggle-hide-method 'delete-window))
+#+end_src
+
+** Lastpass
+Lastpass-cli is used in order to avoid needing to use authinfo files
+when configuring both email and elfeed passwords. I fully trust LastPass'
+security and they have not had any recent breaches (last in 2015, encrypted
+further with 100k rounds). I will be using the lastpass package on melpa,
+which makes easier the process of using auth-source with the cli tool.
+#+begin_src emacs-lisp
+    (use-package lastpass
+      :ensure t
+      :demand t
+      :custom
+      (lastpass-user "qkessler@gmail.com")
+      (lastpass-trust-login t)
+      :config (lastpass-auth-source-enable)
+      :bind ("C-c l p" . lastpass-list-all))
+
+    (if (boundp 'auth-source-backend-parser-functions)
+        (add-hook 'auth-source-backend-parser-functions #'lastpass-auth-source-backend-parse)
+      (advice-add 'auth-source-backend-parse :before-until #'lastpass-auth-source-backend-parse))
 #+end_src
 
 * Org-mode
@@ -1658,19 +1680,19 @@ Thanks to the amazing Ledger command line tool, which is an double-entry
 accounting system that allows for fast queries and reports we are able to
 connect our emacs --and ledger files-- to the amazing ledger-mode.
 #+begin_src emacs-lisp
-  (use-package ledger-mode
-    :mode "\\.ledger\\'"
-    :custom
-    (ledger-clear-whole-transactions t)
-    (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal")
-                      ("reg" "%(binary) -f %(ledger-file) reg")
-                      ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-                      ("account" "%(binary) -f %(ledger-file) reg %(account)")
-                      ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
-  \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")))
-                    :ensure t
-                    :config
-                    (alexm/set-faces-by-spec
-                     '(ledger-occur-xact-face
-                       ((t (:background "#222324" :inherit nil))))))
+    (use-package ledger-mode
+      :mode "\\.ledger\\'"
+      :custom
+      (ledger-clear-whole-transactions t)
+      (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal")
+                        ("reg" "%(binary) -f %(ledger-file) reg")
+                        ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                        ("account" "%(binary) -f %(ledger-file) reg %(account)")
+                        ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
+    \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")))
+                      :ensure t
+                      :config
+                      (alexm/set-faces-by-spec
+                       '(ledger-occur-xact-face
+                         ((t (:background "#222324" :inherit nil))))))
 #+end_src

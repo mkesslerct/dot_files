@@ -1,7 +1,7 @@
 IMAPAccount gmail-personal
 Host imap.gmail.com
 User qkessler@gmail.com
-PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"gmail.com\\\" :user \\\"qkessler\\\")\" | cut -d '\"' -f2"
+PassCmd "lpass show -p as-qkessler"
 PipelineDepth 50
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -24,7 +24,7 @@ SyncState *
 IMAPAccount gmail-work
 Host imap.gmail.com
 User enrique.kesslerm@gmail.com
-PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"gmail.com\\\" :user \\\"enrique.kesslerm\\\")\" | cut -d '\"' -f2"
+PassCmd "lpass show -p as-enrique.kesslerm"
 PipelineDepth 50
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -47,7 +47,7 @@ SyncState *
 IMAPAccount umu
 Host imap.um.es
 User enrique.kesslerm@um.es
-PassCmd "emacsclient -e \"(efs/lookup-password :host \\\"um.es\\\" :user \\\"enrique.kesslerm\\\")\" | cut -d '\"' -f2"
+PassCmd "lpass show -p entrada.um.es"
 PipelineDepth 50
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
