@@ -1324,7 +1324,7 @@ that the mu4e version is in sync with the mu binary from my distro.
 
 In order to be able to send email, we need to configure smtp in the
 different contexts.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
@@ -1460,7 +1460,7 @@ adding the async functionality.
     (message-send-mail-function 'async-smtpmail-send-it))
 #+end_src
 
-** RSS/Atom feed reader
+** RSS/Atom feed reader: Elfeed
 Following the need of separating my email in a more organized and
 distraction free way, I found my self looking for a efficient enough
 messure to read all the mailing lists I was subscribed to. A lot of
@@ -1545,6 +1545,20 @@ remove those entries.
             ("e" . prot-elfeed-show-eww)
             ("q" . prot-elfeed-kill-buffer-close-window-dwim)))
 #+end_src
+*** Elfeed-dashboard
+This is the package that allows elfeed to configure a dashboard mu4e-style,
+with the cool features of selecting searches, using bookmarks and overall
+editing of the dashboard with an org-file, which is always cool.
+#+begin_src emacs-lisp
+(use-package elfeed-dashboard
+  :ensure t
+  :config
+  (setq elfeed-dashboard-file "~/elfeed-dashboard.org")
+  ;; update feed counts on elfeed-quit
+  (advice-add 'elfeed-search-quit-window :after #'elfeed-dashboard-update-links))
+
+#+end_src
+
 
 ** Speed-test
 Practicing typing speed in emacs.
