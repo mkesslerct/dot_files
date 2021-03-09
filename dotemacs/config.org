@@ -1196,7 +1196,23 @@ Sintax checking on the fly.
     :bind-keymap ("C-c l" . lsp-command-map))
 
 #+END_SRC
-
+**** Html preview.
+Adding the html preview filter, which uses the httpd server and impatient-mode,
+in order to process all the information. Keep in mind that you would need to use
+the impatient-mode command on all the buffers that need to be refreshed on change,
+including possible stylesheets that are connected to the initial 
+#+begin_src emacs-lisp
+  (use-package mhtml-mode
+    :ensure nil
+    :init
+    (defun qk/html-preview ()
+      "Preview html using httpd and impatient-mode"
+      (interactive)
+      (unless (process-status "httpd")
+        (httpd-start))
+      (impatient-mode)
+      (imp-visit-buffer))) 
+#+end_src
 **** Dap-mode
 Server side debugging protocol, seemed to be installed with lsp-dart,
 I'm adding the package here just to make sure, as I couldn't load
@@ -1286,7 +1302,7 @@ Exactly the same with the html server, installed with lsp-install-server: html-l
 Trying to install emmet-mode, but the package is deprecated.
 ***** Emmet-mode
 Better completion for html tags, very good documentation.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
   (use-package emmet-mode
     :demand t
     :ensure t
@@ -1324,7 +1340,7 @@ that the mu4e version is in sync with the mu binary from my distro.
 
 In order to be able to send email, we need to configure smtp in the
 different contexts.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
@@ -1549,7 +1565,7 @@ remove those entries.
 This is the package that allows elfeed to configure a dashboard mu4e-style,
 with the cool features of selecting searches, using bookmarks and overall
 editing of the dashboard with an org-file, which is always cool.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package elfeed-dashboard
   :ensure t
   :config
@@ -1672,7 +1688,7 @@ from eww buffers, using the pdf-view-mode of pdf-tools.
 
 :warning: Update 26/01/21: Untangling this config, testing if the eww configuration
 is enough to open the pdfs in the browser, avoiding problems.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package mailcap
     :config (add-to-list 'mailcap-user-mime-data
                '((type . "application/pdf")
