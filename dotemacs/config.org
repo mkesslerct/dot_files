@@ -1330,10 +1330,12 @@ admin privileges (sudo):
 - npm i -g typescript-language-server; npm i -g typescript
 - npm i -g javascript-typescript-langserver
 #+begin_src emacs-lisp
-  (use-package rjsx-mode
-    :ensure t
-    :mode "components\\/.*\\.js\\'")
-  (use-package js2-mode :ensure t)
+     (use-package rjsx-mode
+       :ensure t
+       :mode "components\\/.*\\.js\\'")
+     (use-package js2-mode
+       :ensure t
+       :mode "\\.js\\'")
 #+end_src
 
 
