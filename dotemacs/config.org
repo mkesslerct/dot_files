@@ -1187,7 +1187,6 @@ Sintax checking on the fly.
     (mhtml-mode . lsp-deferred)
     (css-mode . lsp-deferred)
     (python-mode . lsp-deferred)
-    (js2-mode . lsp-deferred)
     (lsp-mode . lsp-enable-which-key-integration)
     (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
     :init
@@ -1310,12 +1309,12 @@ Trying to install emmet-mode, but the package is deprecated.
 Better completion for html tags, very good documentation.
 #+BEGIN_SRC emacs-lisp
   (use-package emmet-mode
-    :demand t
     :ensure t
     :hook
     (html-mode . emmet-mode)
     (sgml-mode . emmet-mode)
-    (css-mode . emmet-mode))
+    (css-mode . emmet-mode)
+    (typescript-mode . emmet-mode))
 #+END_SRC
 
 ***** JavaScript environment
@@ -1329,15 +1328,106 @@ inside every project, we have it defined as a npm package. You might need to run
 admin privileges (sudo):
 - npm i -g typescript-language-server; npm i -g typescript
 - npm i -g javascript-typescript-langserver
+
+In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
+is on the exec-path, which, even though I'm using the exec-path-to-shell-initialize package,
+it isn't.
 #+begin_src emacs-lisp
-     (use-package rjsx-mode
-       :ensure t
-       :mode "components\\/.*\\.js\\'")
-     (use-package js2-mode
-       :ensure t
-       :mode "\\.js\\'")
+  (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.21.0/bin")))
 #+end_src
 
+
+Another option, which I'm considering is the use of tide, combined with web-mode and js2-mode,
+or rjsx-mode, with the intention of working with react components while having the powerful
+js2-mode under the hood. The configuration snippets that I'm using could be found [[https://github.com/bryanwb/dotfiles/blob/master/emacs.d/init.el#L845-L909\\][here]].
+#+begin_src emacs-lisp
+  (defun br/setup-tide-mode ()
+    (interactive)
+    ;;  (setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
+    (tide-setup)
+    (if (file-exists-p (concat tide-project-root "node_modules/typescript/bin/tsserver"))
+        (setq tide-tsserver-executable "node_modules/typescript/bin/tsserver")
+      (setq tide-tsserver-executable "~/.nvm/versions/node/v12.21.0/lib/node_modules/typescript/bin/tsserver"))
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    (setq tide-format-options '(:indentSize 2 :tabSize 2 :insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil))
+    (local-set-key (kbd "C-c t d") 'tide-documentation-at-point)
+    (company-mode +1))
+#+end_src
+
+Tide, which uses the typescript language server internally, allows for good simple features that
+wouldn't impaire our ability to be productive and efficient inside emacs.
+#+begin_src emacs-lisp
+  ;; typescript setup
+  (use-package tide
+    :ensure t
+    :config
+    (progn
+      (company-mode +1)
+      ;; aligns annotation to the right hand side
+      (setq company-tooltip-align-annotations t)
+      (add-hook 'typescript-mode-hook #'br/setup-tide-mode)
+      (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+      ))
+#+end_src
+
+Adding js2-mode's configuration.
+#+begin_src emacs-lisp
+  ;; use web-mode + tide-mode for javascript instead
+  (use-package js2-mode
+    :ensure t
+    :config
+    (progn
+      (add-hook 'js2-mode-hook #'br/setup-tide-mode)
+      ;; configure javascript-tide checker to run after your default javascript checker
+      (setq js2-basic-offset 2)
+      (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
+      (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+      (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
+#+end_src
+
+Adding json-mode configuration, which is a major mode for editing json files, providing
+better sintax highlights, and some nice editing keybindings.
+#+begin_src emacs-lisp
+  (use-package json-mode
+  :ensure t
+  :config
+  (progn
+    (flycheck-add-mode 'json-jsonlint 'json-mode)
+    (add-hook 'json-mode-hook 'flycheck-mode)
+    (setq js-indent-level 2)
+    (add-to-list 'auto-mode-alist '("\\.json" . json-mode))))
+#+end_src
+
+Lastly, configuring the web-mode package to use the flycheck configuration modes depending
+on the major mode that we are using, comparing with the file-name-extension.
+#+begin_src emacs-lisp
+  (use-package web-mode
+  :ensure t
+  :config
+  (progn
+    (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.js" . web-mode))
+    ;; this magic incantation fixes highlighting of jsx syntax in .js files
+    (setq web-mode-content-types-alist
+          '(("jsx" . "\\.js[x]?\\'")))
+    (add-hook 'web-mode-hook
+              (lambda ()
+                (setq web-mode-code-indent-offset 2)
+                (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                  (br/setup-tide-mode))
+                (when (string-equal "jsx" (file-name-extension buffer-file-name))
+                  (br/setup-tide-mode))
+                (when (string-equal "js" (file-name-extension buffer-file-name))
+                  (progn
+                    (br/setup-tide-mode)
+                    (with-eval-after-load 'flycheck
+                      (flycheck-add-mode 'typescript-tslint 'web-mode)
+                      (flycheck-add-mode 'javascript-tide 'web-mode))))))
+    ))
+#+end_src
 
 ** Elf-mode
 Adding elf command output when the file is a binary file
@@ -1367,7 +1457,7 @@ that the mu4e version is in sync with the mu binary from my distro.
 
 In order to be able to send email, we need to configure smtp in the
 different contexts.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
