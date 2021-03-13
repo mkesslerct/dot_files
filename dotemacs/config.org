@@ -1352,6 +1352,7 @@ js2-mode under the hood. The configuration snippets that I'm using could be foun
     (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (eldoc-mode +1)
     (tide-hl-identifier-mode +1)
+    (tide-format-before-save t)
     (setq tide-format-options '(:indentSize 2 :tabSize 2 :insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil))
     (local-set-key (kbd "C-c t d") 'tide-documentation-at-point)
     (company-mode +1))
@@ -1406,6 +1407,7 @@ on the major mode that we are using, comparing with the file-name-extension.
 #+begin_src emacs-lisp
   (use-package web-mode
   :ensure t
+  :hook (web-mode . emmet-mode)
   :config
   (progn
     (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
