@@ -1457,7 +1457,7 @@ that the mu4e version is in sync with the mu binary from my distro.
 
 In order to be able to send email, we need to configure smtp in the
 different contexts.
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (require 'mu4e-context)
   (use-package mu4e
     :ensure nil
