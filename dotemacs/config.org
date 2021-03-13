@@ -1330,9 +1330,9 @@ admin privileges (sudo):
 - npm i -g javascript-typescript-langserver
 
 In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
-is on the exec-path, which, even though I'm using the exec-path-to-shell-initialize package,
-it isn't.
-#+begin_src emacs-lisp
+is on the exec-path, not tangling this because the correct solution for this problem is the
+[[*Syncing .profile env variables][exec-path-from-shell package]]
+#+begin_src emacs-lisp :tangle no
   (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.21.0/bin")))
 #+end_src
 
