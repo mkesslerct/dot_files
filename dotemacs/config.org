@@ -1460,109 +1460,109 @@ that the mu4e version is in sync with the mu binary from my distro.
 In order to be able to send email, we need to configure smtp in the
 different contexts.
 #+begin_src emacs-lisp
-  (require 'mu4e-context)
+    ;; (require 'mu4e-context)
   (use-package mu4e
-    :ensure nil
-    :load-path "/usr/share/emacs/site-lisp/mu4e/"
-    :defer 20
-    :bind (("C-c m" . mu4e)
-           :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
-    :hook (mu4e-compose-mode-hook . flyspell-mode)
-    :custom
-    (mu4e-maildir "~/Mail")
-    (mu4e-attachment-dir "~/Downloads")
-    (mu4e-get-mail-command "mbsync -a")
-    (mu4e-change-filenames-when-moving t)
-    (mu4e-completing-read-function 'ivy-completing-read)
-    (mu4e-headers-show-threads nil)
-    (mu4e-html2text-command 'mu4e-shr2text)
-    (mu4e-update-interval (* 5 60))
-    (mu4e-hide-index-messages t)
-    (mu4e-compose-signature "Enrique Kessler Martínez\n")
-    (mu4e-compose-signature-auto-include t)
-    (mu4e-confirm-quit nil)
-    (mu4e-sent-messages-behavior 'sent)
-    (mu4e-headers-auto-update t)
-    (mu4e-headers-skip-duplicates t)
-    (mu4e-headers-fields
-     '((:human-date . 12)
-       (:flags . 6)
-       (:mailing-list . 10)
-       (:from . 22)
-       (:subject)))
-    (mu4e-view-show-addresses t)
-    (mu4e-display-update-status-in-modeline t)
-    (mu4e-view-show-images nil)
-    (mu4e-context-policy 'pick-first)
-    (mu4e-compose-format-flowed t)
-    (mu4e-maildir-shortcuts
-     '( (:maildir "/Gmail/Personal/Inbox"     :key  ?p :hide-unread t)
-        (:maildir "/Gmail/Work/Inbox"   :key  ?w :hide-unread t)
-        (:maildir "/UMU/Inbox"     :key  ?u :hide-unread t)))
-    (mu4e-contexts
-     (list
-      ;; Personal account
-      (make-mu4e-context
-       :name "Personal"
-       :match-func
-       (lambda (msg)
-         (when msg
-           (string-prefix-p "/Gmail/Personal" (mu4e-message-field msg :maildir))))
-       :vars '((user-mail-address . "qkessler@gmail.com")
-               (user-full-name    . "Enrique Kessler Martínez")
-               (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
-               (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
-               (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
-               (smtpmail-default-smtp-server . "smtp.gmail.com")
-               (smtpmail-smtp-server . "smtp.gmail.com")
-               (smtpmail-smtp-service . 587)))
-      (make-mu4e-context
-       :name "Work"
-       :match-func
-       (lambda (msg)
-         (when msg
-           (string-prefix-p "/Gmail/Work" (mu4e-message-field msg :maildir))))
-       :vars '((user-mail-address . "enrique.kesslerm@gmail.com")
-               (user-full-name    . "Enrique Kessler Martínez")
-               (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
-               (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
-               (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
-               (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
-               (smtpmail-default-smtp-server . "smtp.gmail.com")
-               (smtpmail-smtp-server . "smtp.gmail.com")
-               (smtpmail-smtp-service . 587)))
-      (make-mu4e-context
-       :name "UMU"
-       :match-func
-       (lambda (msg)
-         (when msg
-           (string-prefix-p "/UMU" (mu4e-message-field msg :maildir))))
-       :vars '((user-mail-address . "enrique.kesslerm@um.es")
-               (user-full-name    . "Enrique Kessler Martínez")
-               (mu4e-drafts-folder  . "/UMU/Drafts")
-               (mu4e-sent-folder  . "/UMU/Sent")
-               (mu4e-trash-folder  . "/UMU/Trash")
-               (smtpmail-default-smtp-server . "smtp.um.es")
-               (smtpmail-smtp-server . "smtp.um.es")
-               (smtpmail-smtp-service . 587)))))
-    (mu4e-bookmarks
-     '(
-       (:name "Last 7 days" :query `,"d:7d..now" :key ?w)
-       (:name "Today's messages" :query "d:today..now" :key ?t)
-       (:name "Work Unread"
-              :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
-              :key ?s)
-       (:name "Personal Unread"
-              :query "to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
-              :key ?p)
-       (:name "UMU Unread"
-              :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
-              :key ?u)))
-    :config
-    (mu4e t)
-    (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
-    :hook (mu4e-compose-mode-hook . (lambda () (use-hard-newlines -1))))
+      :ensure nil
+      :load-path "/usr/share/emacs/site-lisp/mu4e/"
+      :defer 20
+      :bind (("C-c m" . mu4e)
+             :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
+      :hook (mu4e-compose-mode-hook . flyspell-mode)
+      :custom
+      (mu4e-maildir "~/Mail")
+      (mu4e-attachment-dir "~/Downloads")
+      (mu4e-get-mail-command "mbsync -a")
+      (mu4e-change-filenames-when-moving t)
+      (mu4e-completing-read-function 'ivy-completing-read)
+      (mu4e-headers-show-threads nil)
+      (mu4e-html2text-command 'mu4e-shr2text)
+      (mu4e-update-interval (* 5 60))
+      (mu4e-hide-index-messages t)
+      (mu4e-compose-signature "Enrique Kessler Martínez\n")
+      (mu4e-compose-signature-auto-include t)
+      (mu4e-confirm-quit nil)
+      (mu4e-sent-messages-behavior 'sent)
+      (mu4e-headers-auto-update t)
+      (mu4e-headers-skip-duplicates t)
+      (mu4e-headers-fields
+       '((:human-date . 12)
+         (:flags . 6)
+         (:mailing-list . 10)
+         (:from . 22)
+         (:subject)))
+      (mu4e-view-show-addresses t)
+      (mu4e-display-update-status-in-modeline t)
+      (mu4e-view-show-images nil)
+      (mu4e-context-policy 'pick-first)
+      (mu4e-compose-format-flowed t)
+      (mu4e-maildir-shortcuts
+       '( (:maildir "/Gmail/Personal/Inbox"     :key  ?p :hide-unread t)
+          (:maildir "/Gmail/Work/Inbox"   :key  ?w :hide-unread t)
+          (:maildir "/UMU/Inbox"     :key  ?u :hide-unread t)))
+      (mu4e-contexts
+       (list
+        ;; Personal account
+        (make-mu4e-context
+         :name "Personal"
+         :match-func
+         (lambda (msg)
+           (when msg
+             (string-prefix-p "/Gmail/Personal" (mu4e-message-field msg :maildir))))
+         :vars '((user-mail-address . "qkessler@gmail.com")
+                 (user-full-name    . "Enrique Kessler Martínez")
+                 (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
+                 (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
+                 (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
+                 (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
+                 (smtpmail-default-smtp-server . "smtp.gmail.com")
+                 (smtpmail-smtp-server . "smtp.gmail.com")
+                 (smtpmail-smtp-service . 587)))
+        (make-mu4e-context
+         :name "Work"
+         :match-func
+         (lambda (msg)
+           (when msg
+             (string-prefix-p "/Gmail/Work" (mu4e-message-field msg :maildir))))
+         :vars '((user-mail-address . "enrique.kesslerm@gmail.com")
+                 (user-full-name    . "Enrique Kessler Martínez")
+                 (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
+                 (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
+                 (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
+                 (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
+                 (smtpmail-default-smtp-server . "smtp.gmail.com")
+                 (smtpmail-smtp-server . "smtp.gmail.com")
+                 (smtpmail-smtp-service . 587)))
+        (make-mu4e-context
+         :name "UMU"
+         :match-func
+         (lambda (msg)
+           (when msg
+             (string-prefix-p "/UMU" (mu4e-message-field msg :maildir))))
+         :vars '((user-mail-address . "enrique.kesslerm@um.es")
+                 (user-full-name    . "Enrique Kessler Martínez")
+                 (mu4e-drafts-folder  . "/UMU/Drafts")
+                 (mu4e-sent-folder  . "/UMU/Sent")
+                 (mu4e-trash-folder  . "/UMU/Trash")
+                 (smtpmail-default-smtp-server . "smtp.um.es")
+                 (smtpmail-smtp-server . "smtp.um.es")
+                 (smtpmail-smtp-service . 587)))))
+      (mu4e-bookmarks
+       '(
+         (:name "Last 7 days" :query `,"d:7d..now" :key ?w)
+         (:name "Today's messages" :query "d:today..now" :key ?t)
+         (:name "Work Unread"
+                :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
+                :key ?s)
+         (:name "Personal Unread"
+                :query "to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
+                :key ?p)
+         (:name "UMU Unread"
+                :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
+                :key ?u)))
+      :config
+      (mu4e t)
+      (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
+      :hook (mu4e-compose-mode-hook . (lambda () (use-hard-newlines -1))))
 #+end_src
 *** Message package
 Adding the configuration for the message package, in order to allow for
@@ -1649,7 +1649,7 @@ inherited tags.
 #+begin_src emacs-lisp
   (use-package elfeed-org
     :ensure t
-  :custom (rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org.gpg")))
+  :custom (rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org")))
     :config (elfeed-org))
 #+end_src
 
