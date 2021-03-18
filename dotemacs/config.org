@@ -434,7 +434,7 @@ from the [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][bits 
          (let ((tmp (buffer-name)))
            (set-buffer buffer)
            (set-buffer (markdown tmp))
-           (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/>
+           (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css\" integrity=\"sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==\" crossorigin=\"anonymous\" />
   <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
        (current-buffer)))
     (defun bb/markdown-preview ()
@@ -1187,6 +1187,7 @@ Sintax checking on the fly.
     (mhtml-mode . lsp-deferred)
     (css-mode . lsp-deferred)
     (python-mode . lsp-deferred)
+    (js-mode . lsp-deferred)
     (lsp-mode . lsp-enable-which-key-integration)
     (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
     :init
@@ -1264,9 +1265,9 @@ Always works on C++, sometimes wrong on C programming.
     :ensure t
     :hook (dart-mode . lsp-deferred)
     :custom
-    (dart-sdk-path "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
-    (lsp-dart-sdk-dir "~/snap/flutter/common/flutter/bin/cache/dart-sdk")
-    (lsp-dart-flutter-sdk-dir "~/snap/flutter/common/flutter")
+    (dart-sdk-path "~/Android/Sdk")
+    (lsp-dart-sdk-dir "~/Android/Sdk")
+    (lsp-dart-flutter-sdk-dir "~/.local/flutter")
     (lsp-dart-main-code-lens nil)
     (dart-format-on-save t))
 
@@ -1304,17 +1305,15 @@ Css programming is helped with the lsp-mode server: css-ls, installed with
 the command M-x lsp-install-server RET css-ls RET.
 
 Exactly the same with the html server, installed with lsp-install-server: html-ls.
-Trying to install emmet-mode, but the package is deprecated.
+Trying to install emmet-mode, but the package cl is deprecated.
 ***** Emmet-mode
 Better completion for html tags, very good documentation.
 #+BEGIN_SRC emacs-lisp
-  (use-package emmet-mode
-    :ensure t
-    :hook
-    (html-mode . emmet-mode)
-    (sgml-mode . emmet-mode)
-    (css-mode . emmet-mode)
-    (typescript-mode . emmet-mode))
+    (use-package emmet-mode
+      :ensure t
+      :custom (emmet-move-cursor-between-quotes t))
+    (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+    (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 #+END_SRC
 
 ***** JavaScript environment
@@ -1332,61 +1331,32 @@ admin privileges (sudo):
 In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
 is on the exec-path, not tangling this because the correct solution for this problem is the
 [[*Syncing .profile env variables][exec-path-from-shell package]]
-#+begin_src emacs-lisp :tangle no
-  (setq exec-path (append exec-path '("~/.nvm/versions/node/v12.21.0/bin")))
+#+begin_src emacs-lisp
+  (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.11.0/bin")))
 #+end_src
 
-
-Another option, which I'm considering is the use of tide, combined with web-mode and js2-mode,
-or rjsx-mode, with the intention of working with react components while having the powerful
-js2-mode under the hood. The configuration snippets that I'm using could be found [[https://github.com/bryanwb/dotfiles/blob/master/emacs.d/init.el#L845-L909\\][here]].
+Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
 #+begin_src emacs-lisp
-  (defun br/setup-tide-mode ()
-    (interactive)
-    ;;  (setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
-    (tide-setup)
-    (if (file-exists-p (concat tide-project-root "node_modules/typescript/bin/tsserver"))
-        (setq tide-tsserver-executable "node_modules/typescript/bin/tsserver")
-      (setq tide-tsserver-executable "~/.nvm/versions/node/v12.21.0/lib/node_modules/typescript/bin/tsserver"))
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    (tide-format-before-save t)
-    (setq tide-format-options '(:indentSize 2 :tabSize 2 :insertSpaceAfterFunctionKeywordForAnonymousFunctions t :placeOpenBraceOnNewLineForFunctions nil))
-    (local-set-key (kbd "C-c t d") 'tide-documentation-at-point)
-    (company-mode +1))
-#+end_src
-
-Tide, which uses the typescript language server internally, allows for good simple features that
-wouldn't impaire our ability to be productive and efficient inside emacs.
-#+begin_src emacs-lisp
-  ;; typescript setup
-  (use-package tide
-    :ensure t
-    :config
-    (progn
-      (company-mode +1)
-      ;; aligns annotation to the right hand side
-      (setq company-tooltip-align-annotations t)
-      (add-hook 'typescript-mode-hook #'br/setup-tide-mode)
-      (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-      ))
-#+end_src
-
-Adding js2-mode's configuration.
-#+begin_src emacs-lisp
-  ;; use web-mode + tide-mode for javascript instead
   (use-package js2-mode
+    :ensure t)
+#+end_src
+
+js-mode, which was introduced in Emacs 27, including full support for
+jsx highlighting, indenting and more.
+#+begin_src emacs-lisp
+  (use-package js-mode
+    :mode "\\.js\\'"
+    :bind (:map js-mode-map ("M-." . nil))
+    :hook (js-mode . (lambda ()
+                       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+#+end_src
+
+xref-js2, makes use of "rg" for searching the project for definitions and jumping
+between them, which is key to software developing.
+#+begin_src emacs-lisp
+  (use-package xref-js2
     :ensure t
-    :config
-    (progn
-      (add-hook 'js2-mode-hook #'br/setup-tide-mode)
-      ;; configure javascript-tide checker to run after your default javascript checker
-      (setq js2-basic-offset 2)
-      (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append)
-      (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-      (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
+    :custom (xref-js2-search-program 'rg))
 #+end_src
 
 Adding json-mode configuration, which is a major mode for editing json files, providing
@@ -1399,36 +1369,7 @@ better sintax highlights, and some nice editing keybindings.
     (flycheck-add-mode 'json-jsonlint 'json-mode)
     (add-hook 'json-mode-hook 'flycheck-mode)
     (setq js-indent-level 2)
-    (add-to-list 'auto-mode-alist '("\\.json" . json-mode))))
-#+end_src
-
-Lastly, configuring the web-mode package to use the flycheck configuration modes depending
-on the major mode that we are using, comparing with the file-name-extension.
-#+begin_src emacs-lisp
-  (use-package web-mode
-  :ensure t
-  :hook (web-mode . emmet-mode)
-  :config
-  (progn
-    (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.js" . web-mode))
-    ;; this magic incantation fixes highlighting of jsx syntax in .js files
-    (setq web-mode-content-types-alist
-          '(("jsx" . "\\.js[x]?\\'")))
-    (add-hook 'web-mode-hook
-              (lambda ()
-                (setq web-mode-code-indent-offset 2)
-                (when (string-equal "tsx" (file-name-extension buffer-file-name))
-                  (br/setup-tide-mode))
-                (when (string-equal "jsx" (file-name-extension buffer-file-name))
-                  (br/setup-tide-mode))
-                (when (string-equal "js" (file-name-extension buffer-file-name))
-                  (progn
-                    (br/setup-tide-mode)
-                    (with-eval-after-load 'flycheck
-                      (flycheck-add-mode 'typescript-tslint 'web-mode)
-                      (flycheck-add-mode 'javascript-tide 'web-mode))))))
-    ))
+    (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
 #+end_src
 
 ** Elf-mode
@@ -1467,7 +1408,7 @@ different contexts.
       :defer 20
       :bind (("C-c m" . mu4e)
              :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
-      :hook (mu4e-compose-mode-hook . flyspell-mode)
+      :hook (mu4e-compose-mode . flyspell-mode)
       :custom
       (mu4e-maildir "~/Mail")
       (mu4e-attachment-dir "~/Downloads")
@@ -1833,7 +1774,7 @@ connect our emacs --and ledger files-- to the amazing ledger-mode.
         :mode "\\.ledger\\'"
         :custom
         (ledger-clear-whole-transactions t)
-        (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal")
+        (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
                           ("reg" "%(binary) -f %(ledger-file) reg")
                           ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
                           ("account" "%(binary) -f %(ledger-file) reg %(account)")
