@@ -1334,6 +1334,9 @@ is on the exec-path, not tangling this because the correct solution for this pro
 #+begin_src emacs-lisp
   (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.11.0/bin")))
 #+end_src
+I've found this is often a misnaming error, if you install from a package
+manager you bin may be called nodejs so you just need to symlink it like so "ln
+-s /usr/bin/nodejs /usr/bin/node"
 
 Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
 #+begin_src emacs-lisp
@@ -1371,7 +1374,6 @@ better sintax highlights, and some nice editing keybindings.
     (setq js-indent-level 2)
     (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
 #+end_src
-
 ** Elf-mode
 Adding elf command output when the file is a binary file
 and the mode elf-mode is triggered, could be used as a standalone function. 
