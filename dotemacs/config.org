@@ -664,8 +664,8 @@ intention of all capture created items to go there before correct refiling.
    org-default-notes-file (concat org-directory "/org-agenda/refile.org")
    org-agenda-files (list (concat org-directory "/org-agenda"))
    org-archive-location (concat org-directory "/archive/%s_archive::")
-   org-refile-targets (quote ((nil :maxlevel . 3)
-                              (org-agenda-files :maxlevel . 3)))
+   org-refile-targets (quote ((nil :maxlevel . 5)
+                              (org-agenda-files :maxlevel . 5)))
    org-src-fontify-natively t
    org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
    org-clock-out-remove-zero-time-clocks t
