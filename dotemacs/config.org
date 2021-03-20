@@ -264,6 +264,16 @@ Adding general configuration for tex files and latex-mode better defaults.
 	    ))
 #+END_SRC
 
+Removing the mark keybindings on latex buffers, which are
+normally bound to the flyspell word correction keys.
+#+begin_src emacs-lisp
+  (use-package flyspell
+    :bind (:map flyspell-mode-map (("C-." . nil)
+                                   ("C-," . nil))))
+#+end_src
+
+
+
 ** Appearence
 *** Cursor display
 Bar cursor instead of rectangle default.
@@ -1347,7 +1357,7 @@ In order to be able to find the node path, we need to make sure that the "~/.nvm
 is on the exec-path, not tangling this because the correct solution for this problem is the
 [[*Syncing .profile env variables][exec-path-from-shell package]]
 #+begin_src emacs-lisp
-  (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.11.0/bin")))
+  (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.12.0/bin")))
 #+end_src
 I've found this is often a misnaming error, if you install from a package
 manager you bin may be called nodejs so you just need to symlink it like so "ln
@@ -1417,7 +1427,7 @@ that the mu4e version is in sync with the mu binary from my distro.
 
 In order to be able to send email, we need to configure smtp in the
 different contexts.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
     ;; (require 'mu4e-context)
   (use-package mu4e
       :ensure nil
