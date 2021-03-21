@@ -1277,8 +1277,10 @@ Always works on C++, sometimes wrong on C programming.
     :custom
     (dart-sdk-path "~/.local/flutter/bin/cache/dart-sdk")
     (lsp-dart-sdk-dir "~/.local/flutter/bin/cache/dart-sdk")
-    (lsp-dart-flutter-sdk-dir "~/.local/flutter")
+    ;; (lsp-dart-flutter-sdk-dir "~/.local/flutter")
+    (lsp-dart-flutter-sdk-dir "/home/qkessler/.local/flutter")
     (lsp-dart-main-code-lens nil)
+    (lsp-dart-dap-flutter-hot-reload-on-save t)
     (dart-format-on-save t))
 
 #+END_SRC
