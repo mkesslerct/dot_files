@@ -635,7 +635,6 @@ which makes easier the process of using auth-source with the cli tool.
     :custom
     (lastpass-user "qkessler@gmail.com")
     (lastpass-trust-login t)
-    :config (lastpass-auth-source-enable)
     :bind ("C-c l p" . lastpass-list-all))
 
   (defun lastpass-mu4e-update-mail-and-index (update-function &rest r)
@@ -1441,7 +1440,7 @@ different contexts.
   (use-package mu4e
     :ensure nil
     :load-path "/usr/share/emacs/site-lisp/mu4e/"
-    :defer 20 :after smtpmail
+    :defer 20
     :bind (("C-c m" . mu4e)
            :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
     ;; :hook (mu4e-compose-mode . flyspell-mode)
@@ -1491,6 +1490,7 @@ different contexts.
                (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
                (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
                (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
+               (smtpmail-smtp-user . "qkessler@gmail.com")
                (smtpmail-default-smtp-server . "smtp.gmail.com")
                (smtpmail-smtp-server . "smtp.gmail.com")
                (smtpmail-smtp-service . 587)))
@@ -1507,6 +1507,7 @@ different contexts.
                (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
                (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
                (smtpmail-default-smtp-server . "smtp.gmail.com")
+               (smtpmail-smtp-user . "enrique.kesslerm@gmail.com")
                (smtpmail-smtp-server . "smtp.gmail.com")
                (smtpmail-smtp-service . 587)))
       (make-mu4e-context
@@ -1520,6 +1521,7 @@ different contexts.
                (mu4e-drafts-folder  . "/UMU/Drafts")
                (mu4e-sent-folder  . "/UMU/Sent")
                (mu4e-trash-folder  . "/UMU/Trash")
+               (smtpmail-smtp-user . "enrique.kesslerm@um.es")
                (smtpmail-default-smtp-server . "smtp.um.es")
                (smtpmail-smtp-server . "smtp.um.es")
                (smtpmail-smtp-service . 587)))))
