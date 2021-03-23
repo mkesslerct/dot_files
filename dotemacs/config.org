@@ -690,7 +690,32 @@ intention of all capture created items to go there before correct refiling.
                                (append org-babel-load-languages
                                        '((ledger . t))))
 #+END_SRC
-    
+
+*** org-fill-paragraph fix
+Org by default, when calling the fill-paragraph command breaks the org links, creating
+inconsistencies, specially when trying to export to html or other formats.
+
+I found some ways to fix this, getting input from a bug fix report from [[https://lists.gnu.org/archive/html/emacs-orgmode/2018-04/msg00105.html][Brent Goodrick]].
+#+begin_src emacs-lisp
+  (defun bg-org-fill-paragraph-with-link-nobreak-p ()
+    "Do not allow `fill-paragraph' to break inside the middle of Org mode links."
+    (and (assq :link (org-context)) t))
+
+  (defun bg-org-fill-paragraph-config ()
+    "Configure `fill-paragraph' for Org mode."
+    ;; Append a function to fill-nobreak-predicate similarly to how org-mode does
+    ;; inside `org-setup-filling':
+    (when (boundp 'fill-nobreak-predicate)
+      (setq-local
+       fill-nobreak-predicate
+       (org-uniquify
+        (append fill-nobreak-predicate
+                '(bg-org-fill-paragraph-with-link-nobreak-p))))))
+  (add-hook 'org-mode-hook 'bg-org-fill-paragraph-config)
+#+end_src
+
+
+
 ** Refiling
 Refiling setup, using the file name as header. Last line is
 so that we ensure that tasks cannot be tagged as completed
