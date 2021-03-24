@@ -420,6 +420,8 @@ impatient-mode which is a package that allows for life preview of the file as yo
 editing it, which is amazing. Last but not least, we are configuring a markdown filter
 in order to get the Github look when "markdowning". The configuration has be harvested
 from the [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][bits and bobs blog post.]]
+
+The second markdown function is from this link: [[https://stackoverflow.com/questions/36183071/how-can-i-preview-markdown-in-emacs-in-real-time/41288851#41288851][stack overflow markdown link]].
 #+BEGIN_SRC emacs-lisp
   (use-package simple-httpd
     :ensure t
@@ -444,16 +446,20 @@ from the [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][bits 
          (let ((tmp (buffer-name)))
            (set-buffer buffer)
            (set-buffer (markdown tmp))
-           (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css\" integrity=\"sha512-Oy18vBnbSJkXTndr2n6lDMO5NN31UljR8e/ICzVPrGpSud4Gkckb8yUpqhKuUNoE+o9gAb4O/rAxxw1ojyUVzg==\" crossorigin=\"anonymous\" />
+           (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css\"/>
   <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
        (current-buffer)))
+    (defun eh/markdown-html (buffer)
+      (princ (with-current-buffer buffer
+               (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+             (current-buffer)))
     (defun bb/markdown-preview ()
       "Preview markdown."
       (interactive)
       (unless (process-status "httpd")
         (httpd-start))
       (impatient-mode)
-      (imp-set-user-filter 'bb/markdown-filter)
+      (imp-set-user-filter 'eh/markdown-html)
       (imp-visit-buffer)))
 #+END_SRC
 
