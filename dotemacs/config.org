@@ -1235,6 +1235,7 @@ Sintax checking on the fly.
     (css-mode . lsp-deferred)
     (python-mode . lsp-deferred)
     (js-mode . lsp-deferred)
+    (typescript-mode . lsp-deferred)
     (lsp-mode . lsp-enable-which-key-integration)
     (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
     :init
