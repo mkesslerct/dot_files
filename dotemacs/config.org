@@ -1749,25 +1749,33 @@ be working correctly, anyway.
 *** Custom functions regarding keymaps and browse history
 #+begin_src emacs-lisp
   (defun prot/eww-visit-history (&optional arg)
-      "Revisit a URL from `eww-prompt-history' using completion.
-    With \\[universal-argument] produce a new buffer."
-      (interactive "P")
-      (let ((history eww-prompt-history)  ; eww-bookmarks
-            (new (if arg t nil)))
-        (eww
-         (completing-read "Visit website from history: " history nil t)
-         new)))
-    (defvar qk/eww-mode-global-map
-      (let ((map (make-sparse-keymap)))
-        (define-key map "s" 'eww-search-words)
-        (define-key map "o" 'eww-open-in-new-buffer)
-        (define-key map "f" 'eww-open-file)
-        (define-key map "w" 'prot/eww-visit-history)
-        (define-key map "c" 'browse-url-chrome)
-        map)
-      "Key map to scope `eww' bindings for global usage.
-  The idea is to bind this to a prefix sequence, so that its
-  defined keys follow the pattern of <PREFIX> <KEY>.")
+    "Revisit a URL from `eww-prompt-history' using completion.
+      With \\[universal-argument] produce a new buffer."
+    (interactive "P")
+    (let ((history eww-prompt-history)  ; eww-bookmarks
+          (new (if arg t nil)))
+      (eww
+       (completing-read "Visit website from history: " history nil t)
+       new)))
+  (defun prot/eww-find-feed ()
+    "Produce Occur buffer with RSS/Atom links from XML source."
+    (interactive)
+    (eww-view-source)
+    (occur "\\(rss\\|atom\\)\\+xml.*href=[\"']\\(.*?\\)[\"']" "\\2")
+    (View-quit))
+
+  (defvar qk/eww-mode-global-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map "s" 'eww-search-words)
+      (define-key map "o" 'eww-open-in-new-buffer)
+      (define-key map "f" 'eww-open-file)
+      (define-key map "w" 'prot/eww-visit-history)
+      (define-key map "c" 'browse-url-chrome)
+      (define-key map "F" 'prot/eww-find-feed)
+      map)
+    "Key map to scope `eww' bindings for global usage.
+    The idea is to bind this to a prefix sequence, so that its
+    defined keys follow the pattern of <PREFIX> <KEY>.")
 #+end_src
 
 *** Eww configuration
@@ -1777,7 +1785,7 @@ a possible keymap inside of eww.
 #+begin_src emacs-lisp
   (use-package eww
     :custom
-    (eww-restore-desktop nil)
+    (eww-restore-desktop t)
     (eww-desktop-remove-duplicates t)
     (eww-header-line-format "%u")
     (eww-search-prefix "https://duckduckgo.com/html/?q=")
