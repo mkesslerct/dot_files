@@ -990,11 +990,17 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
     #+begin_src emacs-lisp
       (use-package org-gcal
         :ensure t
+        :demand t
         :custom (
                  (org-gcal-client-id (lastpass-getpass "gcal-sync-client-id"))
                  (org-gcal-client-secret (lastpass-getpass "gcal-sync-client-secret"))
                  (org-gcal-fetch-file-alist '(("qkessler@gmail.com" . "~/Documents/org_files/org-agenda/gcal-sync.org"))
-                 )))
+                                            ))
+        :config (run-with-timer 0 (* 60 60) (lambda ()
+                   (interactive)
+                   (org-gcal--sync-unlock)
+                   (org-gcal-sync)
+                   )))
     #+end_src
     
 *** toc-org
