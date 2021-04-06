@@ -436,6 +436,7 @@ The second markdown function is from this link: [[https://stackoverflow.com/ques
   (use-package markdown-mode
     :ensure nil
     :mode ("\\.md\\'" . gfm-mode)
+    :hook (markdown-mode . toc-org-mode)
     :commands (markdown-mode gfm-mode)
     :custom (markdown-command "pandoc -t html5")
     :bind ("C-c r" . bb/markdown-preview)
@@ -643,13 +644,6 @@ which makes easier the process of using auth-source with the cli tool.
     (lastpass-trust-login t)
     :bind ("C-c l p" . lastpass-list-all))
 
-  (defun lastpass-mu4e-update-mail-and-index (update-function &rest r)
-    "Check if user is logged in and run UPDATE-FUNCTION with arguments R."
-    (unless (lastpass-logged-in-p)
-      (lastpass-login)
-      (error "LastPass: Not logged in, log in and retry"))
-    (apply update-function r))
-
   (if (boundp 'auth-source-backend-parser-functions)
       (add-hook 'auth-source-backend-parser-functions #'lastpass-auth-source-backend-parse)
     (advice-add 'auth-source-backend-parse :before-until #'lastpass-auth-source-backend-parse))
@@ -686,6 +680,7 @@ intention of all capture created items to go there before correct refiling.
    org-clock-persistence-insinuate t
    org-clock-persist t
    org-clock-in-resume t
+   org-startup-with-inline-images t
    )
   (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
   (defvar org-book-list-file (concat org-directory "/book_list.org"))
@@ -719,7 +714,6 @@ I found some ways to fix this, getting input from a bug fix report from [[https:
                 '(bg-org-fill-paragraph-with-link-nobreak-p))))))
   (add-hook 'org-mode-hook 'bg-org-fill-paragraph-config)
 #+end_src
-
 
 
 ** Refiling
@@ -920,7 +914,6 @@ tagging workflow a bit faster, as C-c C-w might be cumbersome to write in agenda
                   (local-set-key (kbd "r") 'org-agenda-refile)))
 #+END_SRC
 
-
 ** Org source blocks
 Tabs on org-mode source blocks try to find the language added.
 If for some reason the language on the source tag doesn't exist
@@ -990,140 +983,163 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
                  name (file-name-nondirectory new-name)))))))
 #+END_SRC
 
-** Org-roam
-I use the Zettelkasten (slip-box) method for taking and recalling notes and
-information. To be able to do so, I started with my own workflow, adding
-org-mode links to the different notes, and has been working for me for 
-close to a month. As a way of improving this workflow, I decided to give
-org-roam a chance.
+** Extension packages
+*** Gcal
+    Gcal is the emacs package that connects to the Calendar API to allow for 2 ways syncing
+    between specific org-mode files and GCalendar.
+    #+begin_src emacs-lisp
+      (use-package org-gcal
+        :ensure t
+        :custom (
+                 (org-gcal-client-id (lastpass-getpass "gcal-sync-client-id"))
+                 (org-gcal-client-secret (lastpass-getpass "gcal-sync-client-secret"))
+                 (org-gcal-fetch-file-alist '(("qkessler@gmail.com" . "~/Documents/org_files/org-agenda/gcal-sync.org"))
+                 )))
+    #+end_src
+    
+*** toc-org
+    Package designed to update a table of contents for the org-mode file, super
+    useful when creating readme files, which are easier to format in org.
+    #+begin_src emacs-lisp
+      (use-package toc-org
+        :ensure t
+        :hook (org-mode . toc-org-mode))
+    #+end_src
 
-#+BEGIN_SRC emacs-lisp
-  (use-package org-roam
-    :ensure t
-    :hook
-    (after-init . org-roam-mode)
-    :custom
-    (org-roam-directory "~/Documents/org_files/slip-box/")
-    (org-roam-capture-templates '(
-                                  ("d" "default" plain (function org-roam--capture-get-point)
-                                   "%?"
-                                   :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                   :head "#+title: ${title}\n#+roam_key: \n#+roam_tags: \n"
-                                   :unnarrowed t)))
-    :bind (:map org-roam-mode-map
-           (("C-c n l" . org-roam)
-            ("C-c n f" . org-roam-find-file)
-            ("C-c n g" . org-roam-graph))
-           :map org-mode-map
-           (("C-c n i" . org-roam-insert)
-            ("C-c n I" . org-roam-insert-immediate))
-           :map org-roam-backlinks-mode-map
-           ("w" . visual-line-mode)))
-#+END_SRC
+*** Org-roam
+  I use the Zettelkasten (slip-box) method for taking and recalling notes and
+  information. To be able to do so, I started with my own workflow, adding
+  org-mode links to the different notes, and has been working for me for 
+  close to a month. As a way of improving this workflow, I decided to give
+  org-roam a chance.
 
-*** Hooks
-Adding the execution of certain functions when the org-roam-file-setup-hook
-is run, for example, adding spelling correction functionality.
-#+begin_src emacs-lisp
-(add-hook 'org-roam-file-setup-hook (lambda ()
-                                       (flyspell-mode t)))
-#+end_src
+  #+BEGIN_SRC emacs-lisp
+    (use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/Documents/org_files/slip-box/")
+      (org-roam-capture-templates '(
+                                    ("d" "default" plain (function org-roam--capture-get-point)
+                                     "%?"
+                                     :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                     :head "#+title: ${title}\n#+roam_key: \n#+roam_tags: \n"
+                                     :unnarrowed t)))
+      :bind (:map org-roam-mode-map
+             (("C-c n l" . org-roam)
+              ("C-c n f" . org-roam-find-file)
+              ("C-c n g" . org-roam-graph))
+             :map org-mode-map
+             (("C-c n i" . org-roam-insert)
+              ("C-c n I" . org-roam-insert-immediate))
+             :map org-roam-backlinks-mode-map
+             ("w" . visual-line-mode)))
+  #+END_SRC
 
-*** Org-roam protocol
-After having configured the org-protocol, the org-roam-protocol will open the links
-that have been created with the org-roam-graph function in order to allow for faster
-browsing when outilining blog posts or articles.
-#+begin_src emacs-lisp
-  (use-package org-roam-protocol
-    :ensure nil)
-#+end_src
+**** Hooks
+  Adding the execution of certain functions when the org-roam-file-setup-hook
+  is run, for example, adding spelling correction functionality.
+  #+begin_src emacs-lisp
+  (add-hook 'org-roam-file-setup-hook (lambda ()
+                                         (flyspell-mode t)))
+  #+end_src
 
-** Org-download
-Org download is one interesting package, which allows drag-and-drop functionality
-for org files, saving the downloaded image to the org-download-dir. This is crucial
-in order to save images efficiently from the clipboard (for example using eww) and
-a seemless integration with org-mode.
-#+begin_src emacs-lisp
-  (use-package org-download
-    :ensure t
-    :defer t
-    :init ;; Add handlers for drag-and-drop when Org is loaded.
-    (with-eval-after-load 'org
-      (org-download-enable)))
-#+end_src
+**** Org-roam protocol
+  After having configured the org-protocol, the org-roam-protocol will open the links
+  that have been created with the org-roam-graph function in order to allow for faster
+  browsing when outilining blog posts or articles.
+  #+begin_src emacs-lisp
+    (use-package org-roam-protocol
+      :ensure nil)
+  #+end_src
 
-** Org-pdftools
-Org-pdftools is the mantained version of the package org-pdfview, which allos for annotations
-and org-links to different pages of the pdf, instead of giving the normal 500 kilometers wide
-slug that org-mode gives.
-#+begin_src emacs-lisp
-  (use-package org-pdftools
-    :ensure t
-    :hook (org-mode . org-pdftools-setup-link))
-#+end_src
+*** Org-download
+  Org download is one interesting package, which allows drag-and-drop functionality
+  for org files, saving the downloaded image to the org-download-dir. This is crucial
+  in order to save images efficiently from the clipboard (for example using eww) and
+  a seemless integration with org-mode.
+  #+begin_src emacs-lisp
+    (use-package org-download
+      :ensure t
+      :defer t
+      :init ;; Add handlers for drag-and-drop when Org is loaded.
+      (with-eval-after-load 'org
+        (org-download-enable)))
+  #+end_src
 
-** Exporting to epub
-This is an attempt to have org-mode export to epub, in order to produce ebooks
-that I can later convert to mobi in order to include in my kindle. The books
-that was interested in converting would most likely be collections of blog posts.
-#+begin_src emacs-lisp
-  (use-package ox-epub
-    :ensure t)
-#+end_src
+*** Org-pdftools
+  Org-pdftools is the mantained version of the package org-pdfview, which allos for annotations
+  and org-links to different pages of the pdf, instead of giving the normal 500 kilometers wide
+  slug that org-mode gives.
+  #+begin_src emacs-lisp
+    (use-package org-pdftools
+      :ensure t
+      :hook (org-mode . org-pdftools-setup-link))
+  #+end_src
 
-** Org-pomodoro
-Adding pomodoro support to emacs, with the intention of adding the effort
-column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxiao9058/dotemacs.d/raw/master/dotemacs.d/lisp/init-pomodoro.el][shuxiao9058]] config.
+*** Exporting to epub
+ This is an attempt to have org-mode export to epub, in order to produce ebooks
+ that I can later convert to mobi in order to include in my kindle. The books
+ that was interested in converting would most likely be collections of blog posts.
+ #+begin_src emacs-lisp
+   (use-package ox-epub
+     :ensure t)
+ #+end_src
 
-I'm also adding a function to be able to set the effort in pomodoros, to avoid
-possible missunderstandings.
-#+begin_src emacs-lisp
-  (defun ndk/org-set-effort-in-pomodoros (&optional n)
-    (interactive "P")
-    (setq n (or n (string-to-number (read-from-minibuffer "How many pomodoros: " nil nil nil nil "1" nil))))
-    (let* ((mins-per-pomodoro-prop (org-entry-get (point) "MINUTES_PER_POMODORO" t))
-           (mins-per-pomodoro (if mins-per-pomodoro-prop
-                                  (string-to-number mins-per-pomodoro-prop)
-                                25)))
-      (org-set-effort nil (org-duration-from-minutes (* n mins-per-pomodoro)))))
-  (use-package org-pomodoro
-    :ensure t
-    :demand t
-    :hook (org-pomodoro-break-finished .
-                                       (lambda ()
-                                         (interactive)
-                                         (point-to-register 1)
-                                         (org-clock-goto)
-                                         (org-pomodoro)
-                                         (register-to-point 1)
-                                         ))
-    :custom
-    (org-pomodoro-keep-killed-pomodoro-time t)
-    (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
-    (org-pomodoro-short-break-sound (concat user-emacs-directory "extra/bell.wav"))
-    :bind-keymap("C-c o p" . qk/org-pomodoro-mode-global-map)
-    :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
-    :init 
-    (defvar shu/org-pomodoro-columns-format
-      "%22SCHEDULED %CATEGORY %42ITEM %4Effort(Effort){:} %4CLOCKSUM_T(Time)")
-    (defun shu/org-pomodoro-columns ()
-      (interactive)
-      (org-columns shu/org-pomodoro-columns-format))
+*** Org-pomodoro
+ Adding pomodoro support to emacs, with the intention of adding the effort
+ column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxiao9058/dotemacs.d/raw/master/dotemacs.d/lisp/init-pomodoro.el][shuxiao9058]] config.
 
-    (defun shu/org-pomodoro-agenda-columns ()
-      (interactive)
-      (let ((org-agenda-overriding-columns-format shu/org-pomodoro-columns-format))
-        (org-agenda-columns)))
-    (defvar qk/org-pomodoro-mode-global-map
-      (let ((map (make-sparse-keymap)))
-        (define-key map "I" 'org-pomodoro)
-        (define-key map "a" 'shu/org-pomodoro-agenda-columns)
-        (define-key map "c" 'shu/org-pomodoro-columns)
-        (define-key map "e" 'ndk/org-set-effort-in-pomodoros) map)
-      "Key map to scope `org-pomodoro' bindings for global usage.
-                  The idea is to bind this to a prefix sequence, so that its
-                  defined keys follow the pattern of <PREFIX> <KEY>."))
-#+end_src
+ I'm also adding a function to be able to set the effort in pomodoros, to avoid
+ possible missunderstandings.
+ #+begin_src emacs-lisp
+   (defun ndk/org-set-effort-in-pomodoros (&optional n)
+     (interactive "P")
+     (setq n (or n (string-to-number (read-from-minibuffer "How many pomodoros: " nil nil nil nil "1" nil))))
+     (let* ((mins-per-pomodoro-prop (org-entry-get (point) "MINUTES_PER_POMODORO" t))
+            (mins-per-pomodoro (if mins-per-pomodoro-prop
+                                   (string-to-number mins-per-pomodoro-prop)
+                                 25)))
+       (org-set-effort nil (org-duration-from-minutes (* n mins-per-pomodoro)))))
+   (use-package org-pomodoro
+     :ensure t
+     :demand t
+     :hook (org-pomodoro-break-finished .
+                                        (lambda ()
+                                          (interactive)
+                                          (point-to-register 1)
+                                          (org-clock-goto)
+                                          (org-pomodoro)
+                                          (register-to-point 1)
+                                          ))
+     :custom
+     (org-pomodoro-keep-killed-pomodoro-time t)
+     (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
+     (org-pomodoro-short-break-sound (concat user-emacs-directory "extra/bell.wav"))
+     :bind-keymap("C-c o p" . qk/org-pomodoro-mode-global-map)
+     :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
+     :init 
+     (defvar shu/org-pomodoro-columns-format
+       "%22SCHEDULED %CATEGORY %42ITEM %4Effort(Effort){:} %4CLOCKSUM_T(Time)")
+     (defun shu/org-pomodoro-columns ()
+       (interactive)
+       (org-columns shu/org-pomodoro-columns-format))
+
+     (defun shu/org-pomodoro-agenda-columns ()
+       (interactive)
+       (let ((org-agenda-overriding-columns-format shu/org-pomodoro-columns-format))
+         (org-agenda-columns)))
+     (defvar qk/org-pomodoro-mode-global-map
+       (let ((map (make-sparse-keymap)))
+         (define-key map "I" 'org-pomodoro)
+         (define-key map "a" 'shu/org-pomodoro-agenda-columns)
+         (define-key map "c" 'shu/org-pomodoro-columns)
+         (define-key map "e" 'ndk/org-set-effort-in-pomodoros) map)
+       "Key map to scope `org-pomodoro' bindings for global usage.
+                   The idea is to bind this to a prefix sequence, so that its
+                   defined keys follow the pattern of <PREFIX> <KEY>."))
+ #+end_src
 
 * Version control
 Obviously Magit
@@ -1222,8 +1238,20 @@ Lsp-mode for server completion.
 *** Flycheck
 Sintax checking on the fly.
 #+BEGIN_SRC emacs-lisp
-(use-package flycheck
-    :ensure t)
+  (use-package flycheck
+    :ensure t
+    :config (
+             (flycheck-define-checker proselint
+               "A linter for prose."
+               :command ("proselint" source-inplace)
+               :error-patterns
+               ((warning line-start (file-name) ":" line ":" column ": "
+                         (id (one-or-more (not (any " "))))
+                         (message) line-end))
+               :modes (text-mode markdown-mode gfm-mode))
+
+             (add-to-list 'flycheck-checkers 'proselint)
+             ))
 #+END_SRC
 *** lsp-mode
 #+BEGIN_SRC emacs-lisp
@@ -1328,7 +1356,7 @@ Adding hover to emulate running flutter mobile application on dekstop.
   (use-package hover
     :ensure t
     :after dart-mode
-    :custom (hover-how-reload-on-save t)
+    :custom (hover-hot-reload-on-save t)
     (hover-clear-buffer-on-hot-restart t)
     (hover-command-path "~/go/bin/hover")
     :bind (:map dart-mode-map
@@ -1575,7 +1603,6 @@ different contexts.
     (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
     :hook (mu4e-compose-mode-hook . (lambda () (use-hard-newlines -1))))
 
-  (advice-add 'mu4e-update-mail-and-index :around #'lastpass-mu4e-update-mail-and-index)
 #+end_src
 *** Message package
 Adding the configuration for the message package, in order to allow for
@@ -1707,7 +1734,6 @@ editing of the dashboard with an org-file, which is always cool.
 
 #+end_src
 
-
 ** Speed-test
 Practicing typing speed in emacs.
 #+BEGIN_SRC emacs-lisp
@@ -1835,7 +1861,6 @@ is enough to open the pdfs in the browser, avoiding problems.
                  (viewer . pdf-view-mode))))  
 #+end_src
 
-
 ** Emojify
 Adding emoji support in order to be able to use it in
 org-mode files, with using them in a blog post in sight.
@@ -1867,3 +1892,23 @@ connect our emacs --and ledger files-- to the amazing ledger-mode.
                          '(ledger-occur-xact-face
                            ((t (:background "#222324" :inherit nil))))))
 #+end_src
+
+** Todo in code
+Using the hl-todo package, we are able to highlight keywords related to
+the working environment, like: TODO, FIXME and some more.
+#+begin_src emacs-lisp
+  (use-package hl-todo
+    :hook (prog-mode . hl-todo-mode)
+    :ensure t
+    :config
+    (setq hl-todo-highlight-punctuation ":"
+          hl-todo-keyword-faces
+          `(("TODO"       warning bold)
+            ("FIXME"      error bold)
+            ("HACK"       font-lock-constant-face bold)
+            ("REVIEW"     font-lock-keyword-face bold)
+            ("NOTE"       success bold)
+            ("DEPRECATED" font-lock-doc-face bold))))
+#+end_src
+
+   
