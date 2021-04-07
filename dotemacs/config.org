@@ -1065,10 +1065,10 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
                  (org-gcal-client-secret (lastpass-getpass "gcal-sync-client-secret"))
                  (org-gcal-fetch-file-alist '(("qkessler@gmail.com" . "~/Documents/org_files/org-agenda/gcal-sync.org"))
                                             ))
-        :config (run-with-timer 0 (* 60 60) (lambda ()
+        :init (run-with-timer 0 (* 60 60) (lambda ()
                    (interactive)
                    (org-gcal--sync-unlock)
-                   (org-gcal-sync)
+                   (org-gcal-sync nil t)
                    )))
     #+end_src
     
