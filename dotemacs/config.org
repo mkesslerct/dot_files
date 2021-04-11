@@ -1,3 +1,4 @@
+#+STARTUP: overview
 * Themes
 ** Subatomic theme.
 #+BEGIN_SRC emacs-lisp
@@ -1594,6 +1595,7 @@ different contexts.
     (mu4e-confirm-quit nil)
     (mu4e-sent-messages-behavior 'sent)
     (mu4e-headers-auto-update t)
+    (message-kill-buffer-on-exit t)
     (mu4e-headers-skip-duplicates t)
     (mu4e-headers-fields
      '((:human-date . 12)
@@ -1675,8 +1677,7 @@ different contexts.
               :key ?u)))
     :config
     (mu4e t)
-    (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
-    :hook (mu4e-compose-mode-hook . (lambda () (use-hard-newlines -1))))
+    (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser)))
 
 #+end_src
 *** Message package
