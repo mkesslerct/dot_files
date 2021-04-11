@@ -155,7 +155,7 @@ it seems to have been deprecated.
 ** Buffers
 *** Bufler
 Better bufler list, creating projects and groups.
-#+BEGIN_SRC emacs-lisp
+# #+Begin_SRC emacs-lisp
 (use-package bufler
   :ensure t
   :config (defhydra+ hydra:bufler ()
@@ -270,7 +270,6 @@ normally bound to the flyspell word correction keys.
     :bind (:map flyspell-mode-map (("C-." . nil)
                                    ("C-," . nil))))
 #+end_src
-
 
 ** Appearence
 *** Cursor display
@@ -1695,6 +1694,8 @@ with emacs.
     (message-citation-line-function
      'message-insert-formatted-citation-line)
     (message-wide-reply-confirm-recipients t)
+    (send-mail-function 'smtpmail-send-it)
+    (message-send-mail-function 'smtpmail-send-it)
     (message-default-charset 'utf-8)
     :config (add-to-list 'mm-body-charset-encoding-alist '(utf-8 . base64)))
 #+end_src
@@ -1702,7 +1703,7 @@ with emacs.
 SMTP configuration in order to be able to send messages via smtp,
 adding the async functionality.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package async
     :ensure t)
   (use-package smtpmail-async
