@@ -711,7 +711,15 @@ which makes easier the process of using auth-source with the cli tool.
     :custom
     (lastpass-user "qkessler@gmail.com")
     (lastpass-trust-login t)
-    :bind ("C-c l p" . lastpass-list-all))
+    :bind-keymap("C-c j" . qk/lastpass-global-map)
+    :init
+    (defvar qk/lastpass-global-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "p" 'lastpass-list-all)
+        (define-key map "l" 'lastpass-login)
+      "Key map to scope `lastpass' bindings for global usage.
+                 The idea is to bind this to a prefix sequence, so that its
+                 defined keys follow the pattern of <PREFIX> <KEY>.")))
 
   (if (boundp 'auth-source-backend-parser-functions)
       (add-hook 'auth-source-backend-parser-functions #'lastpass-auth-source-backend-parse)
@@ -1056,23 +1064,38 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
 *** Gcal
     Gcal is the emacs package that connects to the Calendar API to allow for 2 ways syncing
     between specific org-mode files and GCalendar.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package org-gcal
         :ensure t
-        :demand t
+        :defer 25
         :custom (
                  (org-gcal-client-id (lastpass-getpass "gcal-sync-client-id"))
                  (org-gcal-client-secret (lastpass-getpass "gcal-sync-client-secret"))
                  (org-gcal-fetch-file-alist '(("qkessler@gmail.com" . "~/Documents/org_files/org-agenda/gcal-sync.org"))
-                                            ))
+                                            )))
+    #+end_src
+*** Org-caldav
+    After trying org-gcal, I continued trying with caldav, another of the most
+    popular google calendar (and other calendars) syncing packages.
 
-        ;; :init (run-with-timer 0 (* 60 60) (lambda ()
-        ;;                                     (interactive)
-        ;;                                     (org-gcal--sync-unlock)
-        ;;                                     (org-gcal-sync nil t) ) )
-        )
+    Installing the oauth2 library from melpa. It is one of the dependencies required
+    by org-caldav, but it does not install it itself.
+    #+begin_src emacs-lisp
+      (use-package oauth2
+        :ensure t)
     #+end_src
     
+    #+begin_src emacs-lisp
+      (use-package org-caldav
+        :ensure t
+        :custom ((org-caldav-oauth2-client-id "")
+                 (org-caldav-oauth2-client-secret "")
+                 (org-caldav-url 'google)
+                 (org-caldav-calendar-id "qkessler@gmail.com")
+                 (org-caldav-sync-direction 'cal->org)
+                 (org-caldav-inbox "~/Documents/org_files/org-agenda/gcal-sync.org")))
+    #+end_src
+
 *** toc-org
     Package designed to update a table of contents for the org-mode file, super
     useful when creating readme files, which are easier to format in org.
@@ -1551,6 +1574,15 @@ The package was created by abo-abo and is in melpa.
 (use-package elf-mode
     :ensure t)
 #+end_src
+** Yaml-mode
+   The yaml-mode package provides indentation features for programming with
+   yaml files, in which indentantion is key and a slip-up is really easy.
+   #+begin_src emacs-lisp
+     (use-package yaml-mode
+       :mode "\\.yml\\'"
+       :ensure t)
+   #+end_src
+
 * Extra
 ** Email from emacs
    Adding email integration for the email indexer mu, called mu4e.
