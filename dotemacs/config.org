@@ -1061,19 +1061,6 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
 #+END_SRC
 
 ** Extension packages
-*** Gcal
-    Gcal is the emacs package that connects to the Calendar API to allow for 2 ways syncing
-    between specific org-mode files and GCalendar.
-    #+begin_src emacs-lisp :tangle no
-      (use-package org-gcal
-        :ensure t
-        :defer 25
-        :custom (
-                 (org-gcal-client-id (lastpass-getpass "gcal-sync-client-id"))
-                 (org-gcal-client-secret (lastpass-getpass "gcal-sync-client-secret"))
-                 (org-gcal-fetch-file-alist '(("qkessler@gmail.com" . "~/Documents/org_files/org-agenda/gcal-sync.org"))
-                                            )))
-    #+end_src
 *** Org-caldav
     After trying org-gcal, I continued trying with caldav, another of the most
     popular google calendar (and other calendars) syncing packages.
