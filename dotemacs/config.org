@@ -1346,7 +1346,6 @@ Sintax checking on the fly.
     :commands (lsp lsp-deferred)
     :hook
     (mhtml-mode . lsp-deferred)
-    (text-mode . lsp-deferred)
     (css-mode . lsp-deferred)
     (python-mode . lsp-deferred)
     (js-mode . lsp-deferred)
@@ -1372,10 +1371,7 @@ Sintax checking on the fly.
      connect the functinality to a language server.
      #+begin_src emacs-lisp
        (use-package lsp-grammarly
-         :ensure t
-         :hook (text-mode . (lambda ()
-                              (require 'lsp-grammarly)
-                              (lsp-deferred))))  ; or lsp-deferred
+         :ensure t)  ; or lsp-deferred
      #+end_src
 
 **** Html preview.
