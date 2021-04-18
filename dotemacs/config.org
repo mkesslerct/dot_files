@@ -1346,6 +1346,7 @@ Sintax checking on the fly.
     :commands (lsp lsp-deferred)
     :hook
     (mhtml-mode . lsp-deferred)
+    (text-mode . lsp-deferred)
     (css-mode . lsp-deferred)
     (python-mode . lsp-deferred)
     (js-mode . lsp-deferred)
@@ -1364,6 +1365,19 @@ Sintax checking on the fly.
     :bind-keymap ("C-c l" . lsp-command-map))
 
 #+END_SRC
+
+**** Grammarly
+     Grammarly is an interesting spelling and prose linting extension for most
+     browsers. There has been created some packages from the Grammarly api to
+     connect the functinality to a language server.
+     #+begin_src emacs-lisp
+       (use-package lsp-grammarly
+         :ensure t
+         :hook (text-mode . (lambda ()
+                              (require 'lsp-grammarly)
+                              (lsp-deferred))))  ; or lsp-deferred
+     #+end_src
+
 **** Html preview.
 Adding the html preview filter, which uses the httpd server and impatient-mode,
 in order to process all the information. Keep in mind that you would need to use
