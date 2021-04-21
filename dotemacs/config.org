@@ -1072,7 +1072,7 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
         :ensure t)
     #+end_src
     
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package org-caldav
         :ensure t
         :custom ((org-caldav-oauth2-client-id "")
@@ -1369,7 +1369,7 @@ Sintax checking on the fly.
      Grammarly is an interesting spelling and prose linting extension for most
      browsers. There has been created some packages from the Grammarly api to
      connect the functinality to a language server.
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (use-package lsp-grammarly
          :ensure t)  ; or lsp-deferred
      #+end_src
