@@ -1243,6 +1243,8 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
    
    #+begin_src emacs-lisp
      (setq imperative-verb-file "~/.emacs.d/imperative_verbs.txt")
+     (setq conventional-commits-type-regexp (concat "^\\(" (regexp-opt
+                                                            '("feat" "fix" "refactor" "docs")) "!?:\s\\)" ))
      (defun get-imperative-verbs ()
        "Return a list of imperative verbs."
        (let ((file-path imperative-verb-file))
@@ -1250,6 +1252,7 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
            (insert-file-contents file-path)
            (split-string (buffer-string) "\n" t)
            )))
+
      ;; Parallels `git-commit-style-convention-checks',
      ;; allowing the user to specify which checks they
      ;; wish to enforce.
