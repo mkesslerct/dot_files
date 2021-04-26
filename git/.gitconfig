@@ -1,0 +1,7 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+#	name = Enrique Kessler Martínez
+#	email = qkessler@gmail.com
+[commit]
+    template = ~/.gitmessage
