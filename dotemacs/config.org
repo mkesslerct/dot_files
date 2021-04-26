@@ -1339,6 +1339,35 @@ Sintax checking on the fly.
 
     ;;          (add-to-list 'flycheck-checkers 'proselint)
     ;;          )
+*** Treemacs
+    Treemacs is a package explorer that has been created taking a ton of inspiration
+    from Eclipse's package explorer. It allows to have a ton of project and workspace
+    functionality that I find interesting for some of my applications. Mostly it will
+    be used when there are a ton of files in the project and I can benefit from having
+    a bird-view.
+
+    I use the following keybindings:
+    
+    - =C-c T=: =treemacs=, I normally use it to close treemacs.
+    - =C-c t=: =treemacs-select-window=, this second one is the one that I most use,
+      considering that treemacs opens when this command is called and the treemacs
+      window was hidden.
+    #+begin_src emacs-lisp
+      (use-package treemacs
+        :ensure t
+        :bind (:map global-map (("C-c T" . treemacs)
+                                ("C-c t" . treemacs-select-window))))
+    #+end_src
+
+**** treemacs-projectile
+     treemacs-projectile is a little extension to the comprehensive treemacs functionality,
+     focused on providing an easy exprerience adding projects, specially some of which have
+     already been imported by projectile.
+     #+begin_src emacs-lisp
+       (use-package treemacs-projectile
+         :ensure t)
+     #+end_src
+     
 *** lsp-mode
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-mode
@@ -1365,15 +1394,6 @@ Sintax checking on the fly.
 
 #+END_SRC
 
-**** Grammarly
-     Grammarly is an interesting spelling and prose linting extension for most
-     browsers. There has been created some packages from the Grammarly api to
-     connect the functinality to a language server.
-     #+begin_src emacs-lisp :tangle no
-       (use-package lsp-grammarly
-         :ensure t)  ; or lsp-deferred
-     #+end_src
-
 **** Html preview.
 Adding the html preview filter, which uses the httpd server and impatient-mode,
 in order to process all the information. Keep in mind that you would need to use
@@ -1398,7 +1418,10 @@ lsp-dart or lsp-java because dap-mode wasn't available.
 #+begin_src emacs-lisp
   (use-package dap-mode
     :ensure t)
-  (use-package dap-python)
+  (use-package dap-python
+    :ensure nil)
+  (use-package dap-java
+    :ensure nil)
 #+end_src
 **** lsp-ui
 Better ui for lsp-mode, adding el-doc.
@@ -1459,7 +1482,6 @@ Adding hover to emulate running flutter mobile application on dekstop.
                 ("C-c h z" . #'hover-run-or-hot-reload)
                 ("C-c h x" . #'hover-run-or-hot-restart)))
 #+end_src
-
 
 
 **** Java Programming
@@ -1580,6 +1602,15 @@ The package was created by abo-abo and is in melpa.
        :mode "\\.yml\\'"
        :ensure t)
    #+end_src
+
+**** treemacs-all-the-icons
+     Adding all-the-icons support to treemacs, configuring better default icons.
+     #+begin_src emacs-lisp
+       (use-package treemacs-all-the-icons
+         :ensure t
+         :config
+         (treemacs-load-theme "all-the-icons"))
+     #+end_src
 
 * Extra
 ** Email from emacs
