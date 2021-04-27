@@ -1324,9 +1324,10 @@ Magit with the integration of Github Issues.
        :ensure t
        :bind ("C-x g" . magit-status)
        :hook (after-save . magit-after-save-refresh-status)
+       :hook (git-commit-mode . (lambda ()
+                                  (set-fill-column 72)))
        :custom 
        (git-commit-summary-max-length 50)
-       (git-commit-fill-column 72)
        :config (add-to-list 'git-commit-finish-query-functions
                             #'bw/git-commit-check-style-conventions))
    #+end_src
