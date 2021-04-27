@@ -1258,70 +1258,14 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
    - Wrap the body at 72 characters
    - Use the body to explain the what and why vs. how
    
-   #+begin_src emacs-lisp
-     (setq imperative-verb-file "~/.emacs.d/imperative_verbs.txt")
-     (setq conventional-commits-type-regexp (concat "^\\(" (regexp-opt
-                                                            '("feat" "fix" "refactor" "docs")) "!?:\s\\)" ))
-     (defun get-imperative-verbs ()
-       "Return a list of imperative verbs."
-       (let ((file-path imperative-verb-file))
-         (with-temp-buffer
-           (insert-file-contents file-path)
-           (split-string (buffer-string) "\n" t)
-           )))
-
-     ;; Parallels `git-commit-style-convention-checks',
-     ;; allowing the user to specify which checks they
-     ;; wish to enforce.
-     (defcustom bw/git-commit-style-convention-checks '(summary-starts-with-capital
-                                                        summary-does-not-end-with-period
-                                                        summary-uses-imperative)
-       "List of checks performed by `bw/git-commit-check-style-conventions'.
-          Valid members are `summary-starts-with-capital',
-          `summary-does-not-end-with-period', and
-          `summary-uses-imperative'. That function is a member of
-          `git-commit-finish-query-functions'."
-       :options '(summary-starts-with-capital
-                  summary-does-not-end-with-period
-                  summary-uses-imperative)
-       :type '(list :convert-widget custom-hood-convert-widget)
-       :group 'git-commit)
-
-     ;; Parallels `git-commit-check-style-conventions'
-     (defun bw/git-commit-check-style-conventions (force)
-       "Check for violations of certain basic style conventions.
-
-          For each violation ask the user if she wants to proceed anway.
-          Option `bw/git-commit-check-style-conventions' controls which
-          conventions are checked."
-       (save-excursion
-         (goto-char (point-min))
-         (re-search-forward (git-commit-summary-regexp) nil t)
-         (let ((summary (match-string 1))
-               (first-word))
-           (and (or (not (memq 'summary-starts-with-capital
-                               bw/git-commit-style-convention-checks))
-                    (let ((case-fold-search nil))
-                      (string-match-p "^[[:upper:]]" summary))
-                    (y-or-n-p "Summary line does not start with capital letter.  Commit anyway? "))
-                (or (not (memq 'summary-does-not-end-with-period
-                               bw/git-commit-style-convention-checks))
-                    (not (string-match-p "[\\.!\\?;,:]$" summary))
-                    (y-or-n-p "Summary line ends with punctuation.  Commit anyway? "))
-                (or (not (memq 'summary-uses-imperative
-                               bw/git-commit-style-convention-checks))
-                    (progn
-                      (string-match "^\\([[:alpha:]]*\\)" summary)
-                      (setq first-word (downcase (match-string 1 summary)))
-                      (car (member first-word (get-imperative-verbs))))
-                    (when (y-or-n-p "Summary line should use imperative.  Does it? ")
-                      (when (y-or-n-p (format "Add `%s' to list of imperative verbs?" first-word))
-                        (with-temp-buffer
-                          (insert first-word)
-                          (insert "\n")
-                          (write-region (point-min) (point-max) imperative-verb-file t)))
-                      t))))))
+   :warning: There is no new for new configuration, I changed the workflow to use
+   =commitlint=, a linter commit tool recommended by conventional-commits, using
+   its own preset on ensure all the points above plus the standard is endured.
+   #+begin_src sh
+     yarn global add @commitlint/{cli,config-conventional}
+     echo "module.exports = {extends: ['@commitlint/config-conventional']};" > ~/.commitlint.config.js
    #+end_src
+
 
 ** Magit forge
 Magit with the integration of Github Issues.
@@ -1344,9 +1288,7 @@ Magit with the integration of Github Issues.
        :hook (git-commit-mode . (lambda ()
                                   (set-fill-column 72)))
        :custom 
-       (git-commit-summary-max-length 50)
-       :config (add-to-list 'git-commit-finish-query-functions
-                            #'bw/git-commit-check-style-conventions))
+       (git-commit-summary-max-length 50))
    #+end_src
 * Project management
 #+BEGIN_SRC emacs-lisp
