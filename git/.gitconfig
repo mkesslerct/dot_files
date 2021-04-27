@@ -5,3 +5,5 @@
 #	email = qkessler@gmail.com
 [commit]
     template = ~/.gitmessage
+[init]
+	templatedir = ~/.git-templates
