@@ -80,12 +80,29 @@ removing them later.
   (use-package try
     :ensure t)
 #+END_SRC
-** Autopair
-#+BEGIN_SRC emacs-lisp
-(use-package autopair
-  :ensure t
-  :config (autopair-global-mode))
-#+END_SRC
+** Delimiters
+*** smart-parens
+    Smart-parens is a package that improves on the previous package,
+    now deprecated: autopair. Smart-parens has the plus of being maintained,
+    considering that they usually merge pull requests and responde to issues.
+
+    #+begin_src emacs-lisp
+      (use-package smartparens
+        :ensure t
+        :hook (prog-mode . smartparens-mode)
+        :config (require 'smartparens-config))
+    #+end_src
+
+*** rainbow-delimiters
+    In order to be able to differentiate the parenthesis in all programming
+    modes, rainbow-delimiters considers different faces from your current theme
+    and adds the same face to the matching parens.
+
+    #+begin_src emacs-lisp
+      (use-package rainbow-delimiters
+        :ensure t
+        :hook (prog-mode . rainbow-delimiters-mode))
+    #+end_src
 
 ** Modeline
 *** Doom-modeline
