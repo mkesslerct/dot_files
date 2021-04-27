@@ -1,9 +1,8 @@
 #! /bin/sh
-npx commitlint < $1
+COMMITLINT_MESSAGE=$(npx commitlint < $1)
 status=$?
 if [ $status -gt 0 ]
 then
-        echo "Commit message does not follow conventional commit message spec"
-        echo "The default format is the following:\n<type>[optional scope]: <description>\n\n[optional body]\n\n[optional footer(s)]"
+        echo "$COMMITLINT_MESSAGE"
 fi
 exit $status
