@@ -1,5 +1,5 @@
 #! /bin/sh
-COMMITLINT_MESSAGE=$(npx commitlint < $1)
+COMMITLINT_MESSAGE=$(commitlint --config ~/.commitlintrc.js < $1)
 status=$?
 if [ $status -gt 0 ]
 then
