@@ -102,9 +102,16 @@ removing them later.
       (use-package rainbow-delimiters
         :ensure t
         :hook (prog-mode . rainbow-delimiters-mode)
-        :config (alexm/set-faces-by-spec
-                 '(rainbow-delimiters-base-error-face
-                   ((t (:foreground "#fc0303" :inherit nil))))))
+        :config
+        (alexm/set-faces-by-spec
+         '(rainbow-delimiters-base-error-face
+           ((t (:foreground "#fc0303" :inherit nil)))))
+        (alexm/set-faces-by-spec
+         '(rainbow-delimiters-mismatched-face
+           ((t (:foreground "#fc0303" :inherit nil)))))
+        (alexm/set-faces-by-spec
+         '(rainbow-delimiters-unmatched-face
+           ((t (:foreground "#fc0303" :inherit nil))))))
     #+end_src
 
 ** Modeline
@@ -2057,22 +2064,22 @@ Thanks to the amazing Ledger command line tool, which is an double-entry
 accounting system that allows for fast queries and reports we are able to
 connect our emacs --and ledger files-- to the amazing ledger-mode.
 #+begin_src emacs-lisp
-      (use-package ledger-mode
-        :mode "\\.ledger\\'"
-        :custom
-        (ledger-clear-whole-transactions t)
-        (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
-                          ("reg" "%(binary) -f %(ledger-file) reg")
-                          ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-                          ("account" "%(binary) -f %(ledger-file) reg %(account)")
-                          ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
-      \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
-                          ("budget" "%(binary) -f %(ledger-file) -E bal ^Budget and not Budget:Checking")))
-                        :ensure t
-                        :config
-                        (alexm/set-faces-by-spec
-                         '(ledger-occur-xact-face
-                           ((t (:background "#222324" :inherit nil))))))
+  (use-package ledger-mode
+    :mode "\\.ledger\\'"
+    :custom
+    (ledger-clear-whole-transactions t)
+    (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
+                      ("reg" "%(binary) -f %(ledger-file) reg")
+                      ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                      ("account" "%(binary) -f %(ledger-file) reg %(account)")
+                      ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
+  \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
+                      ("budget" "%(binary) -f %(ledger-file) -E bal ^Budget and not Budget:Checking")))
+    :ensure t
+    :config
+    (alexm/set-faces-by-spec
+     '(ledger-occur-xact-face
+       ((t (:background "#222324" :inherit nil))))))
 #+end_src
 
 ** Todo in code
