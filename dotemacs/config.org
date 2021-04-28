@@ -101,7 +101,10 @@ removing them later.
     #+begin_src emacs-lisp
       (use-package rainbow-delimiters
         :ensure t
-        :hook (prog-mode . rainbow-delimiters-mode))
+        :hook (prog-mode . rainbow-delimiters-mode)
+        :config (alexm/set-faces-by-spec
+                 '(rainbow-delimiters-base-error-face
+                   ((t (:foreground "#fc0303" :inherit nil))))))
     #+end_src
 
 ** Modeline
