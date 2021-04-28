@@ -952,7 +952,7 @@ of the layout, giving me a lot more information.
   (setq org-agenda-category-icon-alist
         `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
   (setq org-agenda-custom-commands
-        '(				; start list
+        '(
           ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
                                      (org-agenda-span 'day)
                                      (org-agenda-ndays 1)
@@ -970,6 +970,12 @@ of the layout, giving me a lot more information.
                          (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
                                            (org-tags-match-list-sublevels nil)))
                          ;; Tasks upcoming (should be similar to above?)
+
+                         ;; Tasks that are unscheduled
+                         (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
+                                       (org-tags-match-list-sublevels nil)
+                                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                                       ))
                          (agenda "" ((org-agenda-overriding-header "Upcoming:")
                                      (org-agenda-span 7)
                                      (org-agenda-start-day "+1d")
@@ -980,23 +986,14 @@ of the layout, giving me a lot more information.
                                                                       ))
                                      ;; I should set this next one to true, so that deadlines are ignored...?
                                      (org-agenda-todo-ignore-deadlines nil)))
-                         ;; Tasks that are unscheduled
-                         (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
-                                       (org-tags-match-list-sublevels nil)
-                                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
-                                       ))
                          ;; Tasks that are waiting or someday
                          (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
                                                   (org-tags-match-list-sublevels nil)))
                          (todo "NOTE" ((org-agenda-overriding-header "Notes:")
-                                                  (org-tags-match-list-sublevels nil)))
-                         )
-           )
-          )				; end list
+                                       (org-tags-match-list-sublevels nil))))))
 
         ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
-        org-agenda-skip-scheduled-if-deadline-is-shown t
-        )
+        org-agenda-skip-scheduled-if-deadline-is-shown t)
 #+END_SRC
 
 Adding custom agenda commands, with the intention of making the refiling and
