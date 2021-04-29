@@ -737,15 +737,15 @@ which makes easier the process of using auth-source with the cli tool.
     :custom
     (lastpass-user "qkessler@gmail.com")
     (lastpass-trust-login t)
-    :bind-keymap("C-c j" . qk/lastpass-global-map)
+    :bind-keymap("C-c l p" . qk/lastpass-global-map)
     :init
     (defvar qk/lastpass-global-map
-      (let ((map (make-sparse-keymap)))
-        (define-key map "p" 'lastpass-list-all)
-        (define-key map "l" 'lastpass-login)
-      "Key map to scope `lastpass' bindings for global usage.
+       (let ((map (make-sparse-keymap)))
+         (define-key map "l" 'lastpass-list-all)
+         (define-key map "p" 'lastpass-getpass) map)
+       "Key map to scope `lastpass' bindings for global usage.
                  The idea is to bind this to a prefix sequence, so that its
-                 defined keys follow the pattern of <PREFIX> <KEY>.")))
+                 defined keys follow the pattern of <PREFIX> <KEY>."))
 
   (if (boundp 'auth-source-backend-parser-functions)
       (add-hook 'auth-source-backend-parser-functions #'lastpass-auth-source-backend-parse)
