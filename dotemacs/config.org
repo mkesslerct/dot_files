@@ -1389,21 +1389,31 @@ Lsp-mode for server completion.
         :hook (org-mode . flycheck-mode))
 
       (flycheck-define-checker proselint
-         "A linter for prose."
-         :command ("proselint" source-inplace)
-         :error-patterns
-         ((warning line-start (file-name) ":" line ":" column ": "
-                   (id (one-or-more (not (any " "))))
-                   (message) line-end))
-         :modes (text-mode markdown-mode gfm-mode org-mode))
-       (add-to-list 'flycheck-checkers 'proselint)
+        "A linter for prose."
+        :command ("proselint" source-inplace)
+        :error-patterns
+        ((warning line-start (file-name) ":" line ":" column ": "
+                  (id (one-or-more (not (any " "))))
+                  (message) line-end))
+        :modes (text-mode markdown-mode gfm-mode org-mode))
+      (add-to-list 'flycheck-checkers 'proselint)
+
+      (flycheck-define-checker vale
+        "A checker for prose"
+        :command ("vale" "--output" "line"
+                  source)
+        :standard-input nil
+        :error-patterns
+        ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
+        :modes (markdown-mode org-mode text-mode))
+      (add-to-list 'flycheck-checkers 'vale 'append)
     #+end_src
 
 **** Flycheck-vale
      flycheck-vale is a package trying to provide seemless integration
      with the =vale= prose linter, which is written in go, it is fast and
      maintained, couldn't be a better option.
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (use-package flycheck-vale
          :ensure t
          :config (flycheck-vale-setup))
@@ -1553,7 +1563,6 @@ Adding hover to emulate running flutter mobile application on dekstop.
                 ("C-c h x" . #'hover-run-or-hot-restart)))
 #+end_src
 
-
 **** Java Programming
 Works with the eclipse server, not really sure if it is what I'm looking for.
 #+BEGIN_SRC emacs-lisp
@@ -1563,11 +1572,10 @@ Works with the eclipse server, not really sure if it is what I'm looking for.
 #+END_SRC
 
 **** Python programming
-Making sure the executable for python is not longer "python",
-but default to using the "python3" binary. Remember that pip3,
-when installing python-language-server saves the information in
-~/.local/bin, which may not be in your path, check the "echo $PATH"
-output.
+Making sure the executable for python is not longer "python", but default to
+using the "python3" binary. Remember that pip3, when installing
+python-language-server saves the information in ~/.local/bin, which may not be
+in your path, check the "echo $PATH" output.
 #+begin_src emacs-lisp
     (use-package python
       :custom (python-shell-interpreter "python3"))
@@ -2149,4 +2157,5 @@ the working environment, like: TODO, FIXME and some more.
        (langtool-language-tool-server-jar "~/.local/LanguageTool-5.3-stable/languagetool-server.jar")
        (langtool-server-user-arguments '("-p" "8082")))
    #+end_src
+
 
