@@ -2112,3 +2112,31 @@ the working environment, like: TODO, FIXME and some more.
 #+end_src
 
    
+
+** langtool
+   "Instantly Enhance Your Writing LanguageTool’s multilingual grammar, style,
+   and spell checker is used by millions of people around the
+   world."—[[https://languagetool.org]]
+
+   Seems to be as good as Grammarly, while being open-source, free premium for
+   students and an already implemented emacs package!
+
+   #+begin_src emacs-lisp
+     (defvar qk/langtool-mode-global-map
+       (let ((map (make-sparse-keymap)))
+         (define-key map "c" 'langtool-check)
+         (define-key map "d" 'langtool-check-done)
+         (define-key map "l" 'langtool-switch-default-language)
+         (define-key map "s" 'langtool-show-message-at-point)
+         (define-key map "b" 'langtool-correct-buffer) map)
+       "Key map to scope `langtool' bindings for global usage.
+                           The idea is to bind this to a prefix sequence, so
+                           that its defined keys follow the pattern of <PREFIX>
+                           <KEY>.")
+     (use-package langtool
+       :ensure t
+       :bind-keymap("C-c i" . qk/langtool-mode-global-map)
+       :custom
+       (langtool-language-tool-jar "~/.local/LanguageTool-5.3-stable/languagetool-commandline.jar"))
+   #+end_src
+
