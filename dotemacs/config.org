@@ -731,21 +731,21 @@ security and they have not had any recent breaches (last in 2015, encrypted
 further with 100k rounds). I will be using the lastpass package on melpa,
 which makes easier the process of using auth-source with the cli tool.
 #+begin_src emacs-lisp
+  (defvar qk/lastpass-global-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map "l" 'lastpass-list-all)
+      (define-key map "p" 'lastpass-getpass) map)
+    "Key map to scope `lastpass' bindings for global usage.
+                   The idea is to bind this to a prefix sequence, so that its
+                   defined keys follow the pattern of <PREFIX> <KEY>.")
+
   (use-package lastpass
     :ensure t
     :demand t
     :custom
     (lastpass-user "qkessler@gmail.com")
     (lastpass-trust-login t)
-    :bind-keymap("C-c l p" . qk/lastpass-global-map)
-    :init
-    (defvar qk/lastpass-global-map
-       (let ((map (make-sparse-keymap)))
-         (define-key map "l" 'lastpass-list-all)
-         (define-key map "p" 'lastpass-getpass) map)
-       "Key map to scope `lastpass' bindings for global usage.
-                 The idea is to bind this to a prefix sequence, so that its
-                 defined keys follow the pattern of <PREFIX> <KEY>."))
+    :bind-keymap("C-c l p" . qk/lastpass-global-map))
 
   (if (boundp 'auth-source-backend-parser-functions)
       (add-hook 'auth-source-backend-parser-functions #'lastpass-auth-source-backend-parse)
