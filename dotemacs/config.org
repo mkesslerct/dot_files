@@ -1500,7 +1500,7 @@ lsp-dart or lsp-java because dap-mode wasn't available.
     :ensure t
     :after lsp-mode
     :bind (:map lsp-mode-map
-                ("d" . dap-hydra))
+                ("C-c l d" . dap-hydra))
     :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
     :config (dap-auto-configure-mode))
 
