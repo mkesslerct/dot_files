@@ -1399,6 +1399,16 @@ Lsp-mode for server completion.
        (add-to-list 'flycheck-checkers 'proselint)
     #+end_src
 
+**** Flycheck-vale
+     flycheck-vale is a package trying to provide seemless integration
+     with the =vale= prose linter, which is written in go, it is fast and
+     maintained, couldn't be a better option.
+     #+begin_src emacs-lisp
+       (use-package flycheck-vale
+         :ensure t
+         :config (flycheck-vale-setup))
+     #+end_src
+
 *** Treemacs
     Treemacs is a package explorer that has been created taking a ton of inspiration
     from Eclipse's package explorer. It allows to have a ton of project and workspace
