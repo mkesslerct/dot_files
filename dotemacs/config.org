@@ -1382,23 +1382,23 @@ this year.
 ** Server side functionality (LSP)
 Lsp-mode for server completion.
 *** Flycheck
-Sintax checking on the fly.
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t)
-#+END_SRC
-;; :config (
-    ;;          (flycheck-define-checker proselint
-    ;;            "A linter for prose."
-    ;;            :command ("proselint" source-inplace)
-    ;;            :error-patterns
-    ;;            ((warning line-start (file-name) ":" line ":" column ": "
-    ;;                      (id (one-or-more (not (any " "))))
-    ;;                      (message) line-end))
-    ;;            :modes (text-mode markdown-mode gfm-mode))
+    Sintax checking on the fly.
+    #+begin_src emacs-lisp
+      (use-package flycheck
+        :ensure t
+        :hook (org-mode . flycheck-mode))
 
-    ;;          (add-to-list 'flycheck-checkers 'proselint)
-    ;;          )
+      (flycheck-define-checker proselint
+         "A linter for prose."
+         :command ("proselint" source-inplace)
+         :error-patterns
+         ((warning line-start (file-name) ":" line ":" column ": "
+                   (id (one-or-more (not (any " "))))
+                   (message) line-end))
+         :modes (text-mode markdown-mode gfm-mode org-mode))
+       (add-to-list 'flycheck-checkers 'proselint)
+    #+end_src
+
 *** Treemacs
     Treemacs is a package explorer that has been created taking a ton of inspiration
     from Eclipse's package explorer. It allows to have a ton of project and workspace
@@ -2111,8 +2111,6 @@ the working environment, like: TODO, FIXME and some more.
             ("DEPRECATED" font-lock-doc-face bold))))
 #+end_src
 
-   
-
 ** langtool
    "Instantly Enhance Your Writing LanguageTool’s multilingual grammar, style,
    and spell checker is used by millions of people around the
@@ -2121,7 +2119,8 @@ the working environment, like: TODO, FIXME and some more.
    Seems to be as good as Grammarly, while being open-source, free premium for
    students and an already implemented emacs package!
 
-   #+begin_src emacs-lisp
+   :warning: Untangling 2021/04/29, might visit later.
+   #+begin_src emacs-lisp :tangle no
      (defvar qk/langtool-mode-global-map
        (let ((map (make-sparse-keymap)))
          (define-key map "c" 'langtool-check)
@@ -2137,6 +2136,7 @@ the working environment, like: TODO, FIXME and some more.
        :ensure t
        :bind-keymap("C-c i" . qk/langtool-mode-global-map)
        :custom
-       (langtool-language-tool-jar "~/.local/LanguageTool-5.3-stable/languagetool-commandline.jar"))
+       (langtool-language-tool-server-jar "~/.local/LanguageTool-5.3-stable/languagetool-server.jar")
+       (langtool-server-user-arguments '("-p" "8082")))
    #+end_src
 
