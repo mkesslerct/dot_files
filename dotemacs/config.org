@@ -768,31 +768,32 @@ Keybindings for org-mode as well as better defaults. Not in use-package format y
 Initial configuration of org-directory and refile.org, with the
 intention of all capture created items to go there before correct refiling.
 #+BEGIN_SRC emacs-lisp
-  (setq 
-   org-directory "~/Documents/org_files"
-   org-default-notes-file (concat org-directory "/org-agenda/refile.org")
-   org-agenda-files (list (concat org-directory "/org-agenda"))
-   org-archive-location (concat org-directory "/archive/%s_archive::")
-   org-refile-targets (quote ((nil :maxlevel . 5)
-                              (org-agenda-files :maxlevel . 5)))
-   org-src-fontify-natively t
-   org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
-   org-clock-out-remove-zero-time-clocks t
-   org-clock-out-when-done t
-   org-agenda-restore-windows-after-quit t
-   org-clock-persistence-insinuate t
-   org-clock-persist t
-   org-clock-in-resume t
-   org-startup-with-inline-images t
-   )
-  (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
-  (defvar org-book-list-file (concat org-directory "/book_list.org"))
-  (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
-  (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
-  (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               (append org-babel-load-languages
-                                       '((ledger . t))))
+    (defvar org-book-list-file (concat org-directory "/book_list.org"))
+    (setq 
+     org-directory "~/Documents/org_files"
+     org-default-notes-file (concat org-directory "/org-agenda/refile.org")
+     org-agenda-files (list (concat org-directory "/org-agenda"))
+     org-archive-location (concat org-directory "/archive/%s_archive::")
+     org-refile-targets (quote ((nil :maxlevel . 5)
+                                (org-agenda-files :maxlevel . 5)
+                                (org-book-list-file :maxlevel . 2)))
+     org-src-fontify-natively t
+     org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
+     org-clock-out-remove-zero-time-clocks t
+     org-clock-out-when-done t
+     org-agenda-restore-windows-after-quit t
+     org-clock-persistence-insinuate t
+     org-clock-persist t
+     org-clock-in-resume t
+     org-startup-with-inline-images t
+     )
+    (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
+    (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
+    (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
+    (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
+    (org-babel-do-load-languages 'org-babel-load-languages
+                                 (append org-babel-load-languages
+                                         '((ledger . t))))
 #+END_SRC
 
 *** org-fill-paragraph fix
@@ -817,7 +818,6 @@ I found some ways to fix this, getting input from a bug fix report from [[https:
                 '(bg-org-fill-paragraph-with-link-nobreak-p))))))
   (add-hook 'org-mode-hook 'bg-org-fill-paragraph-config)
 #+end_src
-
 
 ** Refiling
 Refiling setup, using the file name as header. Last line is
@@ -1251,6 +1251,17 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
  #+end_src
 
 * Version control
+** Symlinks
+   As part of this =dot_files= repo, my configuration philosofy uses
+   symlinks to control the files within the repo but still benefit from
+   the modifying on only individual files, instead of copying and pasting.
+   The =vc= emacs package always asks whether I intend to follow the links
+   that are git-controlled, obviously yes.
+
+   #+begin_src emacs-lisp
+     (setq vc-follow-symlinks t)
+   #+end_src
+
 ** Enforcing commit messages
    I considered [[https://www.adventuresinwhy.com/post/commit-message-linting/][this]] post a very good guide resumming most of the
    information out there for git commiting. The items solved with
@@ -1271,7 +1282,6 @@ in a DONE state.) items, with the intention of making org-agenda quicker to proc
      yarn global add @commitlint/{cli,config-conventional}
      echo "module.exports = {extends: ['@commitlint/config-conventional']};" > ~/.commitlint.config.js
    #+end_src
-
 
 ** Magit forge
 Magit with the integration of Github Issues.
@@ -1579,63 +1589,64 @@ Better completion for html tags, very good documentation.
 #+END_SRC
 
 ***** JavaScript environment
-Adding the JavaScript programming environment, trying only with lsp-mode and then
-considering "tide", which is a full-fledged environment, close to what elpy was
-for python3. Adding the rjsx-mode package, which allows for updated sintax documentation
-and keywords, considering the updated react components and new sintax, deriving js2-mode.
+      Adding the JavaScript programming environment, trying only with lsp-mode and then
+      considering "tide", which is a full-fledged environment, close to what elpy was
+      for python3. Adding the rjsx-mode package, which allows for updated sintax documentation
+      and keywords, considering the updated react components and new sintax, deriving js2-mode.
 
-The following lines are needed to run the language server. We need to install the server
-inside every project, we have it defined as a npm package. You might need to run it with
-admin privileges (sudo):
-- npm i -g typescript-language-server; npm i -g typescript
-- npm i -g javascript-typescript-langserver
+      The following lines are needed to run the language server. We need to install the server
+      inside every project, we have it defined as a npm package. You might need to run it with
+      admin privileges (sudo):
+      - npm i -g typescript-language-server; npm i -g typescript
+      - npm i -g javascript-typescript-langserver
 
-In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
-is on the exec-path, not tangling this because the correct solution for this problem is the
-[[*Syncing .profile env variables][exec-path-from-shell package]]
-#+begin_src emacs-lisp
-  (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.12.0/bin")))
-#+end_src
-I've found this is often a misnaming error, if you install from a package
-manager you bin may be called nodejs so you just need to symlink it like so "ln
--s /usr/bin/nodejs /usr/bin/node"
+      In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
+      is on the exec-path, not tangling this because the correct solution for this problem is the
+      [[*Syncing .profile env variables][exec-path-from-shell package]]
+      #+begin_src emacs-lisp
+        (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.12.0/bin")))
+      #+end_src
+      I've found this is often a misnaming error, if you install from a package
+      manager you bin may be called nodejs so you just need to symlink it like so "ln
+      -s /usr/bin/nodejs /usr/bin/node"
 
-Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
-#+begin_src emacs-lisp
-  (use-package js2-mode
-    :ensure t)
-#+end_src
+      Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
+      #+begin_src emacs-lisp
+        (use-package js2-mode
+          :ensure t)
+      #+end_src
 
-js-mode, which was introduced in Emacs 27, including full support for
-jsx highlighting, indenting and more.
-#+begin_src emacs-lisp
-  (use-package js-mode
-    :mode ("\\.js\\'" "\\.tsx\\'")
-    :bind (:map js-mode-map ("M-." . nil))
-    :hook (js-mode . (lambda ()
-                       (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
-#+end_src
+      js-mode, which was introduced in Emacs 27, including full support for
+      jsx highlighting, indenting and more.
+      #+begin_src emacs-lisp
+        (use-package js-mode
+          :mode ("\\.js\\'" "\\.tsx\\'")
+          :bind (:map js-mode-map ("M-." . nil))
+          :hook (js-mode . (lambda ()
+                             (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+      #+end_src
 
-xref-js2, makes use of "rg" for searching the project for definitions and jumping
-between them, which is key to software developing.
-#+begin_src emacs-lisp
-  (use-package xref-js2
-    :ensure t
-    :custom (xref-js2-search-program 'rg))
-#+end_src
+      xref-js2, makes use of "rg" for searching the project for definitions and jumping
+      between them, which is key to software developing.
+      #+begin_src emacs-lisp
+        (use-package xref-js2
+          :ensure t
+          :custom (xref-js2-search-program 'rg))
+      #+end_src
 
-Adding json-mode configuration, which is a major mode for editing json files, providing
-better sintax highlights, and some nice editing keybindings.
-#+begin_src emacs-lisp
-  (use-package json-mode
-  :ensure t
-  :config
-  (progn
-    (flycheck-add-mode 'json-jsonlint 'json-mode)
-    (add-hook 'json-mode-hook 'flycheck-mode)
-    (setq js-indent-level 2)
-    (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
-#+end_src
+      Adding json-mode configuration, which is a major mode for editing json files, providing
+      better sintax highlights, and some nice editing keybindings.
+      #+begin_src emacs-lisp
+        (use-package json-mode
+          :ensure t
+          :config
+          (progn
+            (flycheck-add-mode 'json-jsonlint 'json-mode)
+            (add-hook 'json-mode-hook 'flycheck-mode)
+            (setq js-indent-level 2)
+            (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
+      #+end_src
+
 ** Elf-mode
 Adding elf command output when the file is a binary file
 and the mode elf-mode is triggered, could be used as a standalone function. 
