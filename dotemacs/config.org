@@ -1497,7 +1497,13 @@ I'm adding the package here just to make sure, as I couldn't load
 lsp-dart or lsp-java because dap-mode wasn't available.
 #+begin_src emacs-lisp
   (use-package dap-mode
-    :ensure t)
+    :ensure t
+    :after lsp-mode
+    :bind (:map lsp-mode-map
+                ("d" . dap-hydra))
+    :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
+    :config (dap-auto-configure-mode))
+
   (use-package dap-python
     :ensure nil)
   (use-package dap-java
