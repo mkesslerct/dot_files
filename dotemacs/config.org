@@ -792,6 +792,7 @@
       (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
       (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
       (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
+      (add-hook 'org-mode-hook 'visual-line-mode)
       (org-babel-do-load-languages 'org-babel-load-languages
                                    (append org-babel-load-languages
                                            '((ledger . t))))
@@ -1720,6 +1721,14 @@
              (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
        #+end_src
 
+***** treemacs-all-the-icons
+      Adding all-the-icons support to treemacs, configuring better default icons.
+      #+begin_src emacs-lisp
+        (use-package treemacs-all-the-icons
+          :ensure t
+          :config
+          (treemacs-load-theme "Netbeans"))
+      #+end_src
 *** Elf-mode
     Adding elf command output when the file is a binary file
     and the mode elf-mode is triggered, could be used as a standalone function. 
@@ -1737,14 +1746,6 @@
         :ensure t)
     #+end_src
 
-***** treemacs-all-the-icons
-      Adding all-the-icons support to treemacs, configuring better default icons.
-      #+begin_src emacs-lisp
-        (use-package treemacs-all-the-icons
-          :ensure t
-          :config
-          (treemacs-load-theme "all-the-icons"))
-      #+end_src
 
 ** Extra
 *** Email from emacs
