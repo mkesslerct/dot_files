@@ -184,14 +184,14 @@
 *** Buffers
 **** Bufler
      Better bufler list, creating projects and groups.
-     # #+Begin_SRC emacs-lisp
-     (use-package bufler
-     :ensure t
-     :config (defhydra+ hydra:bufler ()
-     ("o" #'delete-other-windows "Full screen"))
-     :bind (:map bufler-list-mode-map
-     ("o" . delete-other-windows)))
-     #+END_SRC
+     #+begin_src emacs-lisp
+       (use-package bufler
+         :ensure t
+         :config (defhydra+ hydra:bufler ()
+                   ("o" #'delete-other-windows "Full screen"))
+         :bind (:map bufler-list-mode-map
+                     ("o" . delete-other-windows)))
+     #+end_src
 
 
      Function to make bufler buffer full-screen.
