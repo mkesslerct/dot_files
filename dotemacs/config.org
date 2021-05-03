@@ -861,6 +861,16 @@
          `(org-document-title ((t (,@headline  :height 1.75 :underline nil))))))
     #+end_src
 
+    Change the default face for org-capture-mode-hook on the title, the giant header 1 level height feels awkward on the org-capture template modes.
+    #+begin_src emacs-lisp
+      (add-hook 'org-capture-mode-hook
+                (lambda ()
+                  (let* (;; (base-font-color     (face-foreground 'default nil 'default))
+                         (headline           `(:inherit default :weight bold)))
+
+                    (face-remap-add-relative 'org-level-1 '(,@headline)))))
+    #+end_src
+
     Hide leading stars on org headlines, instead of using org-bullets. No need
     to have different symbols on the headlines, I'm just not used to it and it
     doesn't feel natural.
@@ -936,8 +946,6 @@
           "* NOTE %? :REFILING:\n%a\n")
          )
        )
-      ;; Keep a line between headers
-      ;; org-cycle-separator-lines 1
     #+END_SRC
 
 *** Org agenda
@@ -1745,7 +1753,6 @@
         :mode "\\.yml\\'"
         :ensure t)
     #+end_src
-
 
 ** Extra
 *** Email from emacs
