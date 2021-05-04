@@ -1659,6 +1659,17 @@
 
       Exactly the same with the html server, installed with lsp-install-server: html-ls.
       Trying to install emmet-mode, but the package cl is deprecated.
+
+****** html      
+       To use html-mode in other mode files, I needed to configure .hsb template
+       files, using express.
+       #+begin_src emacs-lisp
+         (use-package mhtml-mode
+           :mode ("\\.html\\'" "\\.hbs\\'")
+           :ensure nil)
+       #+end_src
+
+       
 ****** Emmet-mode
        Better completion for html tags, very good documentation.
        #+BEGIN_SRC emacs-lisp
