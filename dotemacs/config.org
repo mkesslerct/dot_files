@@ -699,6 +699,16 @@
         (help/real-insert ?-))
 
     #+end_src
+*** Browse-url
+    Browse url is the package that controls the information that is passed to the browser when forwarded from emacs. I find that cookies are important when accessing chrome, might need to check again if I can select to save cookies only for Chrome browsing.
+
+    #+begin_src emacs-lisp
+      (use-package browse-url
+        :ensure nil
+        :custom
+        (url-cookie-file (no-littering-expand-var-file-name "cookies/cookies")))
+    #+end_src
+
 
 ** Terminal
    Configuration related to terminal emulators and modes. Recently, 
