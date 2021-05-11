@@ -709,6 +709,15 @@
         (url-cookie-file (no-littering-expand-var-file-name "cookies/cookies")))
     #+end_src
 
+*** Whole-line-or-region
+    Emacs doesn't have a by default command to get the whole region without going to the beginning of the line and marking the rest of the line or pressing C-S-backspace to remove the whole line.
+
+    Whole-line-or-region implementes some changes to add the mentioned funcionality. Using the remapped C-w and M-w (cut and copy) without a region selected with select the whole line.
+    #+begin_src emacs-lisp
+      (use-package whole-line-or-region
+        :ensure t
+        :config (whole-line-or-region-global-mode))
+    #+end_src
 
 ** Terminal
    Configuration related to terminal emulators and modes. Recently, 
@@ -779,33 +788,33 @@
     Initial configuration of org-directory and refile.org, with the
     intention of all capture created items to go there before correct refiling.
     #+BEGIN_SRC emacs-lisp
+      (setq org-directory "~/Documents/org_files")
       (defvar org-book-list-file (concat org-directory "/book_list.org"))
-      (setq 
-       org-directory "~/Documents/org_files"
-       org-default-notes-file (concat org-directory "/org-agenda/refile.org")
-       org-agenda-files (list (concat org-directory "/org-agenda"))
-       org-archive-location (concat org-directory "/archive/%s_archive::")
-       org-refile-targets (quote ((nil :maxlevel . 5)
-                                  (org-agenda-files :maxlevel . 5)
-                                  (org-book-list-file :maxlevel . 2)))
-       org-src-fontify-natively t
-       org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
-       org-clock-out-remove-zero-time-clocks t
-       org-clock-out-when-done t
-       org-agenda-restore-windows-after-quit t
-       org-clock-persistence-insinuate t
-       org-clock-persist t
-       org-clock-in-resume t
-       org-startup-with-inline-images t
-       )
-      (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
-      (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
-      (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
-      (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
-      (add-hook 'org-mode-hook 'visual-line-mode)
-      (org-babel-do-load-languages 'org-babel-load-languages
-                                   (append org-babel-load-languages
-                                           '((ledger . t))))
+      (setq
+            org-default-notes-file (concat org-directory "/org-agenda/refile.org")
+            org-agenda-files (list (concat org-directory "/org-agenda"))
+            org-archive-location (concat org-directory "/archive/%s_archive::")
+            org-refile-targets (quote ((nil :maxlevel . 5)
+                                       (org-agenda-files :maxlevel . 5)
+                                       (org-book-list-file :maxlevel . 2)))
+            org-src-fontify-natively t
+            org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
+            org-clock-out-remove-zero-time-clocks t
+            org-clock-out-when-done t
+            org-agenda-restore-windows-after-quit t
+            org-clock-persistence-insinuate t
+            org-clock-persist t
+            org-clock-in-resume t
+            org-startup-with-inline-images t
+            )
+           (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
+           (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
+           (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
+           (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
+           (add-hook 'org-mode-hook 'visual-line-mode)
+           (org-babel-do-load-languages 'org-babel-load-languages
+                                        (append org-babel-load-languages
+                                                '((ledger . t))))
     #+END_SRC
 
 **** org-fill-paragraph fix
@@ -1173,6 +1182,14 @@
                   (org-caldav-inbox "~/Documents/org_files/org-agenda/gcal-sync.org")))
      #+end_src
 
+     I also added a script I created with python3, and I find that hooking up an emacs function helps calling the script and having my tasks updated.
+     #+begin_src emacs-lisp
+       (defun qk/gcal-org-sync()
+         (interactive)
+         (let ((default-directory "~/Documents/gcal-org")) 
+           (shell-command "./crontab-script.sh")))
+     #+end_src
+
 **** toc-org
      Package designed to update a table of contents for the org-mode file, super
      useful when creating readme files, which are easier to format in org.
@@ -1538,6 +1555,7 @@
          (setq lsp-signature-auto-activate nil)
          (setq lsp-headerline-breadcrumb-enable nil)
          (setq lsp-enable-links nil)
+         (setq lsp-keymap-prefix "C-c l")
          :bind-keymap ("C-c l" . lsp-command-map))
 
      #+END_SRC

@@ -175,3 +175,4 @@ alias uemacs="killall -USR2 emacs" # Unfreezing emacs.
 alias ect="emacsclient -t" # Open emacs inside terminal.
 # Pulling everything inside a directory.
 alias pa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;" 
+alias mon2cam="deno run --unstable -A -r -q https://raw.githubusercontent.com/ShayBox/Mon2Cam/master/src/mod.ts"

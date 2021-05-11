@@ -27,3 +27,5 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 export PATH="/home/qkessler/.nvm/versions/node/v12.20.1/bin:/home/qkessler/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:~/go/bin:~/.yarn/bin"
+export DENO_INSTALL="/home/qkessler/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
