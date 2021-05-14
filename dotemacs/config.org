@@ -279,7 +279,6 @@
                   (setq TeX-parse-self t)
                   (setq-default TeX-master nil)
                   (setq reftex-plug-into-AUCTeX t)
-                  (pdf-tools-install)
                   (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
                         TeX-source-correlate-start-server t)
                   ;; Update PDF buffers after successful LaTeX runs
@@ -462,11 +461,12 @@
       (use-package markdown-mode
         :ensure nil
         :mode ("\\.md\\'" . gfm-mode)
-        :hook (markdown-mode . toc-org-mode)
         :commands (markdown-mode gfm-mode)
         :custom (markdown-command "pandoc -t html5")
         :bind ("C-c r" . bb/markdown-preview)
         :init
+        (add-hook 'markdown-mode-hook #'toc-org-mode)
+        (add-hook 'markdown-mode-hook #'visual-line-mode)
         (defun bb/markdown-filter (buffer)
           (princ
            (with-temp-buffer
@@ -474,7 +474,7 @@
                (set-buffer buffer)
                (set-buffer (markdown tmp))
                (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css\"/>
-      <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
+                <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
            (current-buffer)))
         (defun eh/markdown-html (buffer)
           (princ (with-current-buffer buffer
@@ -579,7 +579,7 @@
         :ensure t
         :custom
         ((which-key-show-early-on-C-h t)
-         (which-key-idle-delay 1.5)
+         (which-key-idle-delay .5)
          (which-key-popup-type 'minibuffer))
         :config (which-key-mode))
     #+end_src
@@ -1034,35 +1034,38 @@
     Adding more beautiful org-agenda view with all-icons and better configuration
     of the layout, giving me a lot more information.
     #+BEGIN_SRC emacs-lisp
-      (setq org-deadline-warning-days 3)
-      (setq org-agenda-category-icon-alist
-            `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
-      (setq org-agenda-custom-commands
-            '(
-              ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
-                                         (org-agenda-span 'day)
-                                         (org-agenda-ndays 1)
-                                         (org-agenda-start-on-weekday nil)
-                                         (org-agenda-start-day "+0d")
-                                         (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
-                                                                           (outline-next-heading) (1- (point)))
-                                                                          (t (org-agenda-skip-entry-if 'todo 'done))
-                                                                          ))
-                                         (org-agenda-todo-ignore-deadlines nil)))
-                             ;; Project tickle list.
-                             (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
-                                              (org-tags-match-list-sublevels nil)))
-                             ;; Refiling category set file wide in file.
-                             (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
-                                               (org-tags-match-list-sublevels nil)))
-                             ;; Tasks upcoming (should be similar to above?)
-
-                             ;; Tasks that are unscheduled
-                             (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
-                                           (org-tags-match-list-sublevels nil)
-                                           (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
-                                           ))
-                             (agenda "" ((org-agenda-overriding-header "Upcoming:")
+            (setq org-deadline-warning-days 3)
+            (setq org-agenda-category-icon-alist
+                  `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
+            (setq org-agenda-custom-commands
+                  '(
+                    ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
+                                               (org-agenda-span 'day)
+                                               (org-agenda-ndays 1)
+                                               (org-agenda-start-on-weekday nil)
+                                               (org-agenda-start-day "+0d")
+                                               (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
+                                                                                 (outline-next-heading) (1- (point)))
+                                                                                (t (org-agenda-skip-entry-if 'todo 'done))
+                                                                                ))
+                                               (org-agenda-todo-ignore-deadlines nil)))
+                                   ;; Project tickle list.
+                                   (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
+                                                    (org-tags-match-list-sublevels nil)))
+                                   ;; Refiling category set file wide in file.
+                                   (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
+                                                     (org-tags-match-list-sublevels nil)))
+                                   ;; Tasks that are unscheduled
+                                   (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
+                                                 (org-tags-match-list-sublevels nil)
+                                                 (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                                                 ))
+                                   ;; Tasks that are waiting or someday
+                                   (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
+                                                            (org-tags-match-list-sublevels nil)))
+                                   (todo "NOTE" ((org-agenda-overriding-header "Notes:")
+                                                 (org-tags-match-list-sublevels nil)))
+                                   (agenda "" ((org-agenda-overriding-header "Upcoming:")
                                          (org-agenda-span 7)
                                          (org-agenda-start-day "+1d")
                                          (org-agenda-start-on-weekday nil)
@@ -1071,15 +1074,10 @@
                                                                           (t (org-agenda-skip-entry-if 'todo 'done))
                                                                           ))
                                          ;; I should set this next one to true, so that deadlines are ignored...?
-                                         (org-agenda-todo-ignore-deadlines nil)))
-                             ;; Tasks that are waiting or someday
-                             (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
-                                                      (org-tags-match-list-sublevels nil)))
-                             (todo "NOTE" ((org-agenda-overriding-header "Notes:")
-                                           (org-tags-match-list-sublevels nil))))))
+                                         (org-agenda-todo-ignore-deadlines nil))))))
 
-            ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
-            org-agenda-skip-scheduled-if-deadline-is-shown t)
+                  ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
+                  org-agenda-skip-scheduled-if-deadline-is-shown t)
     #+END_SRC
 
     Adding custom agenda commands, with the intention of making the refiling and
