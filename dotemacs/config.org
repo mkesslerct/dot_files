@@ -1372,6 +1372,10 @@
         :ensure t
         :after magit)
 
+      (transient-append-suffix 'forge-dispatch '(0)
+        ["Edit"
+         ("e a" "assignees" forge-edit-topic-assignees)
+         ("e r" "review requests" forge-edit-topic-review-requests)])
       ;; Setting up forge token.
       (setq auth-sources '("~/.authinfo"))
     #+END_SRC

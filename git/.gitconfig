@@ -8,3 +8,5 @@
 [init]
 	templatedir = ~/.git-templates
 	defaultBranch = main
+[github]
+	user = Qkessler
