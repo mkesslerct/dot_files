@@ -1525,7 +1525,8 @@
         :hook (git-commit-mode . (lambda ()
                                    (set-fill-column 72)))
         :custom 
-        (git-commit-summary-max-length 50))
+        (git-commit-summary-max-length 50)
+        (magit-diff-hide-trailing-cr-characters t))
     #+end_src
 
 ** Project management
@@ -1601,14 +1602,25 @@
         :ensure t)
     #+end_src
 
+*** C# programming
+    C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
+    #+begin_src emacs-lisp
+      (use-package tree-sitter :ensure t)
+      (use-package tree-sitter-langs :ensure t)
+
+      (use-package csharp-mode
+        :ensure t
+        :config
+        (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
+    #+end_src
+    
 *** Server side functionality (LSP)
     Lsp-mode for server completion.
 **** Flycheck
      Sintax checking on the fly.
      #+begin_src emacs-lisp
        (use-package flycheck
-         :ensure t
-         :hook (org-mode . flycheck-mode))
+         :ensure t)
 
        (flycheck-define-checker proselint
          "A linter for prose."
@@ -1679,6 +1691,7 @@
          (mhtml-mode . lsp-deferred)
          (css-mode . lsp-deferred)
          (python-mode . lsp-deferred)
+         (csharp-mode . lsp-deferred)
          (js-mode . lsp-deferred)
          (typescript-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration)
