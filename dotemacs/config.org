@@ -1,4 +1,4 @@
-#+STARTUP: overview
+#+STARTUP: showeverything
 * Emacs configuration
 ** Themes
 *** Subatomic theme.
