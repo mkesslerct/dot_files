@@ -943,6 +943,7 @@
     Capture templates are used with the intention of improving
     the workflow of adding several items and refiling.
     #+BEGIN_SRC emacs-lisp
+      (defvar org-blog-directory-file (concat org-directory "/blog/refile.org"))
       (setq
        org-capture-templates
        '(("t" "todo" entry (file org-default-notes-file)
@@ -966,6 +967,8 @@
           "* %^{TITLE}\n:PROPERTIES:\n:ADDED: %<[%Y-%02m-%02d]>\n:END:%^{AUTHOR}p\n%^{URL}p\n")
          ("n" "Note" entry (file org-default-notes-file)
           "* NOTE %? :REFILING:\n%a\n")
+         ("B" "Blog post" entry (file org-blog-directory-file)
+          "* TODO #+TITLE: \n#+DATE: \n#+CATEGORY: \n#+TAGS: \n#+SUMMARY: \n #+IMAGE: \n")
          )
        )
     #+END_SRC
