@@ -375,55 +375,6 @@
       (setq indent-line-function 'insert-tab)
     #+END_SRC
 
-*** Ivy And Counsel
-    Both are from the same family, Counsel uses Ivy functionality in
-    order to provide good completion for emacs commands.
-    #+BEGIN_SRC emacs-lisp
-      (use-package counsel
-        :ensure t
-        :config 
-        (progn 
-          (ivy-mode 1)
-          (global-set-key (kbd "M-x") 'counsel-M-x)
-          (global-set-key "\C-s" 'swiper)
-          (global-set-key "\C-r" 'swiper-isearch-backward)
-          (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-          (global-set-key (kbd "M-y") 'counsel-yank-pop)
-          (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-          (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-          (global-set-key (kbd "<f1> l") 'counsel-find-library)
-          (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-          (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-          (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-          (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-          (global-set-key (kbd "C-c v") 'ivy-push-view)
-          (global-set-key (kbd "C-c V") 'ivy-pop-view))
-        :custom(
-                (ivy-use-virtual-buffers t)
-                (ivy-count-format "%d/%d ")
-                (find-program "fdfind")
-                (ivy-use-selectable-prompt t)
-                (counsel-file-jump-args (split-string "-L --type f --hidden"))))
-      (use-package counsel-projectile
-        :ensure t)
-      (counsel-projectile-mode 1)
-
-    #+END_SRC
-**** Prescient
-     Better sorting mechanism focusing on user data, working better than default
-     systems using heuristics as time passes. Following lines are added with
-     the intention of providing prescient magic to other frameworks that I have installed,
-     like ivy and company.
-
-     #+begin_src emacs-lisp
-       (use-package prescient
-         :ensure t
-         :config (prescient-persist-mode 1))
-       (use-package ivy-prescient
-         :ensure t
-         :config (ivy-prescient-mode 1))
-     #+end_src
-
 *** Hungry-delete
     Deleting all the spaces but one when multiple spaces are present.
     #+BEGIN_SRC emacs-lisp :tangle no
@@ -718,6 +669,56 @@
         :ensure t
         :config (whole-line-or-region-global-mode))
     #+end_src
+
+** Completion framework
+*** Ivy And Counsel
+    Both are from the same family, Counsel uses Ivy functionality in
+    order to provide good completion for emacs commands.
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (use-package counsel
+        :ensure t
+        :config 
+        (progn 
+          (ivy-mode 1)
+          (global-set-key (kbd "M-x") 'counsel-M-x)
+          (global-set-key "\C-s" 'swiper)
+          (global-set-key "\C-r" 'swiper-isearch-backward)
+          (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+          (global-set-key (kbd "M-y") 'counsel-yank-pop)
+          (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+          (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+          (global-set-key (kbd "<f1> l") 'counsel-find-library)
+          (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+          (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+          (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+          (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+          (global-set-key (kbd "C-c v") 'ivy-push-view)
+          (global-set-key (kbd "C-c V") 'ivy-pop-view))
+        :custom(
+                (ivy-use-virtual-buffers t)
+                (ivy-count-format "%d/%d ")
+                (find-program "fdfind")
+                (ivy-use-selectable-prompt t)
+                (counsel-file-jump-args (split-string "-L --type f --hidden"))))
+      (use-package counsel-projectile
+        :ensure t)
+      (counsel-projectile-mode 1)
+
+    #+END_SRC
+**** Prescient
+     Better sorting mechanism focusing on user data, working better than default
+     systems using heuristics as time passes. Following lines are added with
+     the intention of providing prescient magic to other frameworks that I have installed,
+     like ivy and company.
+
+     #+begin_src emacs-lisp :tangle no
+       (use-package prescient
+         :ensure t
+         :config (prescient-persist-mode 1))
+       (use-package ivy-prescient
+         :ensure t
+         :config (ivy-prescient-mode 1))
+     #+end_src
 
 ** Terminal
    Configuration related to terminal emulators and modes. Recently, 
@@ -1760,7 +1761,7 @@
 
 ***** lsp-ivy
       Buffer cycling and find-files quicker. Close to helm.
-      #+BEGIN_SRC emacs-lisp
+      #+BEGIN_SRC emacs-lisp :tangle no
         (use-package lsp-ivy
           :ensure t  
           :commands lsp-ivy-workspace-symbol)
@@ -1980,7 +1981,7 @@
          (mu4e-attachment-dir "~/Downloads")
          (mu4e-get-mail-command "mbsync -a")
          (mu4e-change-filenames-when-moving t)
-         (mu4e-completing-read-function 'ivy-completing-read)
+         ;; (mu4e-completing-read-function 'ivy-completing-read)
          (mu4e-headers-show-threads nil)
          (mu4e-html2text-command 'mu4e-shr2text)
          (mu4e-update-interval (* 5 60))
@@ -2137,22 +2138,24 @@
         (elfeed-show-truncate-long-urls t)
         (elfeed-show-unique-buffers t)
         (elfeed-search-date-format '("%F %R" 16 :left)))  
-      (defun elfeed-ivy-filter ()
-        (interactive)
-        (let ((filtered-tag (ivy-completing-read "Choose Tags: " (elfeed-db-get-all-tags))))
-          (progn
-            (setq elfeed-search-filter (concat elfeed-search-filter " +" filtered-tag))
-            (elfeed-search-update--force))))
+      ;; (defun elfeed-ivy-filter ()
+      ;;   (interactive)
+      ;;   (let ((filtered-tag (ivy-completing-read "Choose Tags: " (elfeed-db-get-all-tags))))
+      ;;     (progn
+      ;;       (setq elfeed-search-filter (concat elfeed-search-filter " +" filtered-tag))
+      ;;       (elfeed-search-update--force))))
       (use-package elfeed
-        :bind (("C-c e" . elfeed)
+        :bind (
+               ("C-c e" . elfeed)
                :map elfeed-search-mode-map
                ("w" . elfeed-search-yank)
                ("g" . elfeed-update)
                ("G" . elfeed-search-update--force)
-               ("s" . elfeed-ivy-filter)
+               ;; ("s" . elfeed-ivy-filter)
                :map elfeed-show-mode-map
                ("w" . elfeed-show-yank)
-               ("s" . elfeed-ivy-filter)))
+               ;; ("s" . elfeed-ivy-filter)
+               ))
     #+end_src
 
 **** Elfeed org
