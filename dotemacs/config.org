@@ -870,6 +870,15 @@
          (setq consult-project-root-function #'projectile-project-root))
      #+end_src
 
+***** Consult-projectile
+      Consult-projectile is a package that is still in development, adding this here only means I'm interested in having something of the sort. I might need to do a more in-depth search a few weeks forward.
+      #+begin_src emacs-lisp
+        (use-package consult-projectile
+          :ensure nil
+          :bind ("C-c p" . consult-projectile))
+      #+end_src
+
+
 **** Embark
      This package provides a sort of right-click contextual menu for Emacs, accessed through the embark-act command (which you should bind to a convenient key), offering you relevant actions to use on a target determined by the context:
 
@@ -1739,7 +1748,7 @@
        ;; Working on ubuntu, if you are not, change fdfind to fd.
        :custom (projectile-generic-command "fdfind . -0 --type f --color=never")
        :config(progn 
-                (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+                ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
                 (setq projectile-project-search-path '("~/Documents/"))
                 (projectile-global-mode)
                 ))
