@@ -243,17 +243,14 @@
 
     
 *** Latex
-    Adding auctex which is a specific package with the intention of
-    making the latex ide experience.
-    #+BEGIN_SRC emacs-lisp
-      (use-package auctex-latexmk
-        :ensure t
-        :config
-        (auctex-latexmk-setup)
-        (setq auctex-latexmk-inherit-TeX-PDF-mode t))
+**** :warning: TESTING: lsp-latex
+     LaTeX has its own lsp server: texlab. I have added it here to check whether I'm interested in keeping it or keep going with latex. I added the TESTING flag to let the possible outside user know.
+     #+begin_src emacs-lisp
+       (use-package lsp-latex
+         :ensure t)
+     #+end_src
 
-    #+END_SRC
-
+    
     Adding reference connection made easier with reftex.
     #+BEGIN_SRC emacs-lisp
       (use-package reftex
@@ -273,7 +270,7 @@
   
     Adding company backend support to auctex in order to get completions
     on the fly.
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (use-package company-auctex
         :ensure t
         :init (company-auctex-init))
@@ -1294,10 +1291,8 @@
                                          (org-agenda-ndays 1)
                                          (org-agenda-start-on-weekday nil)
                                          (org-agenda-start-day "+0d")
-                                         (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
-                                                                           (outline-next-heading) (1- (point)))
-                                                                          (t (org-agenda-skip-entry-if 'todo 'done))
-                                                                          ))
+                                         (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org") (outline-next-heading) (1- (point)))
+                                                                          (t (org-agenda-skip-entry-if 'todo 'done))))
                                          (org-agenda-todo-ignore-deadlines nil)))
                              ;; Project tickle list.
                              (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
@@ -1993,6 +1988,8 @@
          (csharp-mode . lsp-deferred)
          (js-mode . lsp-deferred)
          (typescript-mode . lsp-deferred)
+         (tex-mode . lsp-deferred) ;; :warning: testing
+         (latex-mode . lsp-deferred) ;; :warning: testing
          (lsp-mode . lsp-enable-which-key-integration)
          (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
          :init
