@@ -751,6 +751,13 @@
          (savehist-mode))
      #+end_src
 
+**** Recentf-mode
+     Recentf-mode needs to be enabled in order to save the history of the files and use them later as virtual buffers. This is a great package (which is already built-in) combined with savehist, as savehist saves the completion candidates but not the files on which the candidates are.
+     #+begin_src emacs-lisp
+       (use-package recentf
+         :init (recentf-mode))
+     #+end_src
+     
 **** Additional completion configuration
      Adding a prompt indicator that the completing-read-multiple command is enabled. The other configuration is enabling recursive minibuffers. I also disabled the cursor in the minibuffer prompt, avoid clicking by accident.
      #+begin_src emacs-lisp
