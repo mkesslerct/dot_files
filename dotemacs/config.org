@@ -109,6 +109,16 @@
         kept-old-versions 2
         version-control t)
      #+end_src
+*** Default bindings
+    There are some awful keybindings that Emacs binds by default. These better defaults try to give a little more user-friendly keybindings, while maintaining the original Emacs essence.
+    #+begin_src emacs-lisp
+      (use-package dabbrev
+        ;; Swap M-/ and C-M-/
+        :bind (("M-/" . dabbrev-completion)
+               ("C-M-/" . dabbrev-expand)))
+    #+end_src
+
+    
 *** Setting faces easily
     Found the face-spec-set, which is the easiest way to configure the faces for especific
     modes, specially using use-package. The code is from the [[https://se30.xyz/conf.html][Alexm website]].
@@ -1901,9 +1911,12 @@
     #+END_SRC
 
 ** Programming
-*** Company
-    Company is used for better completion on the fly.
-    #+BEGIN_SRC emacs-lisp
+*** Completion Overlay
+**** Company
+    Company is used for better completion on the fly. :warning: UPDATE 2021/05/20: Instead of using company, the master branch will now be testing [[https://github.com/minad/corfu][corfu]], which seems a package that is better align with my goal of making the configuration as modular as possible.
+
+    For completion reasons, I still leave the company configuration here, just in case someone might want to give it a try.
+    #+BEGIN_SRC emacs-lisp :tangle no
       (use-package company
         :ensure t
         :config (progn 
@@ -1914,7 +1927,7 @@
     #+END_SRC
 
     Adding completion on tab.
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC emacs-lisp :tangle no
       (defun tab-indent-or-complete ()
         (interactive)
         (if (minibufferp)
@@ -1929,12 +1942,36 @@
 
     Adding prescient sorting and filtering mechanism with the intention
     of enabling a better candidate mechanism.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package company-prescient
         :ensure t
         :config (company-prescient-mode 1))
     #+end_src
 
+**** Corfu
+     As I mentioned in the company configuration update. I can't seem to come around using company for its heavy weight obsession. Instead of trying to create a completion API, let Emacs do its work (using =completion-at-point-functions=, which are normally defined by programming modes), improving the performance in the process.
+
+     Corfu also uses a child-frame, which is one of the star features of Emacs 26. One of the possible user downsides of using Corfu is that at the moment it doesn't support idle-completion, which could be interesting for programming. I personally find that is just a matter of getting used to the new workflow of completing if you need it.
+
+     Another option is to also set up the `TAB' for cycling through the candidates, but I don't find it particularly interesting. I prefer the company convention of using C-n and C-p.
+     #+begin_src emacs-lisp
+       (use-package corfu
+         :bind (:map corfu-map
+                     ("C-n" . corfu-next)
+                     ("C-p" . corfu-previous))
+         :custom (corfu-cycle t)
+         :config (corfu-global-mode))
+
+       (use-package emacs
+         :init
+         ;; TAB cycle if there are only few candidates
+         (setq completion-cycle-threshold 3)
+
+         ;; Enable indentation+completion using the TAB key.
+         ;; `completion-at-point' is often bound to M-TAB.
+         (setq tab-always-indent 'complete))
+     #+end_src
+     
 *** Processing programming
     Adding processing mode, in order to finish some of the assignments
     this year.
