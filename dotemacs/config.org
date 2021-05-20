@@ -1955,21 +1955,31 @@
 
      Another option is to also set up the `TAB' for cycling through the candidates, but I don't find it particularly interesting. I prefer the company convention of using C-n and C-p.
      #+begin_src emacs-lisp
+       (defvar gruvbox-dark1 "#3c3836")
+       (defvar gruvbox-bright_purple "#d3869b")
+       (defvar gruvbox-dark2 "#504945")
+
        (use-package corfu
          :bind (:map corfu-map
                      ("C-n" . corfu-next)
                      ("C-p" . corfu-previous))
          :custom (corfu-cycle t)
+         :custom-face 
+         (corfu-background ((t (:background ,gruvbox-dark1))))
+         (corfu-current ((t (:foreground ,gruvbox-bright_purple :background ,gruvbox-dark2))))
+         (corfu-bar ((t (:background ,gruvbox-dark2))))
+         (corfu-border ((t (:background ,gruvbox-dark1))))
          :config (corfu-global-mode))
 
-       (use-package emacs
-         :init
-         ;; TAB cycle if there are only few candidates
-         (setq completion-cycle-threshold 3)
+         (use-package emacs
+           :init
+           ;; TAB cycle if there are only few candidates
+           (setq completion-cycle-threshold 3)
 
-         ;; Enable indentation+completion using the TAB key.
-         ;; `completion-at-point' is often bound to M-TAB.
-         (setq tab-always-indent 'complete))
+           ;; Enable indentation+completion using the TAB key.
+           ;; `completion-at-point' is often bound to M-TAB.
+           (setq tab-always-indent 'complete))
+
      #+end_src
      
 *** Processing programming

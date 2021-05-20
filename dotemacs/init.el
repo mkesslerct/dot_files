@@ -39,7 +39,10 @@
    '(lsp-latex consult-projectile helpful embark-consult embark bookmark-view consult marginalia orderless vertico csharp-mode tree-sitter-langs tree-sitter whole-line-or-region flycheck-vale langtool smartparens rainbow-delimiters treemacs-all-the-icons treemacs-projectile dap-java dap-python org-protocol oauth2 org-caldav yaml-mode toc-org xref-js2 json-mode tide elfeed-dashboard hungry-delete bufler monokai-theme gruvbox-theme hover lsp-java lsp-dart ccls lsp-treemacs lsp-ivy flycheck lsp-ui lsp-mode yasnippet-snippets smart-comment projectile web-mode magit emmet-mode doom-modeline autopair all-the-icons auto-package-update rainbow-mode subatomic-theme use-package))
  '(projectile-mode t nil (projectile))
  '(safe-local-variable-values
-   '((TeX-command-extra-options . "-shell-escape")
+   '((eval when
+           (fboundp 'rainbow-mode)
+           (rainbow-mode 1))
+     (TeX-command-extra-options . "-shell-escape")
      (TeX-engine . luatex)
      (TeX-master . t))))
 (custom-set-faces
