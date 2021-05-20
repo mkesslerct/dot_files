@@ -1,30 +1,77 @@
 #+STARTUP: showeverything
 * Emacs configuration
 ** Themes
-*** Subatomic theme.
-    #+BEGIN_SRC emacs-lisp
-      (use-package subatomic-theme
-        :ensure t)
-    #+END_SRC
-
-*** Gruvbox theme.
-    #+BEGIN_SRC emacs-lisp
+*** Gruvbox theme
+    The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
+    #+begin_src emacs-lisp
       (use-package gruvbox-theme
         :ensure t
         :config (load-theme 'gruvbox-dark-soft t))
-    #+END_SRC
+    #+end_src
 
-*** Sublime-themes.
-    #+BEGIN_SRC emacs-lisp
-      (use-package sublime-themes
+*** Solarized theme
+    This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
+    #+begin_src emacs-lisp :tangle no
+      (use-package solarized-theme
         :ensure t)
-    #+END_SRC
+    #+end_src
 
-*** Monokai-theme
-    #+BEGIN_SRC emacs-lisp
-      (use-package monokai-theme
-        :ensure t)
-    #+END_SRC
+*** Theme-changer
+    I'm trying out that depending on the time of the day, a.k.a sunset or sunrise, I change the theme between two options. The package (which is no longer maintained is called 'theme-changer', but it has a ton of problems. An option is using some of the code snippets found on the [[https://stackoverflow.com/questions/14760567/emacs-auto-load-color-theme-by-time][stack-overflow page]].
+    #+begin_src emacs-lisp :tangle no
+      (use-package solar
+        :ensure nil
+        :init 
+        (defun today-date-integer (offset)
+          "Returns today's date in a list of integers, i.e. month, date, and year, in system time."
+          (let* ((date (mapcar
+                        (lambda (pattern)
+                          (string-to-number (format-time-string pattern)))
+                        '("%m" "%d" "%Y"))))
+            (setcar
+             (nthcdr
+              1
+              date)
+             (+ offset (nth 1 date)))
+            date))
+
+        (defun current-time-decimal ()
+          (let* ((current-min-fraction (/ (string-to-number (format-time-string "%M")) 60.0))
+                 (current-hour (string-to-number (format-time-string "%H"))))
+            (+ current-hour current-min-fraction)))
+
+        (defun next-alarm-time (sunrise-time sunset-time)
+          (let* ((current-time (current-time-decimal)))
+            (cond ((< current-time sunrise-time)
+                   (- sunrise-time current-time))
+                  ((and (>= current-time sunrise-time)
+                        (< current-time sunset-time))
+                   (- sunset-time current-time))
+                  ((>= current-time sunset-time)
+                   (let ((tomorrow-sunrise-time (car (car (solar-sunrise-sunset (today-date-integer 1))))))
+                     (- (+ 24 tomorrow-sunrise-time) current-time))))))
+
+        (defun to-seconds (hour) (* hour 60 60))
+
+        (defun change-theme (light-theme dark-theme coor)
+          (let* ((_ (setq calendar-latitude (car coor)))
+                 ( _ (setq calendar-longitude (nth 1 coor)))
+                 (today-date (today-date-integer 0))
+                 (sunrise-sunset-list (solar-sunrise-sunset today-date))
+                 (sunrise-time (car (car sunrise-sunset-list)))
+                 (sunset-time (car (nth 1 sunrise-sunset-list)))
+                 (current-time (current-time-decimal))
+                 (current-theme (if (or (< current-time sunrise-time) (> current-time sunset-time))
+                                    dark-theme
+                                  light-theme))
+                 (next-alarm-t (next-alarm-time sunrise-time sunset-time)))
+            (cancel-function-timers 'change-theme)
+            (load-theme current-theme t)
+            (run-at-time
+             (to-seconds next-alarm-t) nil 'change-theme light-theme dark-theme coor)))
+        :config (change-theme 'solarized-gruvbox-light 'solarized-gruvbox-dark '(37.60806276678858, -0.9865568014502395)))
+#+end_src
+
 
 ** Better defaults
 *** Keep emacs clean
@@ -1282,6 +1329,7 @@
     of the layout, giving me a lot more information.
     #+BEGIN_SRC emacs-lisp
       (setq org-deadline-warning-days 3)
+      (setq org-agenda-block-separator ?—)
       (setq org-agenda-category-icon-alist
             `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
       (setq org-agenda-custom-commands
@@ -1567,7 +1615,7 @@
                     ;; retrieve heading string
                     (kv/heading-text (nth 4 (org-heading-components)))
                     ;; remove progress indicators like "[2/7]" or "[25%]"
-                    (kv/heading-text (replace-regexp-in-string "[[][0-9%/]+[]] " "" kv/heading-text))
+                    ;; (kv/heading-text (replace-regexp-in-string "[[][0-9%/]+[]] " "" kv/heading-text))
                     ;; get slug from heading text
                     (new-id (kv/generate-sanitized-alnum-dash-string kv/heading-text))
                     )
