@@ -72,7 +72,6 @@
         :config (change-theme 'solarized-gruvbox-light 'solarized-gruvbox-dark '(37.60806276678858, -0.9865568014502395)))
 #+end_src
 
-
 ** Better defaults
 *** Keep emacs clean
     This is the section created with the intention of make emacs create the files needed, but keep
