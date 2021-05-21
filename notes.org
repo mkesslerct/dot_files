@@ -1,7 +1,7 @@
 * links
 These links are what I use to move the setup between machines.
 ** Building emacs
-https://emacs.stackexchange.com/questions/59538/compile-emacs-from-feature-native-comp-gccemacs-branch-on-ubuntu
+https://www.emacswiki.org/emacs/GccEmacs
 
 ** Emacsclient
 https://www.reddit.com/r/emacs/comments/bddz3i/problems_with_emacs_deamon_emacsclient_cant_find/
