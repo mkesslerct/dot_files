@@ -4,7 +4,7 @@ These links are what I use to move the setup between machines.
 https://www.emacswiki.org/emacs/GccEmacs
 
 ** Emacsclient
-https://www.reddit.com/r/emacs/comments/bddz3i/problems_with_emacs_deamon_emacsclient_cant_find/
+[[https://www.reddit.com/r/emacs/comments/bddz3i/problems_with_emacs_deamon_emacsclient_cant_find/][service description and paths]]: ~/.config/systemd/user/emacs.service
 https://www.taingram.org/blog/emacs-client.html
 
 Super interesting blog option created from org.

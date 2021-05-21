@@ -5,8 +5,8 @@
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
-        :straight t
-        :config (load-theme 'gruvbox-dark-soft t))
+	:straight t
+	:config (load-theme 'gruvbox-dark-soft t))
     #+end_src
 
 *** Solarized theme
@@ -1704,6 +1704,7 @@
        (defvar gruvbox-dark2 "#504945")
 
        (use-package corfu
+         :straight t
          :bind (:map corfu-map
                      ("C-n" . corfu-next)
                      ("C-p" . corfu-previous))
@@ -1715,14 +1716,14 @@
          (corfu-border ((t (:background ,gruvbox-dark1))))
          :config (corfu-global-mode))
 
-         (use-package emacs
-           :init
-           ;; TAB cycle if there are only few candidates
-           (setq completion-cycle-threshold 3)
+       (use-package emacs
+         :init
+         ;; TAB cycle if there are only few candidates
+         (setq completion-cycle-threshold 3)
 
-           ;; Enable indentation+completion using the TAB key.
-           ;; `completion-at-point' is often bound to M-TAB.
-           (setq tab-always-indent 'complete))
+         ;; Enable indentation+completion using the TAB key.
+         ;; `completion-at-point' is often bound to M-TAB.
+         (setq tab-always-indent 'complete))
 
      #+end_src
      
