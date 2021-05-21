@@ -752,9 +752,9 @@
                 ("M-g i" . consult-imenu)
                 ("M-g I" . consult-project-imenu)
                 ;; M-s bindings (search-map)
-                ("M-s f" . consult-fd)
+                ("M-s f" . consult-fd) ;; Changed on the `affe' configuration.
                 ("M-s L" . consult-locate)
-                ("M-s g" . consult-grep)
+                ("M-s g" . consult-grep) ;; Changed on the `affe' configuration.
                 ("M-s G" . consult-git-grep)
                 ("M-s r" . consult-ripgrep)
                 ("M-s l" . consult-line)
@@ -847,6 +847,8 @@
        (use-package affe
          :straight (affe :type git :host github :repo "minad/affe" )
          :after orderless
+         :bind (("M-s f" . affe-find)
+                ("M-s g" . affe-grep))
          :config
          ;; Configure Orderless
          (setq affe-regexp-function #'orderless-pattern-compiler
