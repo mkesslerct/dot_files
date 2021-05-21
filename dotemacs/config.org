@@ -16,62 +16,6 @@
         :straight t)
     #+end_src
 
-*** Theme-changer
-    I'm trying out that depending on the time of the day, a.k.a sunset or sunrise, I change the theme between two options. The package (which is no longer maintained is called 'theme-changer', but it has a ton of problems. An option is using some of the code snippets found on the [[https://stackoverflow.com/questions/14760567/emacs-auto-load-color-theme-by-time][stack-overflow page]].
-    #+begin_src emacs-lisp :tangle no
-      (use-package solar
-        :straight nil
-        :init 
-        (defun today-date-integer (offset)
-          "Returns today's date in a list of integers, i.e. month, date, and year, in system time."
-          (let* ((date (mapcar
-                        (lambda (pattern)
-                          (string-to-number (format-time-string pattern)))
-                        '("%m" "%d" "%Y"))))
-            (setcar
-             (nthcdr
-              1
-              date)
-             (+ offset (nth 1 date)))
-            date))
-
-        (defun current-time-decimal ()
-          (let* ((current-min-fraction (/ (string-to-number (format-time-string "%M")) 60.0))
-                 (current-hour (string-to-number (format-time-string "%H"))))
-            (+ current-hour current-min-fraction)))
-
-        (defun next-alarm-time (sunrise-time sunset-time)
-          (let* ((current-time (current-time-decimal)))
-            (cond ((< current-time sunrise-time)
-                   (- sunrise-time current-time))
-                  ((and (>= current-time sunrise-time)
-                        (< current-time sunset-time))
-                   (- sunset-time current-time))
-                  ((>= current-time sunset-time)
-                   (let ((tomorrow-sunrise-time (car (car (solar-sunrise-sunset (today-date-integer 1))))))
-                     (- (+ 24 tomorrow-sunrise-time) current-time))))))
-
-        (defun to-seconds (hour) (* hour 60 60))
-
-        (defun change-theme (light-theme dark-theme coor)
-          (let* ((_ (setq calendar-latitude (car coor)))
-                 ( _ (setq calendar-longitude (nth 1 coor)))
-                 (today-date (today-date-integer 0))
-                 (sunrise-sunset-list (solar-sunrise-sunset today-date))
-                 (sunrise-time (car (car sunrise-sunset-list)))
-                 (sunset-time (car (nth 1 sunrise-sunset-list)))
-                 (current-time (current-time-decimal))
-                 (current-theme (if (or (< current-time sunrise-time) (> current-time sunset-time))
-                                    dark-theme
-                                  light-theme))
-                 (next-alarm-t (next-alarm-time sunrise-time sunset-time)))
-            (cancel-function-timers 'change-theme)
-            (load-theme current-theme t)
-            (run-at-time
-             (to-seconds next-alarm-t) nil 'change-theme light-theme dark-theme coor)))
-        :config (change-theme 'solarized-gruvbox-light 'solarized-gruvbox-dark '(37.60806276678858, -0.9865568014502395)))
-#+end_src
-
 ** Better defaults
 *** Keep emacs clean
     This is the section created with the intention of make emacs create the files needed, but keep
@@ -137,6 +81,7 @@
       (use-package try
         :straight t)
     #+END_SRC
+
 *** Delimiters
 **** smart-parens
      Smart-parens is a package that improves on the previous package,
@@ -261,7 +206,6 @@
      #+END_SRC
 
 *** Directories
-
 **** Dired
      Dired is the "package" that gives us all the functionality
      to a dired buffer which in essence is the same as the output
@@ -270,11 +214,9 @@
 
      #+begin_src emacs-lisp
        (use-package dired
-         :hook (dired-mode . org-download-enable)
          :bind (:map dired-mode-map 
                      ("b" . dired-up-directory)))
      #+end_src
-
 
 **** Directories first on dired.
      #+BEGIN_SRC emacs-lisp
@@ -322,14 +264,6 @@
       (use-package auto-dictionary
         :straight t
         :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
-    #+END_SRC
-  
-    Adding company backend support to auctex in order to get completions
-    on the fly.
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (use-package company-auctex
-        :straight t
-        :init (company-auctex-init))
     #+END_SRC
 
     Adding general configuration for tex files and latex-mode better defaults.
@@ -440,19 +374,6 @@
       (setq indent-line-function 'insert-tab)
     #+END_SRC
 
-*** Hungry-delete
-    Deleting all the spaces but one when multiple spaces are present.
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (use-package smart-hungry-delete
-        :straight t
-        :bind (("<backspace>" . smart-hungry-delete-backward-char)
-               ("C-d" . smart-hungry-delete-forward-char)
-               ("<DEL>" . smart-hungry-delete-forward-char))
-        :defer nil ;; dont defer so we can add our functions to hooks 
-        :config (smart-hungry-delete-add-default-hooks))
-
-    #+END_SRC
-
 *** Markdown
     Markdown configuration, which I use specially often when editing README files
     on Github. The are some interesting options like the change of the markdown-command
@@ -551,14 +472,6 @@
                 (aw-background nil)))
     #+END_SRC
 
-*** Loading config from function
-    #+BEGIN_SRC emacs-lisp
-      (defun qk/load-config ()
-        "Load my config file linked to config.org."
-        (interactive)
-        (load-file "~/.emacs.d/init.el"))
-    #+END_SRC
-
 *** Fill column
     #+begin_src emacs-lisp
       (setq-default fill-column 80)
@@ -601,8 +514,7 @@
     #+end_src
 
 *** Ripgrep
-    Adding ripgrep configuration to be able to 
-    access the functionality from emacs.
+    Adding ripgrep configuration to be able to access the functionality from emacs.
     #+begin_src emacs-lisp
       (use-package rg
         :straight t
@@ -715,6 +627,7 @@
         (help/real-insert ?-))
 
     #+end_src
+
 *** Browse-url
     Browse url is the package that controls the information that is passed to the browser when forwarded from emacs. I find that cookies are important when accessing chrome, might need to check again if I can select to save cookies only for Chrome browsing.
 
@@ -736,55 +649,6 @@
     #+end_src
 
 ** Completion framework
-*** Ivy And Counsel
-    Both are from the same family, Counsel uses Ivy functionality in
-    order to provide good completion for emacs commands.
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (use-package counsel
-        :straight t
-        :config 
-        (progn 
-          (ivy-mode 1)
-          (global-set-key (kbd "M-x") 'counsel-M-x)
-          (global-set-key "\C-s" 'swiper)
-          (global-set-key "\C-r" 'swiper-isearch-backward)
-          (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-          (global-set-key (kbd "M-y") 'counsel-yank-pop)
-          (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-          (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-          (global-set-key (kbd "<f1> l") 'counsel-find-library)
-          (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-          (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-          (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-          (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-          (global-set-key (kbd "C-c v") 'ivy-push-view)
-          (global-set-key (kbd "C-c V") 'ivy-pop-view))
-        :custom(
-                (ivy-use-virtual-buffers t)
-                (ivy-count-format "%d/%d ")
-                (find-program "fdfind")
-                (ivy-use-selectable-prompt t)
-                (counsel-file-jump-args (split-string "-L --type f --hidden"))))
-      (use-package counsel-projectile
-        :straight t)
-      (counsel-projectile-mode 1)
-
-    #+END_SRC
-**** Prescient
-     Better sorting mechanism focusing on user data, working better than default
-     systems using heuristics as time passes. Following lines are added with
-     the intention of providing prescient magic to other frameworks that I have installed,
-     like ivy and company.
-
-     #+begin_src emacs-lisp :tangle no
-       (use-package prescient
-         :straight t
-         :config (prescient-persist-mode 1))
-       (use-package ivy-prescient
-         :straight t
-         :config (ivy-prescient-mode 1))
-     #+end_src
-
 *** Modular completion
     Instead of having an abstracted and heavy completion framework, I find that configuring your own makes the process simpler and lighter, focusing on the information that you really need in your configuration, removing all additional commands.
 
@@ -846,23 +710,21 @@
      Marginalia are marks or annotations placed at the margin of the page of a book or in this case helpful colorful annotations placed at the margin of the minibuffer for your completion candidates. Marginalia can only add annotations to be displayed with the completion candidates. It cannot modify the appearance of the candidates themselves, which are shown as supplied by the original commands.
      #+begin_src emacs-lisp
        (use-package marginalia
-         ;; Either bind `marginalia-cycle` globally or only in the minibuffer
-         ;; :bind (("M-A" . marginalia-cycle)
-         ;;        :map minibuffer-local-map
-         ;;        ("M-A" . marginalia-cycle))
-
          :straight t
-         ;; The :init configuration is always executed (Not lazy!)
          :init (marginalia-mode))
      #+end_src
 
 **** Consult
      Consult provides various practical commands based on the Emacs completion function completing-read, which allows to quickly select an item from a list of candidates with completion. Consult offers in particular an advanced buffer switching command consult-buffer to switch between buffers and recently opened files. Multiple search commands are provided, an asynchronous consult-grep and consult-ripgrep, and consult-line, which resembles Swiper. Some of the Consult commands are enhanced versions of built-in Emacs commands. For example the command consult-imenu presents a flat list of the Imenu with live preview and narrowing support.
      #+begin_src emacs-lisp
+       (defun consult-fd (&optional dir initial)
+         (interactive "P")
+         (let ((consult-find-command "fdfind --color=never --full-path ARG OPTS"))
+           (consult-find dir initial)))
+
        (use-package consult
          ;; Replace bindings. Lazily loaded due by `use-package'.
          :straight t
-         :custom (consult-find-command "fdfind -color=never --full-path ARG OPTS")
          :bind (;; C-c bindings (mode-specific-map)
                 ("C-c h" . consult-history)
                 ("C-c b" . consult-bookmark)
@@ -890,7 +752,7 @@
                 ("M-g i" . consult-imenu)
                 ("M-g I" . consult-project-imenu)
                 ;; M-s bindings (search-map)
-                ("M-s f" . consult-find)
+                ("M-s f" . consult-fd)
                 ("M-s L" . consult-locate)
                 ("M-s g" . consult-grep)
                 ("M-s G" . consult-git-grep)
@@ -931,7 +793,6 @@
           :bind ("C-c p" . consult-projectile))
       #+end_src
 
-
 **** Embark
      This package provides a sort of right-click contextual menu for Emacs, accessed through the embark-act command (which you should bind to a convenient key), offering you relevant actions to use on a target determined by the context:
 
@@ -970,16 +831,27 @@
       Configuration merging embark and consult, creating live previews of completion candidates in the Embark collections buffer.
       
       #+begin_src emacs-lisp
-        ;; Consult users will also want the embark-consult package.
         (use-package embark-consult
           :straight t
           :after (embark consult)
-          :demand t ; only necessary if you have the hook below
-          ;; if you want to have consult previews as you move around an
-          ;; auto-updating embark collect buffer
+          :demand t
           :hook
           (embark-collect-mode . consult-preview-at-point-mode))
       #+end_src
+
+**** Affe
+     Affe is another package from the great =minad=, which keeps coming out with these amazing integrations to the emacs default functionality, improving the performance out of the park. In this case, he is trying to come up with a replacement to the commonly known fzf.el and fuzzy-find.el modes, which emulate fuzzy find matching running fzf in an emacs terminal process.
+
+     This ends up not being that performant, as they need the default candidate list to be updated all the time —every time the command is called. Affe tries to improve on that functionality (it is still on development, this is only a test configuration) defining the functions: =affe-grep=, using ripgrep, and =affe-find= using find —it could also be configured to use fd.
+     #+begin_src emacs-lisp
+       (use-package affe
+         :straight (affe :type git :host github :repo "minad/affe" )
+         :after orderless
+         :config
+         ;; Configure Orderless
+         (setq affe-regexp-function #'orderless-pattern-compiler
+               affe-highlight-function #'orderless-highlight-matches))
+     #+end_src
 
 ** Terminal
    Configuration related to terminal emulators and modes. Recently, 
@@ -1555,122 +1427,6 @@
     #+END_SRC
 
 *** Extension packages
-**** Linking headings
-     The Org mode manual section about internal links does refer to :CUSTOM_ID: properties for internal links. This provides you the ability to link to a heading, which then gets exported in HTML, giving the ability to create table of contents and more for org-mode files. The problem with this is that creating the org-mode headings ids is really cumbersome. @karl-voit created a few custom functions which I find interesting and thought including them in my configuration would improve my linking workflow.
-     #+begin_src emacs-lisp
-       (defun kv/generate-sanitized-alnum-dash-string(str)
-         "Returns a string which contains only a-zA-Z0-9 with single dashes
-        replacing all other characters in-between them.
-
-        Some parts were copied and adapted from org-hugo-slug
-        from https://github.com/kaushalmodi/ox-hugo (GPLv3)."
-         (let* (;; Remove "<FOO>..</FOO>" HTML tags if present.
-                (str (replace-regexp-in-string "<\\(?1:[a-z]+\\)[^>]*>.*</\\1>" "" str))
-                ;; Remove URLs if present in the string.  The ")" in the
-                ;; below regexp is the closing parenthesis of a Markdown
-                ;; link: [Desc](Link).
-                (str (replace-regexp-in-string (concat "\\](" ffap-url-regexp "[^)]+)") "]" str))
-                ;; Replace "&" with " and ", "." with " dot ", "+" with
-                ;; " plus ".
-                (str (replace-regexp-in-string
-                      "&" " and "
-                      (replace-regexp-in-string
-                       "\\." " dot "
-                       (replace-regexp-in-string
-                        "\\+" " plus " str))))
-                ;; Replace German Umlauts with 7-bit ASCII.
-                (str (replace-regexp-in-string "[Ä]" "Ae" str t))
-                (str (replace-regexp-in-string "[Ü]" "Ue" str t))
-                (str (replace-regexp-in-string "[Ö]" "Oe" str t))
-                (str (replace-regexp-in-string "[ä]" "ae" str t))
-                (str (replace-regexp-in-string "[ü]" "ue" str t))
-                (str (replace-regexp-in-string "[ö]" "oe" str t))
-                (str (replace-regexp-in-string "[ß]" "ss" str t))
-                ;; Replace all characters except alphabets, numbers and
-                ;; parentheses with spaces.
-                (str (replace-regexp-in-string "[^[:alnum:]()]" " " str))
-                ;; On emacs 24.5, multibyte punctuation characters like "："
-                ;; are considered as alphanumeric characters! Below evals to
-                ;; non-nil on emacs 24.5:
-                ;;   (string-match-p "[[:alnum:]]+" "：")
-                ;; So replace them with space manually..
-                (str (if (version< emacs-version "25.0")
-                         (let ((multibyte-punctuations-str "：")) ;String of multibyte punctuation chars
-                           (replace-regexp-in-string (format "[%s]" multibyte-punctuations-str) " " str))
-                       str))
-                ;; Remove leading and trailing whitespace.
-                (str (replace-regexp-in-string "\\(^[[:space:]]*\\|[[:space:]]*$\\)" "" str))
-                ;; Replace 2 or more spaces with a single space.
-                (str (replace-regexp-in-string "[[:space:]]\\{2,\\}" " " str))
-                ;; Replace parentheses with double-hyphens.
-                (str (replace-regexp-in-string "\\s-*([[:space:]]*\\([^)]+?\\)[[:space:]]*)\\s-*" " -\\1- " str))
-                ;; Remove any remaining parentheses character.
-                (str (replace-regexp-in-string "[()]" "" str))
-                ;; Replace spaces with hyphens.
-                (str (replace-regexp-in-string " " "-" str))
-                ;; Remove leading and trailing hyphens.
-                (str (replace-regexp-in-string "\\(^[-]*\\|[-]*$\\)" "" str)))
-           str)
-         )	
-       (defun kv/id-get-or-generate()
-         "Returns the ID property if set or generates and returns a new one if not set.
-               The generated ID is stripped off potential progress indicator cookies and
-               sanitized to get a slug. Furthermore, it is prepended with an ISO date-stamp
-               if none was found before."
-         (interactive)
-         (when (not (org-id-get))
-           (progn
-             (let* (
-                    ;; retrieve heading string
-                    (kv/heading-text (nth 4 (org-heading-components)))
-                    ;; remove progress indicators like "[2/7]" or "[25%]"
-                    ;; (kv/heading-text (replace-regexp-in-string "[[][0-9%/]+[]] " "" kv/heading-text))
-                    ;; get slug from heading text
-                    (new-id (kv/generate-sanitized-alnum-dash-string kv/heading-text))
-                    )
-               (when (not (string-match "[12][0-9][0-9][0-9]-[01][0-9]-[0123][0-9]-.+" new-id))
-                 ;; only if no ISO date-stamp is found at the beginning of the new id:
-                 (setq new-id (concat (format-time-string "%Y-%m-%d-") new-id)))
-               (org-set-property "ID" new-id)
-               )
-             )
-           )
-         (kill-new (org-id-get));; put ID in kill-ring
-         (org-id-get);; retrieve the current ID in any case as return value
-         )
-     #+end_src
-
-     
-**** Org-caldav
-     After trying org-gcal, I continued trying with caldav, another of the most
-     popular google calendar (and other calendars) syncing packages.
-
-     Installing the oauth2 library from melpa. It is one of the dependencies required
-     by org-caldav, but it does not install it itself.
-     #+begin_src emacs-lisp
-       (use-package oauth2
-         :straight t)
-     #+end_src
-    
-     #+begin_src emacs-lisp :tangle no
-       (use-package org-caldav
-         :straight t
-         :custom ((org-caldav-oauth2-client-id "")
-                  (org-caldav-oauth2-client-secret "")
-                  (org-caldav-url 'google)
-                  (org-caldav-calendar-id "qkessler@gmail.com")
-                  (org-caldav-sync-direction 'cal->org)
-                  (org-caldav-inbox "~/Documents/org_files/org-agenda/gcal-sync.org")))
-     #+end_src
-
-     I also added a script I created with python3, and I find that hooking up an emacs function helps calling the script and having my tasks updated.
-     #+begin_src emacs-lisp
-       (defun qk/gcal-org-sync()
-         (interactive)
-         (let ((default-directory "~/Documents/gcal-org")) 
-           (shell-command "./crontab-script.sh")))
-     #+end_src
-
 **** toc-org
      Package designed to update a table of contents for the org-mode file, super
      useful when creating readme files, which are easier to format in org.
@@ -1727,20 +1483,6 @@
         (use-package org-roam-protocol
           :straight nil)
       #+end_src
-
-**** Org-download
-     Org download is one interesting package, which allows drag-and-drop functionality
-     for org files, saving the downloaded image to the org-download-dir. This is crucial
-     in order to save images efficiently from the clipboard (for example using eww) and
-     a seemless integration with org-mode.
-     #+begin_src emacs-lisp
-       (use-package org-download
-         :straight t
-         :defer t
-         :init ;; Add handlers for drag-and-drop when Org is loaded.
-         (with-eval-after-load 'org
-           (org-download-enable)))
-     #+end_src
 
 **** Org-pdftools
      Org-pdftools is the mantained version of the package org-pdfview, which allos for annotations
@@ -1982,14 +1724,6 @@
 
      #+end_src
      
-*** Processing programming
-    Adding processing mode, in order to finish some of the assignments
-    this year.
-    #+begin_src emacs-lisp
-      (use-package processing-mode
-        :straight t)
-    #+end_src
-
 *** C# programming
     C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
     #+begin_src emacs-lisp
@@ -2117,6 +1851,7 @@
             (impatient-mode)
             (imp-visit-buffer))) 
       #+end_src
+
 ***** Dap-mode
       Server side debugging protocol, seemed to be installed with lsp-dart,
       I'm adding the package here just to make sure, as I couldn't load
@@ -2139,14 +1874,6 @@
           :straight t
           :commands lsp-ui-mode
           :custom (lsp-ui-sideline-show-code-actions nil))
-      #+END_SRC
-
-***** lsp-ivy
-      Buffer cycling and find-files quicker. Close to helm.
-      #+BEGIN_SRC emacs-lisp :tangle no
-        (use-package lsp-ivy
-          :straight t  
-          :commands lsp-ivy-workspace-symbol)
       #+END_SRC
 
 ***** C++/C programming.
@@ -2224,7 +1951,7 @@
       Exactly the same with the html server, installed with lsp-install-server: html-ls.
       Trying to install emmet-mode, but the package cl is deprecated.
 
-****** html      
+****** HTML      
        To use html-mode in other mode files, I needed to configure .hsb template
        files, using express.
        #+begin_src emacs-lisp
@@ -2314,14 +2041,7 @@
           :config
           (treemacs-load-theme "Netbeans"))
       #+end_src
-*** Elf-mode
-    Adding elf command output when the file is a binary file
-    and the mode elf-mode is triggered, could be used as a standalone function. 
-    The package was created by abo-abo and is in melpa.
-    #+begin_src emacs-lisp
-      (use-package elf-mode
-        :straight t)
-    #+end_src
+
 *** Yaml-mode
     The yaml-mode package provides indentation features for programming with
     yaml files, in which indentantion is key and a slip-up is really easy.
@@ -2344,6 +2064,7 @@
                (funcall (plist-get (car result) :secret))
              nil)))
      #+end_src
+
 **** Mu4e
      Adding mu4e configuration that was configured with mbsync.
      We have installed it with the package manager, in order to make sure
@@ -2359,7 +2080,7 @@
          :defer 20
          :bind (("C-c m" . mu4e)
                 :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
-         ;; :hook (mu4e-compose-mode . flyspell-mode)
+         :hook (mu4e-compose-mode . flyspell-mode)
          :custom
          (mu4e-maildir "~/Mail")
          (mu4e-attachment-dir "~/Downloads")
@@ -2522,24 +2243,14 @@
         (elfeed-show-truncate-long-urls t)
         (elfeed-show-unique-buffers t)
         (elfeed-search-date-format '("%F %R" 16 :left)))  
-      ;; (defun elfeed-ivy-filter ()
-      ;;   (interactive)
-      ;;   (let ((filtered-tag (ivy-completing-read "Choose Tags: " (elfeed-db-get-all-tags))))
-      ;;     (progn
-      ;;       (setq elfeed-search-filter (concat elfeed-search-filter " +" filtered-tag))
-      ;;       (elfeed-search-update--force))))
       (use-package elfeed
-        :bind (
-               ("C-c e" . elfeed)
+        :bind (("C-c e" . elfeed)
                :map elfeed-search-mode-map
                ("w" . elfeed-search-yank)
                ("g" . elfeed-update)
                ("G" . elfeed-search-update--force)
-               ;; ("s" . elfeed-ivy-filter)
                :map elfeed-show-mode-map
-               ("w" . elfeed-show-yank)
-               ;; ("s" . elfeed-ivy-filter)
-               ))
+               ("w" . elfeed-show-yank)))
     #+end_src
 
 **** Elfeed org
@@ -2580,39 +2291,6 @@
                  ("e" . prot-elfeed-show-eww)
                  ("q" . prot-elfeed-kill-buffer-close-window-dwim)))
      #+end_src
-**** Elfeed-dashboard
-     This is the package that allows elfeed to configure a dashboard mu4e-style,
-     with the cool features of selecting searches, using bookmarks and overall
-     editing of the dashboard with an org-file, which is always cool.
-     #+begin_src emacs-lisp :tangle no
-       (use-package elfeed-dashboard
-         :straight t
-         :config
-         (setq elfeed-dashboard-file "~/elfeed-dashboard.org")
-         ;; update feed counts on elfeed-quit
-         (advice-add 'elfeed-search-quit-window :after #'elfeed-dashboard-update-links))
-
-     #+end_src
-
-*** Speed-test
-    Practicing typing speed in emacs.
-    #+BEGIN_SRC emacs-lisp
-      (use-package speed-type
-        :straight t)
-
-      (defun qk/type-test ()
-        (interactive)
-        (browse-url-firefox "https://monkeytype.com/"))
-    #+END_SRC
-
-*** Snow for Christmas
-    Package which uses ascii symbols in order to create a
-    snowy environment in emacs!
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package snow
-        :straight t)
-    #+END_SRC
 
 *** Eww
     Eww is the emacs browser, which can have different integrations and
@@ -2769,33 +2447,4 @@
                 ("REVIEW"     font-lock-keyword-face bold)
                 ("NOTE"       success bold)
                 ("DEPRECATED" font-lock-doc-face bold))))
-    #+end_src
-
-*** langtool
-    "Instantly Enhance Your Writing LanguageTool’s multilingual grammar, style,
-    and spell checker is used by millions of people around the
-    world."—[[https://languagetool.org]]
-
-    Seems to be as good as Grammarly, while being open-source, free premium for
-    students and an already implemented emacs package!
-
-    :warning: Untangling 2021/04/29, might visit later.
-    #+begin_src emacs-lisp :tangle no
-      (defvar qk/langtool-mode-global-map
-        (let ((map (make-sparse-keymap)))
-          (define-key map "c" 'langtool-check)
-          (define-key map "d" 'langtool-check-done)
-          (define-key map "l" 'langtool-switch-default-language)
-          (define-key map "s" 'langtool-show-message-at-point)
-          (define-key map "b" 'langtool-correct-buffer) map)
-        "Key map to scope `langtool' bindings for global usage.
-                            The idea is to bind this to a prefix sequence, so
-                            that its defined keys follow the pattern of <PREFIX>
-                            <KEY>.")
-      (use-package langtool
-        :straight t
-        :bind-keymap("C-c i" . qk/langtool-mode-global-map)
-        :custom
-        (langtool-language-tool-server-jar "~/.local/LanguageTool-5.3-stable/languagetool-server.jar")
-        (langtool-server-user-arguments '("-p" "8082")))
     #+end_src
