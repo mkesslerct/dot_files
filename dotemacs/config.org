@@ -5,7 +5,7 @@
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
-        :ensure t
+        :straight t
         :config (load-theme 'gruvbox-dark-soft t))
     #+end_src
 
@@ -13,14 +13,14 @@
     This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
     #+begin_src emacs-lisp :tangle no
       (use-package solarized-theme
-        :ensure t)
+        :straight t)
     #+end_src
 
 *** Theme-changer
     I'm trying out that depending on the time of the day, a.k.a sunset or sunrise, I change the theme between two options. The package (which is no longer maintained is called 'theme-changer', but it has a ton of problems. An option is using some of the code snippets found on the [[https://stackoverflow.com/questions/14760567/emacs-auto-load-color-theme-by-time][stack-overflow page]].
     #+begin_src emacs-lisp :tangle no
       (use-package solar
-        :ensure nil
+        :straight nil
         :init 
         (defun today-date-integer (offset)
           "Returns today's date in a list of integers, i.e. month, date, and year, in system time."
@@ -83,7 +83,7 @@
      being by default the current directory.
      #+begin_src emacs-lisp
        (use-package no-littering
-         :ensure t)
+         :straight t)
      #+end_src
 **** Backup files
      Files created with the tilde extension, used to track changes to files, being able to 
@@ -135,7 +135,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (use-package try
-        :ensure t)
+        :straight t)
     #+END_SRC
 *** Delimiters
 **** smart-parens
@@ -145,7 +145,7 @@
 
      #+begin_src emacs-lisp
        (use-package smartparens
-         :ensure t
+         :straight t
          :hook (prog-mode . smartparens-mode)
          :config (require 'smartparens-config))
      #+end_src
@@ -157,7 +157,7 @@
 
      #+begin_src emacs-lisp
        (use-package rainbow-delimiters
-         :ensure t
+         :straight t
          :hook (prog-mode . rainbow-delimiters-mode)
          :config
          (alexm/set-faces-by-spec
@@ -175,7 +175,7 @@
 **** Doom-modeline
      #+BEGIN_SRC emacs-lisp
        (use-package doom-modeline
-         :ensure t
+         :straight t
          :config
          (progn
            (doom-modeline-mode 1)
@@ -205,7 +205,7 @@
 **** All-the-icons
      #+BEGIN_SRC emacs-lisp
        (use-package all-the-icons
-         :ensure t)
+         :straight t)
      #+END_SRC
 
 *** Commenting
@@ -216,7 +216,7 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package smart-comment
-         :ensure t
+         :straight t
          :bind ("M-;" . smart-comment))
      #+END_SRC
 
@@ -242,7 +242,7 @@
      Better bufler list, creating projects and groups.
      #+begin_src emacs-lisp
        (use-package bufler
-         :ensure t
+         :straight t
          :config (defhydra+ hydra:bufler ()
                    ("o" #'delete-other-windows "Full screen"))
          :bind (:map bufler-list-mode-map
@@ -290,7 +290,7 @@
     The default emacs help buffers could use some tweaking, and the Helpful package is there to assist. It provides better formatting and links for help buffers, and defines different functions to limit the disruption effect in your emacs configuration.
     #+begin_src emacs-lisp
       (use-package helpful
-        :ensure t
+        :straight t
         :init
         (global-set-key (kbd "C-h f") #'helpful-function)
         (global-set-key (kbd "C-h v") #'helpful-variable)
@@ -303,14 +303,14 @@
      LaTeX has its own lsp server: texlab. I have added it here to check whether I'm interested in keeping it or keep going with latex. I added the TESTING flag to let the possible outside user know.
      #+begin_src emacs-lisp
        (use-package lsp-latex
-         :ensure t)
+         :straight t)
      #+end_src
 
     
     Adding reference connection made easier with reftex.
     #+BEGIN_SRC emacs-lisp
       (use-package reftex
-        :ensure t
+        :straight t
         :defer t
         :config
         (setq reftex-cite-prompt-optional-args t))
@@ -320,7 +320,7 @@
     that have been miss-typed.
     #+BEGIN_SRC emacs-lisp
       (use-package auto-dictionary
-        :ensure t
+        :straight t
         :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
     #+END_SRC
   
@@ -328,14 +328,14 @@
     on the fly.
     #+BEGIN_SRC emacs-lisp :tangle no
       (use-package company-auctex
-        :ensure t
+        :straight t
         :init (company-auctex-init))
     #+END_SRC
 
     Adding general configuration for tex files and latex-mode better defaults.
     #+BEGIN_SRC emacs-lisp
       (use-package tex
-        :ensure auctex
+        :straight auctex
         :mode ("\\.tex\\'" . latex-mode)
         :config (progn
                   (setq TeX-source-correlate-mode t)
@@ -444,7 +444,7 @@
     Deleting all the spaces but one when multiple spaces are present.
     #+BEGIN_SRC emacs-lisp :tangle no
       (use-package smart-hungry-delete
-        :ensure t
+        :straight t
         :bind (("<backspace>" . smart-hungry-delete-backward-char)
                ("C-d" . smart-hungry-delete-forward-char)
                ("<DEL>" . smart-hungry-delete-forward-char))
@@ -465,17 +465,17 @@
     The second markdown function is from this link: [[https://stackoverflow.com/questions/36183071/how-can-i-preview-markdown-in-emacs-in-real-time/41288851#41288851][stack overflow markdown link]].
     #+BEGIN_SRC emacs-lisp
       (use-package simple-httpd
-        :ensure t
+        :straight t
         :custom
         (httpd-port 7070)
         (httpd-host (system-name)))
 
       (use-package impatient-mode
-        :ensure t
+        :straight t
         :commands impatient-mode)
 
       (use-package markdown-mode
-        :ensure nil
+        :straight nil
         :mode ("\\.md\\'" . gfm-mode)
         :commands (markdown-mode gfm-mode)
         :custom (markdown-command "pandoc -t html5")
@@ -543,7 +543,7 @@
       (global-unset-key (kbd "C-x o"))
       (global-unset-key (kbd "C-x u"))
       (use-package ace-window
-        :ensure t
+        :straight t
         :config 
         (global-set-key (kbd "M-o") 'ace-window)
         :custom(
@@ -575,7 +575,7 @@
     with auctex.
     #+BEGIN_SRC emacs-lisp
       (use-package pdf-tools
-        :ensure t
+        :straight t
         :config (pdf-tools-install)
         (setq-default pdf-view-display-size 'fit-page)
         (setq pdf-annot-activate-created-annotations t)
@@ -592,7 +592,7 @@
     available for a certain prefix you start typing.
     #+begin_src emacs-lisp
       (use-package which-key
-        :ensure t
+        :straight t
         :custom
         ((which-key-show-early-on-C-h t)
          (which-key-idle-delay .5)
@@ -605,7 +605,7 @@
     access the functionality from emacs.
     #+begin_src emacs-lisp
       (use-package rg
-        :ensure t
+        :straight t
         :config (rg-enable-default-bindings))
     #+end_src
 
@@ -632,17 +632,17 @@
     usual places like .profile and such. Installing the package
     exec-path-from-shell, we make sure that those important config files
     are loaded.
-    #+begin_src emacs-lisp
-      (use-package exec-path-from-shell
-        :init (setq exec-path-from-shell-arguments '("-l"))
-        :ensure t)
-    #+end_src
-    I added the following inside the init.el file, :warning: not tangling this:
+
+    :warning: WARNING: The configuration of the exec-path-from-shell-initialize from shell should be in the init.el file, which is run before tangling this whole org file. I'm just adding this for completion of the configuration.
     #+begin_src emacs-lisp :tangle no
-      (when (daemonp)
-        (exec-path-from-shell-initialize))
-      (when (memq window-system '(mac ns x))
-        (exec-path-from-shell-initialize))
+      (use-package exec-path-from-shell
+        :straight t
+        :custom (exec-path-from-shell-arguments '("-l"))
+        :init 
+        (when (daemonp)
+          (exec-path-from-shell-initialize))
+        (when (memq window-system '(mac ns x))
+          (exec-path-from-shell-initialize)))
     #+end_src
 
 *** Special characters
@@ -720,7 +720,7 @@
 
     #+begin_src emacs-lisp
       (use-package browse-url
-        :ensure nil
+        :straight nil
         :custom
         (url-cookie-file (no-littering-expand-var-file-name "cookies/cookies")))
     #+end_src
@@ -731,7 +731,7 @@
     Whole-line-or-region implementes some changes to add the mentioned funcionality. Using the remapped C-w and M-w (cut and copy) without a region selected with select the whole line.
     #+begin_src emacs-lisp
       (use-package whole-line-or-region
-        :ensure t
+        :straight t
         :config (whole-line-or-region-global-mode))
     #+end_src
 
@@ -741,7 +741,7 @@
     order to provide good completion for emacs commands.
     #+BEGIN_SRC emacs-lisp :tangle no
       (use-package counsel
-        :ensure t
+        :straight t
         :config 
         (progn 
           (ivy-mode 1)
@@ -766,7 +766,7 @@
                 (ivy-use-selectable-prompt t)
                 (counsel-file-jump-args (split-string "-L --type f --hidden"))))
       (use-package counsel-projectile
-        :ensure t)
+        :straight t)
       (counsel-projectile-mode 1)
 
     #+END_SRC
@@ -778,10 +778,10 @@
 
      #+begin_src emacs-lisp :tangle no
        (use-package prescient
-         :ensure t
+         :straight t
          :config (prescient-persist-mode 1))
        (use-package ivy-prescient
-         :ensure t
+         :straight t
          :config (ivy-prescient-mode 1))
      #+end_src
 
@@ -792,7 +792,7 @@
      Vertico provides a minimalistic vertical completion UI, which is based on the default completion system. By reusing the default system, Vertico achieves full compatibility with built-in Emacs commands and completion tables. Vertico is pretty bare-bone and comes with only a minimal set of commands. The code base is small (~500 lines of code without whitespace and comments). Additional enhancements can be installed separately via complementary packages.
      #+begin_src emacs-lisp
        (use-package vertico
-         :ensure t
+         :straight t
          :init (vertico-mode)
          :custom (vertico-cycle t))
      #+end_src
@@ -801,7 +801,7 @@
      Orderless is one of the same emacs packages that works modularly, using the basic emacs API. This package provides an orderless completion style that divides the pattern into space-separated components, and matches candidates that match all of the components in any order. Each component can match in any one of several ways: literally, as a regexp, as an initialism, in the flex style, or as multiple word prefixes. By default, regexp and literal matches are enabled.
      #+begin_src emacs-lisp
        (use-package orderless
-         :ensure t
+         :straight t
          :init
          (setq completion-styles '(orderless)
                completion-category-defaults nil
@@ -851,7 +851,7 @@
          ;;        :map minibuffer-local-map
          ;;        ("M-A" . marginalia-cycle))
 
-         :ensure t
+         :straight t
          ;; The :init configuration is always executed (Not lazy!)
          :init (marginalia-mode))
      #+end_src
@@ -861,7 +861,7 @@
      #+begin_src emacs-lisp
        (use-package consult
          ;; Replace bindings. Lazily loaded due by `use-package'.
-         :ensure t
+         :straight t
          :custom (consult-find-command "fdfind -color=never --full-path ARG OPTS")
          :bind (;; C-c bindings (mode-specific-map)
                 ("C-c h" . consult-history)
@@ -927,7 +927,7 @@
       Consult-projectile is a package that is still in development, adding this here only means I'm interested in having something of the sort. I might need to do a more in-depth search a few weeks forward.
       #+begin_src emacs-lisp
         (use-package consult-projectile
-          :ensure nil
+          :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile")
           :bind ("C-c p" . consult-projectile))
       #+end_src
 
@@ -940,7 +940,7 @@
      - In a regular buffer, the target is the region if active, or else the file, symbol or URL at point.
      #+begin_src emacs-lisp
        (use-package embark
-         :ensure t
+         :straight t
          :bind
          (("C-M-y" . embark-act)       ;; pick some comfortable binding
           ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
@@ -972,7 +972,7 @@
       #+begin_src emacs-lisp
         ;; Consult users will also want the embark-consult package.
         (use-package embark-consult
-          :ensure t
+          :straight t
           :after (embark consult)
           :demand t ; only necessary if you have the hook below
           ;; if you want to have consult previews as you move around an
@@ -988,7 +988,7 @@
 *** Vterm
     #+begin_src emacs-lisp
       (use-package vterm
-        :ensure t
+        :straight t
         :custom (vterm-max-scrollback 10000)
         )
     #+end_src
@@ -999,7 +999,7 @@
      buffer creation if the buffer was non-existing.
      #+begin_src emacs-lisp
        (use-package vterm-toggle
-         :ensure t
+         :straight t
          :bind ("C-c x" . vterm-toggle-cd)
          :custom
          (vterm-toggle-reset-window-configration-after-exit 'kill-window-only)
@@ -1022,7 +1022,7 @@
                        defined keys follow the pattern of <PREFIX> <KEY>.")
 
       (use-package lastpass
-        :ensure t
+        :straight t
         :demand t
         :custom
         (lastpass-user "qkessler@gmail.com")
@@ -1649,12 +1649,12 @@
      by org-caldav, but it does not install it itself.
      #+begin_src emacs-lisp
        (use-package oauth2
-         :ensure t)
+         :straight t)
      #+end_src
     
      #+begin_src emacs-lisp :tangle no
        (use-package org-caldav
-         :ensure t
+         :straight t
          :custom ((org-caldav-oauth2-client-id "")
                   (org-caldav-oauth2-client-secret "")
                   (org-caldav-url 'google)
@@ -1676,7 +1676,7 @@
      useful when creating readme files, which are easier to format in org.
      #+begin_src emacs-lisp
        (use-package toc-org
-         :ensure t
+         :straight t
          :hook (org-mode . toc-org-mode))
      #+end_src
 
@@ -1689,7 +1689,7 @@
 
      #+BEGIN_SRC emacs-lisp
        (use-package org-roam
-         :ensure t
+         :straight t
          :hook
          (after-init . org-roam-mode)
          :custom
@@ -1725,7 +1725,7 @@
       browsing when outilining blog posts or articles.
       #+begin_src emacs-lisp
         (use-package org-roam-protocol
-          :ensure nil)
+          :straight nil)
       #+end_src
 
 **** Org-download
@@ -1735,7 +1735,7 @@
      a seemless integration with org-mode.
      #+begin_src emacs-lisp
        (use-package org-download
-         :ensure t
+         :straight t
          :defer t
          :init ;; Add handlers for drag-and-drop when Org is loaded.
          (with-eval-after-load 'org
@@ -1748,7 +1748,7 @@
      slug that org-mode gives.
      #+begin_src emacs-lisp
        (use-package org-pdftools
-         :ensure t
+         :straight t
          :hook (org-mode . org-pdftools-setup-link))
      #+end_src
 
@@ -1758,7 +1758,7 @@
      that was interested in converting would most likely be collections of blog posts.
      #+begin_src emacs-lisp
        (use-package ox-epub
-         :ensure t)
+         :straight t)
      #+end_src
 
 **** Org-pomodoro
@@ -1777,7 +1777,7 @@
                                      25)))
            (org-set-effort nil (org-duration-from-minutes (* n mins-per-pomodoro)))))
        (use-package org-pomodoro
-         :ensure t
+         :straight t
          :demand t
          :hook (org-pomodoro-break-finished .
                                             (lambda ()
@@ -1853,7 +1853,7 @@
     Magit with the integration of Github Issues.
     #+BEGIN_SRC emacs-lisp
       (use-package forge
-        :ensure t
+        :straight t
         :after magit
         :config (progn 
                   (transient-append-suffix 'forge-dispatch '(0)
@@ -1870,7 +1870,7 @@
     Obviously [[https://magit.vc/][Magit]].
     #+begin_src emacs-lisp
       (use-package magit
-        :ensure t
+        :straight t
         :bind ("C-x g" . magit-status)
         :hook (after-save . magit-after-save-refresh-status)
         :hook (git-commit-mode . (lambda ()
@@ -1883,7 +1883,7 @@
 ** Project management
    #+BEGIN_SRC emacs-lisp
      (use-package projectile
-       :ensure t
+       :straight t
        ;; Working on ubuntu, if you are not, change fdfind to fd.
        :custom (projectile-generic-command "fdfind . -0 --type f --color=never")
        :config(progn 
@@ -1900,14 +1900,14 @@
 *** Yasnippet
     #+BEGIN_SRC emacs-lisp
       (use-package yasnippet
-        :ensure t
+        :straight t
         :config (yas-global-mode))
     #+END_SRC
 
 *** Better yasnippets for modes.
     #+BEGIN_SRC emacs-lisp
       (use-package yasnippet-snippets
-        :ensure t)
+        :straight t)
     #+END_SRC
 
 ** Programming
@@ -1918,7 +1918,7 @@
     For completion reasons, I still leave the company configuration here, just in case someone might want to give it a try.
     #+BEGIN_SRC emacs-lisp :tangle no
       (use-package company
-        :ensure t
+        :straight t
         :config (progn 
                   (global-company-mode 1)
                   (setq company-show-numbers t)
@@ -1944,7 +1944,7 @@
     of enabling a better candidate mechanism.
     #+begin_src emacs-lisp :tangle no
       (use-package company-prescient
-        :ensure t
+        :straight t
         :config (company-prescient-mode 1))
     #+end_src
 
@@ -1987,17 +1987,17 @@
     this year.
     #+begin_src emacs-lisp
       (use-package processing-mode
-        :ensure t)
+        :straight t)
     #+end_src
 
 *** C# programming
     C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
     #+begin_src emacs-lisp
-      (use-package tree-sitter :ensure t)
-      (use-package tree-sitter-langs :ensure t)
+      (use-package tree-sitter :straight t)
+      (use-package tree-sitter-langs :straight t)
 
       (use-package csharp-mode
-        :ensure t
+        :straight t
         :config
         (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
     #+end_src
@@ -2008,7 +2008,7 @@
      Sintax checking on the fly.
      #+begin_src emacs-lisp
        (use-package flycheck
-         :ensure t)
+         :straight t)
 
        (flycheck-define-checker proselint
          "A linter for prose."
@@ -2037,7 +2037,7 @@
       maintained, couldn't be a better option.
       #+begin_src emacs-lisp :tangle no
         (use-package flycheck-vale
-          :ensure t
+          :straight t
           :config (flycheck-vale-setup))
       #+end_src
 
@@ -2056,7 +2056,7 @@
        window was hidden.
      #+begin_src emacs-lisp
        (use-package treemacs
-         :ensure t
+         :straight t
          :bind (:map global-map (("C-c T" . treemacs)
                                  ("C-c t" . treemacs-select-window))))
      #+end_src
@@ -2067,13 +2067,13 @@
       already been imported by projectile.
       #+begin_src emacs-lisp
         (use-package treemacs-projectile
-          :ensure t)
+          :straight t)
       #+end_src
      
 **** lsp-mode
      #+BEGIN_SRC emacs-lisp
        (use-package lsp-mode
-         :ensure t
+         :straight t
          :commands (lsp lsp-deferred)
          :hook
          (mhtml-mode . lsp-deferred)
@@ -2107,7 +2107,7 @@
       including possible stylesheets that are connected to the initial 
       #+begin_src emacs-lisp
         (use-package mhtml-mode
-          :ensure nil
+          :straight nil
           :init
           (defun qk/html-preview ()
             "Preview html using httpd and impatient-mode"
@@ -2123,24 +2123,20 @@
       lsp-dart or lsp-java because dap-mode wasn't available.
       #+begin_src emacs-lisp
         (use-package dap-mode
-          :ensure t
+          :straight t
           :after lsp-mode
           :bind (:map lsp-mode-map
                       ("C-c l d" . dap-hydra))
           :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
           :config (dap-auto-configure-mode))
-
-        (use-package dap-python
-          :ensure nil)
-        (use-package dap-java
-          :ensure nil)
       #+end_src
+
 ***** lsp-ui
       Better ui for lsp-mode, adding el-doc.
       #+BEGIN_SRC emacs-lisp
         (use-package lsp-ui
           :requires (flycheck)
-          :ensure t
+          :straight t
           :commands lsp-ui-mode
           :custom (lsp-ui-sideline-show-code-actions nil))
       #+END_SRC
@@ -2149,7 +2145,7 @@
       Buffer cycling and find-files quicker. Close to helm.
       #+BEGIN_SRC emacs-lisp :tangle no
         (use-package lsp-ivy
-          :ensure t  
+          :straight t  
           :commands lsp-ivy-workspace-symbol)
       #+END_SRC
 
@@ -2157,7 +2153,7 @@
       Always works on C++, sometimes wrong on C programming.
       #+BEGIN_SRC emacs-lisp
         (use-package ccls
-          :ensure t
+          :straight t
           :config (progn
                     (setq ccls-executable "ccls")
                     (setq lsp-prefer-flymake nil)
@@ -2169,7 +2165,7 @@
 ***** Dart/Flutter programming
       #+BEGIN_SRC emacs-lisp
         (use-package lsp-dart 
-          :ensure t
+          :straight t
           :hook (dart-mode . lsp-deferred)
           :custom
           (dart-sdk-path "~/.local/flutter/bin/cache/dart-sdk")
@@ -2185,7 +2181,7 @@
       Adding hover to emulate running flutter mobile application on dekstop.
       #+begin_src emacs-lisp
         (use-package hover
-          :ensure t
+          :straight t
           :after dart-mode
           :custom (hover-hot-reload-on-save t)
           (hover-clear-buffer-on-hot-restart t)
@@ -2199,7 +2195,7 @@
       Works with the eclipse server, not really sure if it is what I'm looking for.
       #+BEGIN_SRC emacs-lisp
         (use-package lsp-java
-          :ensure t
+          :straight t
           :hook (java-mode . lsp-deferred))
       #+END_SRC
 
@@ -2218,7 +2214,7 @@
       #+begin_src emacs-lisp
         (use-package pip-requirements
           :demand t
-          :ensure t)  
+          :straight t)  
       #+end_src
 
 ***** Web programming
@@ -2234,15 +2230,17 @@
        #+begin_src emacs-lisp
          (use-package mhtml-mode
            :mode ("\\.html\\'" "\\.hbs\\'")
-           :ensure nil)
+           :straight nil)
        #+end_src
 
        
 ****** Emmet-mode
-       Better completion for html tags, very good documentation.
+       Better completion for html tags, very good documentation. This package is configured with my fork, as emmet-mode's default repo has problems using the =cl= package, instead of the updated =cl-lib=.
        #+BEGIN_SRC emacs-lisp
          (use-package emmet-mode
-           :ensure t
+           :straight (emmet-mode :type git :host github :repo "smihica/emmet-mode"
+                      :fork (:host github
+                             :repo "Qkessler/emmet-mode"))
            :custom (emmet-move-cursor-between-quotes t))
          (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
          (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
@@ -2274,7 +2272,7 @@
        Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
        #+begin_src emacs-lisp
          (use-package js2-mode
-           :ensure t)
+           :straight t)
        #+end_src
 
        js-mode, which was introduced in Emacs 27, including full support for
@@ -2291,7 +2289,7 @@
        between them, which is key to software developing.
        #+begin_src emacs-lisp
          (use-package xref-js2
-           :ensure t
+           :straight t
            :custom (xref-js2-search-program 'rg))
        #+end_src
 
@@ -2299,7 +2297,7 @@
        better sintax highlights, and some nice editing keybindings.
        #+begin_src emacs-lisp
          (use-package json-mode
-           :ensure t
+           :straight t
            :config
            (progn
              (flycheck-add-mode 'json-jsonlint 'json-mode)
@@ -2312,7 +2310,7 @@
       Adding all-the-icons support to treemacs, configuring better default icons.
       #+begin_src emacs-lisp
         (use-package treemacs-all-the-icons
-          :ensure t
+          :straight t
           :config
           (treemacs-load-theme "Netbeans"))
       #+end_src
@@ -2322,7 +2320,7 @@
     The package was created by abo-abo and is in melpa.
     #+begin_src emacs-lisp
       (use-package elf-mode
-        :ensure t)
+        :straight t)
     #+end_src
 *** Yaml-mode
     The yaml-mode package provides indentation features for programming with
@@ -2330,7 +2328,7 @@
     #+begin_src emacs-lisp
       (use-package yaml-mode
         :mode "\\.yml\\'"
-        :ensure t)
+        :straight t)
     #+end_src
 
 ** Extra
@@ -2356,7 +2354,7 @@
      #+begin_src emacs-lisp
        (require 'mu4e-context)
        (use-package mu4e
-         :ensure nil
+         :straight nil
          :load-path "/usr/share/emacs/site-lisp/mu4e/"
          :defer 20
          :bind (("C-c m" . mu4e)
@@ -2488,9 +2486,9 @@
 
      #+begin_src emacs-lisp :tangle no
        (use-package async
-         :ensure t)
+         :straight t)
        (use-package smtpmail-async
-         :ensure nil
+         :straight nil
          :custom (send-mail-function 'async-smtpmail-send-it)
          (message-send-mail-function 'async-smtpmail-send-it))
      #+end_src
@@ -2509,7 +2507,7 @@
 
     #+begin_src emacs-lisp
       (use-package elfeed
-        :ensure t
+        :straight t
         :custom
         (elfeed-use-curl t)
         (elfeed-curl-max-connections 10)
@@ -2550,22 +2548,22 @@
      inherited tags.
      #+begin_src emacs-lisp
        (use-package elfeed-org
-         :ensure t
+         :straight t
          :custom (rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org")))
          :config (elfeed-org))
      #+end_src
 
 **** Protesilaos personal configuration
-     In order to access the personal protesilaos elfeed configuration I
-     decided on adding the .el file to the load-path, in order to
-     avoid cluttering this config file.
+     In order to access the personal protesilaos elfeed configuration I decided on adding the .el file to the load-path, in order to avoid cluttering this config file.
 
-     A lot of functionality implemented regards the configuration of mpv and
-     bongo, which I don't currently use, a revision will follow in order to
-     remove those entries.
+     A lot of functionality implemented regards the configuration of mpv and bongo, which I don't currently use, a revision will follow in order to remove those entries.
+
+     I tried using the straight recipe from the gitlab repo, without success, I still will be using the local prot-elfeed.
      #+begin_src emacs-lisp
        (use-package prot-elfeed
-         :ensure nil ;; the code is already in the load-path.
+         ;; :straight (prot-elfeed :type git :host gitlab :repo "protesilaos/dotfiles"
+         ;;                        :files ("emacs/.emacs.d/prot-lisp/prot-elfeed.el"))
+         :straight nil
          :custom (prot-elfeed-tag-faces t)
          :config
          (prot-elfeed-fontify-tags)
@@ -2588,7 +2586,7 @@
      editing of the dashboard with an org-file, which is always cool.
      #+begin_src emacs-lisp :tangle no
        (use-package elfeed-dashboard
-         :ensure t
+         :straight t
          :config
          (setq elfeed-dashboard-file "~/elfeed-dashboard.org")
          ;; update feed counts on elfeed-quit
@@ -2600,7 +2598,7 @@
     Practicing typing speed in emacs.
     #+BEGIN_SRC emacs-lisp
       (use-package speed-type
-        :ensure t)
+        :straight t)
 
       (defun qk/type-test ()
         (interactive)
@@ -2613,7 +2611,7 @@
 
     #+BEGIN_SRC emacs-lisp
       (use-package snow
-        :ensure t)
+        :straight t)
     #+END_SRC
 
 *** Eww
@@ -2728,7 +2726,7 @@
     org-mode files, with using them in a blog post in sight.
     #+begin_src emacs-lisp
       (use-package emojify
-        :ensure t
+        :straight t
         :hook (after-init . global-emojify-mode))  
     #+end_src
 
@@ -2748,7 +2746,7 @@
                           ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
       \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
                           ("budget" "%(binary) -f %(ledger-file) -E bal ^Budget and not Budget:Checking")))
-        :ensure t
+        :straight t
         :config
         (alexm/set-faces-by-spec
          '(ledger-occur-xact-face
@@ -2761,7 +2759,7 @@
     #+begin_src emacs-lisp
       (use-package hl-todo
         :hook (prog-mode . hl-todo-mode)
-        :ensure t
+        :straight t
         :config
         (setq hl-todo-highlight-punctuation ":"
               hl-todo-keyword-faces
@@ -2795,7 +2793,7 @@
                             that its defined keys follow the pattern of <PREFIX>
                             <KEY>.")
       (use-package langtool
-        :ensure t
+        :straight t
         :bind-keymap("C-c i" . qk/langtool-mode-global-map)
         :custom
         (langtool-language-tool-server-jar "~/.local/LanguageTool-5.3-stable/languagetool-server.jar")
