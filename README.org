@@ -1,4 +1,4 @@
-# Dot files
+* Dot files
 Repo that has been designed to hold all of my configuration files in order to be 
 able to migrate my existing setup to other systems.
 
