@@ -5,8 +5,8 @@
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
-	:straight t
-	:config (load-theme 'gruvbox-dark-soft t))
+        :straight t
+        :config (load-theme 'gruvbox-dark-soft t))
     #+end_src
 
 *** Solarized theme
@@ -806,25 +806,25 @@
          (("C-M-y" . embark-act)       ;; pick some comfortable binding
           ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
           :map embark-file-map
-          ("s" . embark-magit-status)) 
-         :init
-         (defun embark-magit-status (file)
-           "Run `magit-status` on repo containing the embark target."
-           (interactive "GFile: ")
-           (magit-status (locate-dominating-file file ".git")))
-         ;; Optionally replace the key help with a completing-read interface
-         (setq prefix-help-command #'embark-prefix-help-command)
-         (setq embark-action-indicator
-               (lambda (map _target)
-                 (which-key--show-keymap "Embark" map nil nil 'no-paging)
-                 #'which-key--hide-popup-ignore-command)
-               embark-become-indicator embark-action-indicator)
-         :config
-         ;; Hide the mode line of the Embark live/completions buffers
-         (add-to-list 'display-buffer-alist
-                      '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                        nil
-                        (window-parameters (mode-line-format . none)))))
+          ("s" . embark-magit-status))
+          :init
+          (defun embark-magit-status (file)
+            "Run `magit-status` on repo containing the embark target."
+            (interactive "GFile: ")
+            (magit-status (locate-dominating-file file ".git")))
+          ;; Optionally replace the key help with a completing-read interface
+          (setq prefix-help-command #'embark-prefix-help-command)
+          (setq embark-action-indicator
+                (lambda (map _target)
+                  (which-key--show-keymap "Embark" map nil nil 'no-paging)
+                  #'which-key--hide-popup-ignore-command)
+                embark-become-indicator embark-action-indicator)
+          :config
+          ;; Hide the mode line of the Embark live/completions buffers
+          (add-to-list 'display-buffer-alist
+                       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                         nil
+                         (window-parameters (mode-line-format . none)))))
 #+end_src
 
 ***** Embark-consult
@@ -852,7 +852,8 @@
          :config
          ;; Configure Orderless
          (setq affe-regexp-function #'orderless-pattern-compiler
-               affe-highlight-function #'orderless-highlight-matches))
+               affe-highlight-function #'orderless-highlight-matches)
+         (consult-customize affe-grep :preview-key (kbd "M-.")))
      #+end_src
 
 ** Terminal
