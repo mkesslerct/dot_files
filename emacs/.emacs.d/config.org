@@ -806,25 +806,27 @@
          (("C-M-y" . embark-act)       ;; pick some comfortable binding
           ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
           :map embark-file-map
-          ("s" . embark-magit-status))
-          :init
-          (defun embark-magit-status (file)
-            "Run `magit-status` on repo containing the embark target."
-            (interactive "GFile: ")
-            (magit-status (locate-dominating-file file ".git")))
-          ;; Optionally replace the key help with a completing-read interface
-          (setq prefix-help-command #'embark-prefix-help-command)
-          (setq embark-action-indicator
-                (lambda (map _target)
-                  (which-key--show-keymap "Embark" map nil nil 'no-paging)
-                  #'which-key--hide-popup-ignore-command)
-                embark-become-indicator embark-action-indicator)
-          :config
-          ;; Hide the mode line of the Embark live/completions buffers
-          (add-to-list 'display-buffer-alist
-                       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                         nil
-                         (window-parameters (mode-line-format . none)))))
+          ("s" . embark-magit-status)
+          :map minibuffer-local-map
+          ("M-o" . embark-act))
+         :init
+         (defun embark-magit-status (file)
+           "Run `magit-status` on repo containing the embark target."
+           (interactive "GFile: ")
+           (magit-status (locate-dominating-file file ".git")))
+         ;; Optionally replace the key help with a completing-read interface
+         (setq prefix-help-command #'embark-prefix-help-command)
+         (setq embark-action-indicator
+               (lambda (map _target)
+                 (which-key--show-keymap "Embark" map nil nil 'no-paging)
+                 #'which-key--hide-popup-ignore-command)
+               embark-become-indicator embark-action-indicator)
+         :config
+         ;; Hide the mode line of the Embark live/completions buffers
+         (add-to-list 'display-buffer-alist
+                      '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                        nil
+                        (window-parameters (mode-line-format . none)))))
 #+end_src
 
 ***** Embark-consult
@@ -847,6 +849,7 @@
        (use-package affe
          :straight (affe :type git :host github :repo "minad/affe" )
          :after orderless
+         :custom (affe-find-command "fdfind -H -t f")
          :bind (("M-s f" . affe-find)
                 ("M-s g" . affe-grep))
          :config
@@ -2056,6 +2059,17 @@
     #+end_src
 
 ** Extra
+*** Google calendar integration
+    There are multiple packages to integrate Google calendar with org-mode, but I didn't found that any was really fit to my needs, which are simply to have the calendars synced in.
+    
+    I added a script I created with python3, and I find that hooking up an emacs function helps calling the script and having my tasks updated.
+     #+begin_src emacs-lisp
+       (defun qk/gcal-org-sync()
+         (interactive)
+         (let ((default-directory "~/Documents/gcal-org")) 
+           (shell-command "./crontab-script.sh")))
+     #+end_src
+
 *** Email from emacs
     Adding email integration for the email indexer mu, called mu4e.
 **** Lookup password
