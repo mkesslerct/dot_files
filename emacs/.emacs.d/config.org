@@ -1371,7 +1371,6 @@
             "
          ;; Actions
          ("t" org-agenda-todo)
-         ("+" org-agenda-kill)
          ("+" org-agenda-set-tags)
          ("s" org-agenda-schedule)
          ("d" org-agenda-deadline)
