@@ -357,10 +357,6 @@
        (menu-bar-mode -1)
      #+END_SRC
 
-**** Tab configuration
-     #+BEGIN_SRC 
-    
-     #+END_SRC
 **** Fonts
      #+BEGIN_SRC emacs-lisp
        (setq default-frame-alist '((font . "Ubuntu Mono-13")))
@@ -371,7 +367,7 @@
     #+BEGIN_SRC emacs-lisp
       (setq-default indent-tabs-mode nil)
       (setq-default tab-width 4)
-      (setq indent-line-function 'insert-tab)
+      ;; (setq indent-line-function 'insert-tab)
     #+END_SRC
 
 *** Markdown
@@ -1739,7 +1735,7 @@
          :bind (:map corfu-map
                      ("C-n" . corfu-next)
                      ("C-p" . corfu-previous))
-         :custom (corfu-cycle t)
+         :custom (corfu-cycle t) (corfu-global-mode t)
          :custom-face 
          (corfu-background ((t (:background ,gruvbox-dark1))))
          (corfu-current ((t (:foreground ,gruvbox-bright_purple :background ,gruvbox-dark2))))
