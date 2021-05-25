@@ -1879,20 +1879,8 @@
             (imp-visit-buffer))) 
       #+end_src
 
-***** Dap-mode
-      Server side debugging protocol, seemed to be installed with lsp-dart,
-      I'm adding the package here just to make sure, as I couldn't load
-      lsp-dart or lsp-java because dap-mode wasn't available.
-      #+begin_src emacs-lisp
-        (use-package dap-mode
-          :straight t
-          :after lsp-mode
-          :bind (:map lsp-mode-map
-                      ("C-c l d" . dap-hydra))
-          :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
-          :config (dap-auto-configure-mode))
-      #+end_src
 
+      
 ***** lsp-ui
       Better ui for lsp-mode, adding el-doc.
       #+BEGIN_SRC emacs-lisp
@@ -2068,6 +2056,26 @@
           :config
           (treemacs-load-theme "Netbeans"))
       #+end_src
+
+***** Dap-mode
+      Server side debugging protocol, seemed to be installed with lsp-dart, I'm adding the package here just to make sure, as I couldn't load lsp-dart or lsp-java because dap-mode wasn't available.
+      #+begin_src emacs-lisp
+        (use-package dap-mode
+          :straight t
+          :after lsp-mode
+          :bind (:map lsp-mode-map
+                      ("C-c l d" . dap-hydra))
+          :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
+          :config (dap-auto-configure-mode))
+      #+end_src
+
+****** Dap-java
+       In order to be able to access the java functionality (debugger with dap-java), I needed to update the =jdtls= server, and require the dap-java package. As I'm using =straight=, I figured I would use the =straight-use-package= function.
+       #+begin_src emacs-lisp
+         (use-package dap-java
+           :after dap-mode
+           :straight nil)
+       #+end_src
 
 *** Yaml-mode
     The yaml-mode package provides indentation features for programming with
