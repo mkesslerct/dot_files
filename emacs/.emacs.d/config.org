@@ -1354,7 +1354,7 @@
 
 **** org-agenda-bulk-action hydra
      Instead of having the results in the same line and without any highlighting, you can use Hydra to highlight the different options and overall make the process easier.
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (defhydra hydra-oa-bulk-action (:pre (setq which-key-inhibit t)
                                         :post (setq which-key-inhibit nil)
                                         :hint none)
