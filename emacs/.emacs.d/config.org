@@ -215,7 +215,8 @@
      #+begin_src emacs-lisp
        (use-package dired
          :bind (:map dired-mode-map 
-                     ("b" . dired-up-directory)))
+                     ("b" . dired-up-directory)
+                     ("M-s f" . affe-find)))
      #+end_src
 
 **** Directories first on dired.
