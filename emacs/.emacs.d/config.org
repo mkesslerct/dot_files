@@ -1857,8 +1857,7 @@
          (setq lsp-signature-auto-activate nil)
          (setq lsp-headerline-breadcrumb-enable nil)
          (setq lsp-enable-links nil)
-         (setq lsp-keymap-prefix "C-c l")
-         :bind-keymap ("C-c l" . lsp-command-map))
+         :config (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
      #+END_SRC
 
