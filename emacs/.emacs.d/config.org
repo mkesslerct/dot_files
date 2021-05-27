@@ -878,34 +878,6 @@
          (vterm-toggle-hide-method 'delete-window))
      #+end_src
 
-*** Lastpass
-    Lastpass-cli is used in order to avoid needing to use authinfo files
-    when configuring both email and elfeed passwords. I fully trust LastPass'
-    security and they have not had any recent breaches (last in 2015, encrypted
-    further with 100k rounds). I will be using the lastpass package on melpa,
-    which makes easier the process of using auth-source with the cli tool.
-    #+begin_src emacs-lisp
-      (defvar qk/lastpass-global-map
-        (let ((map (make-sparse-keymap)))
-          (define-key map "l" 'lastpass-list-all)
-          (define-key map "p" 'lastpass-getpass) map)
-        "Key map to scope `lastpass' bindings for global usage.
-                       The idea is to bind this to a prefix sequence, so that its
-                       defined keys follow the pattern of <PREFIX> <KEY>.")
-
-      (use-package lastpass
-        :straight t
-        :demand t
-        :custom
-        (lastpass-user "qkessler@gmail.com")
-        (lastpass-trust-login t)
-        :bind-keymap("C-c l p" . qk/lastpass-global-map))
-
-      (if (boundp 'auth-source-backend-parser-functions)
-          (add-hook 'auth-source-backend-parser-functions #'lastpass-auth-source-backend-parse)
-        (advice-add 'auth-source-backend-parse :before-until #'lastpass-auth-source-backend-parse))
-    #+end_src
-
 ** Org-mode
 *** Keybindings
     Keybindings for org-mode as well as better defaults. Not in use-package format yet.
@@ -1347,33 +1319,6 @@
          ("gr" org-agenda-redo))
      #+end_src
 
-**** org-agenda-bulk-action hydra
-     Instead of having the results in the same line and without any highlighting, you can use Hydra to highlight the different options and overall make the process easier.
-     #+begin_src emacs-lisp :tangle no
-       (defhydra hydra-oa-bulk-action (:pre (setq which-key-inhibit t)
-                                        :post (setq which-key-inhibit nil)
-                                        :hint none)
-         "
-            Org agenda bulk action (_q_uit)
-
-            ^Actions^    
-            ^-----^----  
-            [_t_]odo     
-            [_+_] add tag
-            [_s_]chedule
-            [_d_]eadline
-            [_r_]efile
-            "
-         ;; Actions
-         ("t" org-agenda-todo)
-         ("+" org-agenda-set-tags)
-         ("s" org-agenda-schedule)
-         ("d" org-agenda-deadline)
-         ("r" org-agenda-refile)
-         ;; Other
-         ("q" nil :exit t))
-     #+end_src
-
 
 **** org-agenda keybindings
      Adding custom agenda commands, with the intention of making the refiling and
@@ -1598,27 +1543,6 @@
       (setq vc-follow-symlinks t)
     #+end_src
 
-*** Enforcing commit messages
-    I considered [[https://www.adventuresinwhy.com/post/commit-message-linting/][this]] post a very good guide resumming most of the
-    information out there for git commiting. The items solved with
-    the following configuration are the following:
-
-    - Separate subject from body with a blank line
-    - Limit the subject line to 50 characters
-    - Capitalize the subject line
-    - Do not end the subject line with a period
-    - Use the imperative mood in the subject line
-    - Wrap the body at 72 characters
-    - Use the body to explain the what and why vs. how
-   
-    :warning: There is no new for new configuration, I changed the workflow to use
-    =commitlint=, a linter commit tool recommended by conventional-commits, using
-    its own preset on ensure all the points above plus the standard is endured.
-    #+begin_src sh
-      yarn global add @commitlint/{cli,config-conventional}
-      echo "module.exports = {extends: ['@commitlint/config-conventional']};" > ~/.commitlint.config.js
-    #+end_src
-
 *** Magit forge
     Magit with the integration of Github Issues.
     #+BEGIN_SRC emacs-lisp
@@ -1752,18 +1676,6 @@
 
      #+end_src
      
-*** C# programming
-    C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
-    #+begin_src emacs-lisp
-      (use-package tree-sitter :straight t)
-      (use-package tree-sitter-langs :straight t)
-
-      (use-package csharp-mode
-        :straight t
-        :config
-        (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
-    #+end_src
-    
 *** Server side functionality (LSP)
     Lsp-mode for server completion.
 **** Flycheck
@@ -1838,13 +1750,7 @@
          :straight t
          :commands (lsp lsp-deferred)
          :hook
-         (mhtml-mode . lsp-deferred)
-         (css-mode . lsp-deferred)
          (python-mode . lsp-deferred)
-         (csharp-mode . lsp-deferred)
-         (js-mode . lsp-deferred)
-         (typescript-mode . lsp-deferred)
-         (tex-mode . lsp-deferred) ;; :warning: testing
          (latex-mode . lsp-deferred) ;; :warning: testing
          (lsp-mode . lsp-enable-which-key-integration)
          (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
@@ -1891,56 +1797,6 @@
           :custom (lsp-ui-sideline-show-code-actions nil))
       #+END_SRC
 
-***** C++/C programming.
-      Always works on C++, sometimes wrong on C programming.
-      #+BEGIN_SRC emacs-lisp
-        (use-package ccls
-          :straight t
-          :config (progn
-                    (setq ccls-executable "ccls")
-                    (setq lsp-prefer-flymake nil)
-                    (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
-          :hook ((c-mode c++-mode objc-mode) .
-                 (lambda () (require 'ccls) (lsp-deferred))))
-      #+END_SRC
-
-***** Dart/Flutter programming
-      #+BEGIN_SRC emacs-lisp
-        (use-package lsp-dart 
-          :straight t
-          :hook (dart-mode . lsp-deferred)
-          :custom
-          (dart-sdk-path "~/.local/flutter/bin/cache/dart-sdk")
-          (lsp-dart-sdk-dir "~/.local/flutter/bin/cache/dart-sdk")
-          ;; (lsp-dart-flutter-sdk-dir "~/.local/flutter")
-          (lsp-dart-flutter-sdk-dir "/home/qkessler/.local/flutter")
-          (lsp-dart-main-code-lens nil)
-          (lsp-dart-dap-flutter-hot-reload-on-save t)
-          (dart-format-on-save t))
-
-      #+END_SRC
-
-      Adding hover to emulate running flutter mobile application on dekstop.
-      #+begin_src emacs-lisp
-        (use-package hover
-          :straight t
-          :after dart-mode
-          :custom (hover-hot-reload-on-save t)
-          (hover-clear-buffer-on-hot-restart t)
-          (hover-command-path "~/go/bin/hover")
-          :bind (:map dart-mode-map
-                      ("C-c h z" . #'hover-run-or-hot-reload)
-                      ("C-c h x" . #'hover-run-or-hot-restart)))
-      #+end_src
-
-***** Java Programming
-      Works with the eclipse server, not really sure if it is what I'm looking for.
-      #+BEGIN_SRC emacs-lisp
-        (use-package lsp-java
-          :straight t
-          :hook (java-mode . lsp-deferred))
-      #+END_SRC
-
 ***** Python programming
       Making sure the executable for python is not longer "python", but default to
       using the "python3" binary. Remember that pip3, when installing
@@ -1958,95 +1814,6 @@
           :demand t
           :straight t)  
       #+end_src
-
-***** Web programming
-      Css programming is helped with the lsp-mode server: css-ls, installed with
-      the command M-x lsp-install-server RET css-ls RET.
-
-      Exactly the same with the html server, installed with lsp-install-server: html-ls.
-      Trying to install emmet-mode, but the package cl is deprecated.
-
-****** HTML      
-       To use html-mode in other mode files, I needed to configure .hsb template
-       files, using express.
-       #+begin_src emacs-lisp
-         (use-package mhtml-mode
-           :mode ("\\.html\\'" "\\.hbs\\'")
-           :straight nil)
-       #+end_src
-
-       
-****** Emmet-mode
-       Better completion for html tags, very good documentation. This package is configured with my fork, as emmet-mode's default repo has problems using the =cl= package, instead of the updated =cl-lib=.
-       #+BEGIN_SRC emacs-lisp
-         (use-package emmet-mode
-           :straight (emmet-mode :type git :host github :repo "smihica/emmet-mode"
-                      :fork (:host github
-                             :repo "Qkessler/emmet-mode"))
-           :custom (emmet-move-cursor-between-quotes t))
-         (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-         (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-         (add-hook 'js-mode-hook 'emmet-mode)
-       #+END_SRC
-
-****** JavaScript environment
-       Adding the JavaScript programming environment, trying only with lsp-mode and then
-       considering "tide", which is a full-fledged environment, close to what elpy was
-       for python3. Adding the rjsx-mode package, which allows for updated sintax documentation
-       and keywords, considering the updated react components and new sintax, deriving js2-mode.
-
-       The following lines are needed to run the language server. We need to install the server
-       inside every project, we have it defined as a npm package. You might need to run it with
-       admin privileges (sudo):
-       - npm i -g typescript-language-server; npm i -g typescript
-       - npm i -g javascript-typescript-langserver
-
-       In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
-       is on the exec-path, not tangling this because the correct solution for this problem is the
-       [[*Syncing .profile env variables][exec-path-from-shell package]]
-       #+begin_src emacs-lisp
-         (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.12.0/bin")))
-       #+end_src
-       I've found this is often a misnaming error, if you install from a package
-       manager you bin may be called nodejs so you just need to symlink it like so "ln
-       -s /usr/bin/nodejs /usr/bin/node"
-
-       Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
-       #+begin_src emacs-lisp
-         (use-package js2-mode
-           :straight t)
-       #+end_src
-
-       js-mode, which was introduced in Emacs 27, including full support for
-       jsx highlighting, indenting and more.
-       #+begin_src emacs-lisp
-         (use-package js-mode
-           :mode ("\\.js\\'" "\\.tsx\\'")
-           :bind (:map js-mode-map ("M-." . nil))
-           :hook (js-mode . (lambda ()
-                              (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
-       #+end_src
-
-       xref-js2, makes use of "rg" for searching the project for definitions and jumping
-       between them, which is key to software developing.
-       #+begin_src emacs-lisp
-         (use-package xref-js2
-           :straight t
-           :custom (xref-js2-search-program 'rg))
-       #+end_src
-
-       Adding json-mode configuration, which is a major mode for editing json files, providing
-       better sintax highlights, and some nice editing keybindings.
-       #+begin_src emacs-lisp
-         (use-package json-mode
-           :straight t
-           :config
-           (progn
-             (flycheck-add-mode 'json-jsonlint 'json-mode)
-             (add-hook 'json-mode-hook 'flycheck-mode)
-             (setq js-indent-level 2)
-             (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
-       #+end_src
 
 ***** treemacs-all-the-icons
       Adding all-the-icons support to treemacs, configuring better default icons.
@@ -2067,277 +1834,12 @@
                       ("C-c l d" . dap-hydra))
           :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
           :config (dap-auto-configure-mode))
+        (use-package dap-python
+          :after dap-mode
+          :straight nil)
       #+end_src
 
-****** Dap-java
-       In order to be able to access the java functionality (debugger with dap-java), I needed to update the =jdtls= server, and require the dap-java package. As I'm using =straight=, I figured I would use the =straight-use-package= function.
-       #+begin_src emacs-lisp
-         (use-package dap-java
-           :after dap-mode
-           :straight nil)
-       #+end_src
-
-*** Yaml-mode
-    The yaml-mode package provides indentation features for programming with
-    yaml files, in which indentantion is key and a slip-up is really easy.
-    #+begin_src emacs-lisp
-      (use-package yaml-mode
-        :mode "\\.yml\\'"
-        :straight t)
-    #+end_src
-
 ** Extra
-*** Google calendar integration
-    There are multiple packages to integrate Google calendar with org-mode, but I didn't found that any was really fit to my needs, which are simply to have the calendars synced in.
-    
-    I added a script I created with python3, and I find that hooking up an emacs function helps calling the script and having my tasks updated.
-     #+begin_src emacs-lisp
-       (defun qk/gcal-org-sync()
-         (interactive)
-         (let ((default-directory "~/Documents/gcal-org")) 
-           (shell-command "./crontab-script.sh")))
-     #+end_src
-
-*** Email from emacs
-    Adding email integration for the email indexer mu, called mu4e.
-**** Lookup password
-     Lookup password function in order to get emacsclient to access the password
-     from the encryped gpg file.
-     #+begin_src emacs-lisp
-       (defun efs/lookup-password (&rest keys)
-         (let ((result (apply #'auth-source-search keys)))
-           (if result
-               (funcall (plist-get (car result) :secret))
-             nil)))
-     #+end_src
-
-**** Mu4e
-     Adding mu4e configuration that was configured with mbsync.
-     We have installed it with the package manager, in order to make sure
-     that the mu4e version is in sync with the mu binary from my distro.
-
-     In order to be able to send email, we need to configure smtp in the
-     different contexts.
-     #+begin_src emacs-lisp
-       (require 'mu4e-context)
-       (use-package mu4e
-         :straight nil
-         :load-path "/usr/share/emacs/site-lisp/mu4e/"
-         :defer 20
-         :bind (("C-c m" . mu4e)
-                :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
-         :hook (mu4e-compose-mode . flyspell-mode)
-         :custom
-         (mu4e-maildir "~/Mail")
-         (mu4e-attachment-dir "~/Downloads")
-         (mu4e-get-mail-command "mbsync -a")
-         (mu4e-change-filenames-when-moving t)
-         ;; (mu4e-completing-read-function 'ivy-completing-read)
-         (mu4e-headers-show-threads nil)
-         (mu4e-html2text-command 'mu4e-shr2text)
-         (mu4e-update-interval (* 5 60))
-         (mu4e-hide-index-messages t)
-         (mu4e-compose-signature "Enrique Kessler Martínez\n")
-         (mu4e-compose-signature-auto-include t)
-         (mu4e-confirm-quit nil)
-         (mu4e-sent-messages-behavior 'sent)
-         (mu4e-headers-auto-update t)
-         (message-kill-buffer-on-exit t)
-         (mu4e-headers-skip-duplicates t)
-         (mu4e-headers-fields
-          '((:human-date . 12)
-            (:flags . 6)
-            (:mailing-list . 10)
-            (:from . 22)
-            (:subject)))
-         (mu4e-view-show-addresses t)
-         (mu4e-display-update-status-in-modeline t)
-         (mu4e-view-show-images nil)
-         (mu4e-context-policy 'pick-first)
-         (mu4e-compose-format-flowed t)
-         (mu4e-maildir-shortcuts
-          '( (:maildir "/Gmail/Personal/Inbox"     :key  ?p :hide-unread t)
-             (:maildir "/Gmail/Work/Inbox"   :key  ?w :hide-unread t)
-             (:maildir "/UMU/Inbox"     :key  ?u :hide-unread t)))
-         (mu4e-contexts
-          (list
-           ;; Personal account
-           (make-mu4e-context
-            :name "Personal"
-            :match-func
-            (lambda (msg)
-              (when msg
-                (string-prefix-p "/Gmail/Personal" (mu4e-message-field msg :maildir))))
-            :vars '((user-mail-address . "qkessler@gmail.com")
-                    (user-full-name    . "Enrique Kessler Martínez")
-                    (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
-                    (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
-                    (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
-                    (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
-                    (smtpmail-smtp-user . "qkessler@gmail.com")
-                    (smtpmail-default-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-service . 587)))
-           (make-mu4e-context
-            :name "Work"
-            :match-func
-            (lambda (msg)
-              (when msg
-                (string-prefix-p "/Gmail/Work" (mu4e-message-field msg :maildir))))
-            :vars '((user-mail-address . "enrique.kesslerm@gmail.com")
-                    (user-full-name    . "Enrique Kessler Martínez")
-                    (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
-                    (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
-                    (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
-                    (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
-                    (smtpmail-default-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-user . "enrique.kesslerm@gmail.com")
-                    (smtpmail-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-service . 587)))
-           (make-mu4e-context
-            :name "UMU"
-            :match-func
-            (lambda (msg)
-              (when msg
-                (string-prefix-p "/UMU" (mu4e-message-field msg :maildir))))
-            :vars '((user-mail-address . "enrique.kesslerm@um.es")
-                    (user-full-name    . "Enrique Kessler Martínez")
-                    (mu4e-drafts-folder  . "/UMU/Drafts")
-                    (mu4e-sent-folder  . "/UMU/Sent")
-                    (mu4e-trash-folder  . "/UMU/Trash")
-                    (smtpmail-smtp-user . "enrique.kesslerm@um.es")
-                    (smtpmail-default-smtp-server . "smtp.um.es")
-                    (smtpmail-smtp-server . "smtp.um.es")
-                    (smtpmail-smtp-service . 587)))))
-         (mu4e-bookmarks
-          '(
-            (:name "Last 7 days" :query `,"d:7d..now" :key ?w)
-            (:name "Today's messages" :query "d:today..now" :key ?t)
-            (:name "Work Unread"
-                   :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
-                   :key ?s)
-            (:name "Personal Unread"
-                   :query "to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
-                   :key ?p)
-            (:name "UMU Unread"
-                   :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
-                   :key ?u)))
-         :config
-         (mu4e t)
-         (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser)))
-
-     #+end_src
-**** Message package
-     Adding the configuration for the message package, in order to allow for
-     easier sending and composing of emails. The package comes already installed
-     with emacs.
-     #+begin_src emacs-lisp
-       (use-package message
-         :custom
-         (mail-user-agent 'mu4e-user-agent)
-         (compose-mail-user-agent-warnings nil)
-         (starttls-use-gnutls t)
-         (message-mail-user-agent nil)    ; default is `gnus'
-         (message-citation-line-format "On %Y-%m-%d, %R %z, %f wrote:\n")
-         (message-citation-line-function
-          'message-insert-formatted-citation-line)
-         (message-wide-reply-confirm-recipients t)
-         (send-mail-function 'smtpmail-send-it)
-         (message-send-mail-function 'smtpmail-send-it)
-         (message-default-charset 'utf-8)
-         :config (add-to-list 'mm-body-charset-encoding-alist '(utf-8 . base64)))
-     #+end_src
-**** SMTP
-     SMTP configuration in order to be able to send messages via smtp,
-     adding the async functionality.
-
-     #+begin_src emacs-lisp :tangle no
-       (use-package async
-         :straight t)
-       (use-package smtpmail-async
-         :straight nil
-         :custom (send-mail-function 'async-smtpmail-send-it)
-         (message-send-mail-function 'async-smtpmail-send-it))
-     #+end_src
-
-*** RSS/Atom feed reader: Elfeed
-    Following the need of separating my email in a more organized and
-    distraction free way, I found my self looking for a efficient enough
-    messure to read all the mailing lists I was subscribed to. A lot of
-    free knowledge is being distributed (specially given the amount of
-    amazing people on the internet this days) and it would be a shame to
-    pass the opportunity. That said, I settled on Elfeed, which seems to
-    have become the standard de facto on the community, while still being
-    highly customizable and well documented. I followed the Protesilaos
-    configuration, as I believe the workflow he implements is similar to
-    the one I aspire to achieve.
-
-    #+begin_src emacs-lisp
-      (use-package elfeed
-        :straight t
-        :custom
-        (elfeed-use-curl t)
-        (elfeed-curl-max-connections 10)
-        (elfeed-db-directory "~/.emacs.d/elfeed/")
-        (elfeed-enclosure-default-dir "~/Downloads/")
-        (elfeed-search-filter "@4-months-ago +unread")
-        (elfeed-sort-order 'descending)
-        (elfeed-search-clipboard-type 'CLIPBOARD)
-        (elfeed-search-title-max-width 100)
-        (elfeed-search-title-min-width 30)
-        (elfeed-search-trailing-width 25)
-        (elfeed-show-truncate-long-urls t)
-        (elfeed-show-unique-buffers t)
-        (elfeed-search-date-format '("%F %R" 16 :left)))  
-      (use-package elfeed
-        :bind (("C-c e" . elfeed)
-               :map elfeed-search-mode-map
-               ("w" . elfeed-search-yank)
-               ("g" . elfeed-update)
-               ("G" . elfeed-search-update--force)
-               :map elfeed-show-mode-map
-               ("w" . elfeed-show-yank)))
-    #+end_src
-
-**** Elfeed org
-     Adding the possibility to read the feeds from an org file, which
-     gives us easier control of the tags, making use of regexp and
-     inherited tags.
-     #+begin_src emacs-lisp
-       (use-package elfeed-org
-         :straight t
-         :custom (rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org")))
-         :config (elfeed-org))
-     #+end_src
-
-**** Protesilaos personal configuration
-     In order to access the personal protesilaos elfeed configuration I decided on adding the .el file to the load-path, in order to avoid cluttering this config file.
-
-     A lot of functionality implemented regards the configuration of mpv and bongo, which I don't currently use, a revision will follow in order to remove those entries.
-
-     I tried using the straight recipe from the gitlab repo, without success, I still will be using the local prot-elfeed.
-     #+begin_src emacs-lisp
-       (use-package prot-elfeed
-         ;; :straight (prot-elfeed :type git :host gitlab :repo "protesilaos/dotfiles"
-         ;;                        :files ("emacs/.emacs.d/prot-lisp/prot-elfeed.el"))
-         :straight nil
-         :custom (prot-elfeed-tag-faces t)
-         :config
-         (prot-elfeed-fontify-tags)
-         :bind ( :map elfeed-search-mode-map
-                 ;; ("s" . prot-elfeed-search-tag-filter)
-                 ("f" . prot-elfeed-search-open-other-window)
-                 ("q" . prot-elfeed-kill-buffer-close-window-dwim)
-                 ("+" . prot-elfeed-toggle-tag)
-                 ("!" . (lambda ()
-                          (interactive)
-                          (prot-elfeed-toggle-tag 'important)))
-                 :map elfeed-show-mode-map
-                 ("a" . prot-elfeed-show-archive-entry)
-                 ("e" . prot-elfeed-show-eww)
-                 ("q" . prot-elfeed-kill-buffer-close-window-dwim)))
-     #+end_src
-
 *** Eww
     Eww is the emacs browser, which can have different integrations and
     workflows, specially if you are reading text, as it has a great
@@ -2452,29 +1954,6 @@
       (use-package emojify
         :straight t
         :hook (after-init . global-emojify-mode))  
-    #+end_src
-
-*** Accounting from emacs
-    Thanks to the amazing Ledger command line tool, which is an double-entry
-    accounting system that allows for fast queries and reports we are able to
-    connect our emacs --and ledger files-- to the amazing ledger-mode.
-    #+begin_src emacs-lisp
-      (use-package ledger-mode
-        :mode "\\.ledger\\'"
-        :custom
-        (ledger-clear-whole-transactions t)
-        (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
-                          ("reg" "%(binary) -f %(ledger-file) reg")
-                          ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-                          ("account" "%(binary) -f %(ledger-file) reg %(account)")
-                          ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
-      \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
-                          ("budget" "%(binary) -f %(ledger-file) -E bal ^Budget and not Budget:Checking")))
-        :straight t
-        :config
-        (alexm/set-faces-by-spec
-         '(ledger-occur-xact-face
-           ((t (:background "#222324" :inherit nil))))))
     #+end_src
 
 *** Todo in code
