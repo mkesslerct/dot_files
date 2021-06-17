@@ -41,7 +41,16 @@
      #+begin_src emacs-lisp
        (setq auto-save-list-file-prefix (no-littering-expand-var-file-name "auto-saves/sessions/")
              auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-saves/") t)))
+       (use-package emacs
+         :init
+         (defun xah/save-all-unsaved ()
+           "Save all unsaved files. no ask."
+           (interactive)
+           (save-some-buffers t))
+         :config
+         (add-function :after after-focus-change-function #'xah/save-all-unsaved))
      #+end_src
+
 **** Lockfiles and versions
      configuration of lockfiles and version control for files,
      the intention this modification is the clean workspace directories.
@@ -894,11 +903,11 @@
     Initial configuration of org-directory and refile.org, with the
     intention of all capture created items to go there before correct refiling.
     #+BEGIN_SRC emacs-lisp
-      (setq org-directory "~/Documents/org_files")
+      (setq org-directory "~/OneDriveUPCT/org_files")
       (defvar org-book-list-file (concat org-directory "/book_list.org"))
       (setq
-            org-default-notes-file (concat org-directory "/org-agenda/refile.org")
-            org-agenda-files (list (concat org-directory "/org-agenda"))
+            org-default-notes-file (concat org-directory "/org_agenda/refile.org")
+            org-agenda-files (list (concat org-directory "/org_agenda"))
             org-archive-location (concat org-directory "/archive/%s_archive::")
             org-refile-targets (quote ((nil :maxlevel . 5)
                                        (org-agenda-files :maxlevel . 5)
@@ -1416,13 +1425,13 @@
      close to a month. As a way of improving this workflow, I decided to give
      org-roam a chance.
 
-     #+BEGIN_SRC emacs-lisp
+     #+BEGIN_SRC emacs-lisp :tangle no
        (use-package org-roam
          :straight t
          :hook
          (after-init . org-roam-mode)
          :custom
-         (org-roam-directory "~/Documents/org_files/slip-box/")
+         ;;(org-roam-directory "~/Documents/org_files/slip-box/")
          (org-roam-capture-templates '(
                                        ("d" "default" plain (function org-roam--capture-get-point)
                                         "%?"
@@ -1452,7 +1461,7 @@
       After having configured the org-protocol, the org-roam-protocol will open the links
       that have been created with the org-roam-graph function in order to allow for faster
       browsing when outilining blog posts or articles.
-      #+begin_src emacs-lisp
+      #+begin_src emacs-lisp :tangle no
         (use-package org-roam-protocol
           :straight nil)
       #+end_src
@@ -1530,6 +1539,12 @@
                        defined keys follow the pattern of <PREFIX> <KEY>."))
      #+end_src
 
+ * Org-babel
+#+begin_src emacs-lisp
+  (use-package ob
+    :custom (org-confirm-babel-evaluate nil))
+#+end_src
+    
 
 ** Version control
 *** Symlinks
@@ -1973,3 +1988,51 @@
                 ("NOTE"       success bold)
                 ("DEPRECATED" font-lock-doc-face bold))))
     #+end_src
+* conda python
+  #+begin_src emacs-lisp
+    (use-package conda
+      :straight t
+      :custom (conda-anaconda-home "/home/mkessler/anaconda3/")
+      (conda-env-home-directory "/home/mkessler/anaconda3/")
+      :config
+      (conda-env-initialize-interactive-shells)
+      ;; if you want eshell support, include:
+      (conda-env-initialize-eshell)
+      ;; if you want auto-activation (see below for details), include:
+      ;;(conda-env-autoactivate-mode t)
+      :hook (conda-postactivate . lsp-workspace-restart))
+    (use-package python
+      :init
+      (defun my-compile ()
+        "Use compile to run python programs"
+        (interactive)
+        (compile (concat "python3 " (buffer-name))))
+      (setq compilation-scroll-output t)
+      :bind ("C-c C-u" . my-compile)
+      :custom (compilation-ask-about-save nil))
+#+end_src
+
+
+* ipython ein
+  #+begin_src emacs-lisp :tangle no
+    (use-package ein
+      :straight t)
+#+end_src
+
+* Jupyter configuration
+  #+begin_src emacs-lisp
+    (use-package jupyter
+      :straight t)
+
+    (use-package ob
+      :custom (org-babel-default-header-args:jupyter-python '((:async . "yes")
+                                                                     (:session . "py")
+                                                                     (:kernel . "ids")))
+      (jupyter-repl-echo-eval-p t)
+      :config (progn
+                (org-babel-do-load-languages 'org-babel-load-languages
+                                 (append org-babel-load-languages
+                                         '((jupyter . t))))))
+
+#+end_src
+

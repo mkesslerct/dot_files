@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/qkessler/.oh-my-zsh"
+export ZSH="/home/mkessler/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -176,3 +176,19 @@ alias ect="emacsclient -t" # Open emacs inside terminal.
 # Pulling everything inside a directory.
 alias pa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;" 
 alias mon2cam="deno run --unstable -A -r -q https://raw.githubusercontent.com/ShayBox/Mon2Cam/master/src/mod.ts"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/mkessler/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/mkessler/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/mkessler/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/mkessler/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
