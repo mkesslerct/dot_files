@@ -1425,13 +1425,13 @@
      close to a month. As a way of improving this workflow, I decided to give
      org-roam a chance.
 
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+BEGIN_SRC emacs-lisp 
        (use-package org-roam
          :straight t
          :hook
          (after-init . org-roam-mode)
          :custom
-         ;;(org-roam-directory "~/Documents/org_files/slip-box/")
+         (org-roam-directory "~/Documents/slip-box/")
          (org-roam-capture-templates '(
                                        ("d" "default" plain (function org-roam--capture-get-point)
                                         "%?"
@@ -1545,7 +1545,6 @@
     :custom (org-confirm-babel-evaluate nil))
 #+end_src
     
-
 ** Version control
 *** Symlinks
     As part of this =dot_files= repo, my configuration philosofy uses
@@ -2000,7 +1999,8 @@
       (conda-env-initialize-eshell)
       ;; if you want auto-activation (see below for details), include:
       ;;(conda-env-autoactivate-mode t)
-      :hook (conda-postactivate . lsp-workspace-restart))
+      ;;:hook (conda-postactivate . lsp-workspace-restart)
+      )
     (use-package python
       :init
       (defun my-compile ()
@@ -2026,8 +2026,7 @@
 
     (use-package ob
       :custom (org-babel-default-header-args:jupyter-python '((:async . "yes")
-                                                                     (:session . "py")
-                                                                     (:kernel . "ids")))
+                                                                     (:session . "py")))
       (jupyter-repl-echo-eval-p t)
       :config (progn
                 (org-babel-do-load-languages 'org-babel-load-languages
@@ -2035,4 +2034,5 @@
                                          '((jupyter . t))))))
 
 #+end_src
+
 
