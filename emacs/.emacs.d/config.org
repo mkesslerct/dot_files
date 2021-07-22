@@ -62,6 +62,12 @@
         kept-old-versions 2
         version-control t)
      #+end_src
+     
+**** faces
+     #+begin_src emacs-lisp
+      (use-package emacs
+        :custom (bookmark-face ((t nil))))
+    #+end_src
 *** Default bindings
     There are some awful keybindings that Emacs binds by default. These better defaults try to give a little more user-friendly keybindings, while maintaining the original Emacs essence.
     #+begin_src emacs-lisp
@@ -1539,11 +1545,11 @@
                        defined keys follow the pattern of <PREFIX> <KEY>."))
      #+end_src
 
- * Org-babel
-#+begin_src emacs-lisp
-  (use-package ob
-    :custom (org-confirm-babel-evaluate nil))
-#+end_src
+** Org-babel
+ #+begin_src emacs-lisp
+   (use-package ob
+     :custom (org-confirm-babel-evaluate nil))
+ #+end_src
     
 ** Version control
 *** Symlinks
@@ -2012,7 +2018,11 @@
       :custom (compilation-ask-about-save nil))
 #+end_src
 
-
+* ess for R
+  #+begin_src emacs-lisp
+     (use-package ess
+      :straight t)
+  #+end_src
 * ipython ein
   #+begin_src emacs-lisp :tangle no
     (use-package ein
@@ -2032,6 +2042,8 @@
                 (org-babel-do-load-languages 'org-babel-load-languages
                                  (append org-babel-load-languages
                                          '((jupyter . t))))))
+    (use-package jupyter
+          :config (org-babel-jupyter-override-src-block "python"))
 
 #+end_src
 
