@@ -1,0 +1,25 @@
+IMAPAccount amazon
+Host ballard.amazon.com
+Port 1993
+User enrikes
+PassCmd "pass outlook.office365.com/enrikes@amazon.com"
+SSLType IMAPS
+Timeout 120
+
+IMAPStore amazon-remote
+Account amazon
+
+MaildirStore amazon-local
+Subfolders Verbatim
+Path ~/.Mail/amazon/
+Inbox ~/.Mail/amazon/Inbox
+
+Channel amazon
+Far :amazon-remote:
+Near :amazon-local:
+Patterns *
+CopyArrivalDate yes
+Create Both
+SyncState *
+Sync All
+Expunge Both

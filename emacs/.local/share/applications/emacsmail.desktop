@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Custom mailto Mail Handler
+Comment=Handle mailto links
+GenericName=Mail Client
+Keywords=Email;E-mail
+Exec=emacsmail.sh %u
+Terminal=false
+Type=Application
+Icon=mail-send
+Categories=Application;Network;Email;
+MimeType=x-scheme-handler/mailto;application/x-xpinstall;

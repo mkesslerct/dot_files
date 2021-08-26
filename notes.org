@@ -1,0 +1,17 @@
+* links
+These links are what I use to move the setup between machines.
+** Building emacs
+https://www.emacswiki.org/emacs/GccEmacs
+
+Keep in mind that the stow command is "stow emacs -t "$HOME""
+
+** Emacsclient
+[[https://www.reddit.com/r/emacs/comments/bddz3i/problems_with_emacs_deamon_emacsclient_cant_find/][service description and paths]]: ~/.config/systemd/user/emacs.service
+https://www.taingram.org/blog/emacs-client.html
+
+Super interesting blog option created from org.
+https://github.com/taingra/blog
+
+1. Think about desktop files, creating a shortcut for emacs client
+   into the org_files folder.
+2. Think about the keyboard shortcut to open emacs. ctrl - alt - E
