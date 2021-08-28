@@ -34,8 +34,8 @@
 
 ;; Reset file-name-handler-alist after initialization
 (add-hook 'emacs-startup-hook
-  (lambda ()
-          (setq file-name-handler-alist default-file-name-handler-alist)))
+          (lambda ()
+            (setq file-name-handler-alist default-file-name-handler-alist)))
 
 ;; Garbage collection strategy used by doom-emacs.
 (use-package gcmh
@@ -64,9 +64,22 @@
 
 (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
 
+(when (featurep 'ns)
+  (defun ns-raise-emacs ()
+    "Raise Emacs."
+    (ns-do-applescript "tell application \"Emacs\" to activate"))
+  (defun ns-raise-emacs-with-frame (frame)
+    "Raise Emacs and select the provided frame."
+    (with-selected-frame frame
+      (when (display-graphic-p)
+        (ns-raise-emacs))))
+  (add-hook 'after-make-frame-functions 'ns-raise-emacs-with-frame)
+  (when (display-graphic-p)
+    (ns-raise-emacs)))
+
 (setq custom-file "~/.emacs.d/var/custom.el")
 ;; (load custom-file)
 (message "*** Emacs loaded in %s with %d garbage collections."
-     (format "%.2f seconds"
-             (float-time
-              (time-subtract after-init-time before-init-time))) gcs-done)
+         (format "%.2f seconds"
+                 (float-time
+                  (time-subtract after-init-time before-init-time))) gcs-done)
