@@ -73,6 +73,16 @@
       (qk/load-indexed-theme)
     #+end_src
 
+*** After-load-theme-hook
+    Emacs does not have an =after-load-theme-hook=, which a I find key for adding or changing some of the faces dinamically. Not everything is lost, we still have the =advice= sintax. We can advise the change-theme function to define a hook.
+    #+begin_src emacs-lisp
+      (defvar after-load-theme-hook nil
+        "Hook run after a color theme is loaded using `load-theme'.")
+      (defadvice consult-theme (after run-after-load-theme-hook activate)
+        "Run `after-load-theme-hook'."
+        (run-hooks 'after-load-theme-hook))
+    #+end_src
+
 ** Better defaults
 *** Encoding system
     #+begin_src emacs-lisp
