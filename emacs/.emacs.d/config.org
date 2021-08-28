@@ -1490,16 +1490,33 @@
 
     Change the faces of the keywords, I keep it in a different source block to tangle or untagle if necessary.
     #+begin_src emacs-lisp
-      (setq org-todo-keyword-faces
+      (defface qk/meeting-todo-face '((t :weight bold))
+        "Face to be changed by the `qk/choose-meeting-todo-face' function.")
+      (defun qk/choose-meeting-todo-face ()
+        "Depending on the theme change the MEETING todo-face. That face is too dark
+      on dark themes, which I always have in my second index of the `qk/themes-list'"
+        (if (equal qk/themes-index 0)
+            (face-spec-set 'qk/meeting-todo-face '((t :foreground "#1874cd" :weight bold)) 'face-defface-spec)
+          (face-spec-set 'qk/meeting-todo-face '((t :foreground "#81A1C1" :weight bold)) 'face-defface-spec)))
+      (qk/choose-meeting-todo-face)
+
+      (defun qk/set-org-todo-keyword-faces ()
+        "Configure the MEETING org-todo-face and set up the others, which are still static."
+        (qk/choose-meeting-todo-face)
+        (setq org-todo-keyword-faces
             '(
               ("PROJECT" . (:foreground "#a87600" :weight bold))
               ("OPTIONAL" . (:foreground "#08a838" :weight bold))
               ("WAITING" . (:foreground "#fe2f92" :weight bold))
               ("CANCELLED" . (:foreground "#999999" :weight bold))
               ("SOMEDAY" . (:foreground "#ab82ff" :weight bold))
-              ("MEETING" . (:foreground "#1874cd" :weight bold))
+              ("MEETING" . (get 'qk/meeting-todo-face 'face-defface-spec))
               ("NOTE" . (:foreground "#fcba03" :weight bold))
-              ))
+              )))
+      (qk/set-org-todo-keyword-faces)
+
+      (use-package emacs
+        :hook (after-load-theme . qk/set-org-todo-keyword-faces))
     #+end_src
 
 *** Org capture
