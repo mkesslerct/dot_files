@@ -18,39 +18,38 @@
         (add-to-list 'qk/themes-list 'doom-nord))
     #+end_src
 
-
 *** Solarized theme
     This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
     #+begin_src emacs-lisp
-          (use-package solarized-theme
-            :straight t
-            :custom
-            ;; make the fringe stand out from the background
-            (solarized-distinct-fringe-background t)
+      (use-package solarized-theme
+        :straight t
+        :custom
+        ;; make the fringe stand out from the background
+        (solarized-distinct-fringe-background t)
 
-            ;; Don't change the font for some headings and titles
-            (solarized-use-variable-pitch nil)
+        ;; Don't change the font for some headings and titles
+        (solarized-use-variable-pitch nil)
 
-            ;; Use less bolding
-            (solarized-use-less-bold t)
+        ;; Use less bolding
+        (solarized-use-less-bold t)
 
-            ;; Use more italics
-            (solarized-use-more-italic t)
+        ;; Use more italics
+        (solarized-use-more-italic t)
 
-            ;; Use less colors for indicators such as git:gutter, flycheck and similar
-            (solarized-emphasize-indicators nil)
+        ;; Use less colors for indicators such as git:gutter, flycheck and similar
+        (solarized-emphasize-indicators nil)
 
-            ;; Don't change size of org-mode headlines (but keep other size-changes)
-            (solarized-scale-org-headlines nil)
+        ;; Don't change size of org-mode headlines (but keep other size-changes)
+        (solarized-scale-org-headlines nil)
 
-            ;; Avoid all font-size changes
-            (solarized-height-minus-1 1.0)
-            (solarized-height-plus-1 1.0)
-            (solarized-height-plus-2 1.0)
-            (solarized-height-plus-3 1.0)
-            (solarized-height-plus-4 1.0)
-            :init
-            (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
+        ;; Avoid all font-size changes
+        (solarized-height-minus-1 1.0)
+        (solarized-height-plus-1 1.0)
+        (solarized-height-plus-2 1.0)
+        (solarized-height-plus-3 1.0)
+        (solarized-height-plus-4 1.0)
+        :init
+        (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
     #+end_src
 
 *** Toggle theme
@@ -115,21 +114,6 @@
           (when (and isearch-forward (number-or-marker-p isearch-other-end))
             (goto-char isearch-other-end))))
     #+end_src
-
-**** Ace-isearch
-     Seemless integration changing the search function depending on the query candidate length.
-     - L = 1 : [[https://github.com/abo-abo/avy][avy]]
-     - 1 < L < 6 : [[*Isearch][isearch]]
-     - L >= 6 : =consult-line=
-     #+begin_src emacs-lisp :tangle no
-       (use-package ace-isearch
-         :straight (ace-isearch :type git :host github :repo "Qkessler/ace-isearch")
-         :custom
-         (ace-isearch-function-from-isearch 'consult-line)
-         (ace-isearch-function 'avy-goto-char)
-         (ace-isearch-use-jump 'printing-char)
-         :init (global-ace-isearch-mode +1))
-     #+end_src
 
 *** Expand-region
     Expand region increases the selected region by semantic units. Just keep pressing the key until it selects what you want.
@@ -234,36 +218,11 @@
         :custom-face (bookmark-face ((t nil))))
     #+end_src
 
-*** Try
-    Package that allows to try emacs packages without installing them. What it really does is installing the files in a temp directory and removing them later.
-    #+begin_src emacs-lisp
-      (use-package try
-        :commands try
-        :straight t)
-    #+end_src
-
-*** General
-    =general.el= provides a more convenient method for binding keys in emacs (for both evil and non-evil users). Like use-package, which provides a convenient, unified interface for managing packages, general.el is intended to provide a convenient, unified interface for key definitions.
-    #+begin_src emacs-lisp
-      (use-package general
-        :disabled
-        :straight t)
-    #+end_src
-
-*** Hercules
-    =hercules.el= lets you call any group of related command sequentially with no prefix keys, while showing a handy popup to remember the bindings for those commands. hercules.el can create both of these (the grouped commands, and the popup) from any keymap. It is basically the hydra killer for use configuration, providing useful commands and cutting the setup lines from 10 to 1.
-    #+begin_src emacs-lisp
-      (use-package hercules
-        :straight t
-        :disabled)
-    #+end_src
-    
 *** Delimiters
 **** smart-parens
      Smart-parens is a package that improves on the previous package,
      now deprecated: autopair. Smart-parens has the plus of being maintained,
      considering that they usually merge pull requests and responde to issues.
-
      #+begin_src emacs-lisp
        (use-package smartparens
          :straight t
@@ -284,11 +243,11 @@
          :hook (prog-mode . rainbow-delimiters-mode)
          :custom-face
          (rainbow-delimiters-base-error-face
-            ((t (:foreground "#fc0303" :inherit nil))))
+          ((t (:foreground "#fc0303" :inherit nil))))
          (rainbow-delimiters-mismatched-face
-            ((t (:foreground "#fc0303" :inherit nil))))
+          ((t (:foreground "#fc0303" :inherit nil))))
          (rainbow-delimiters-unmatched-face
-            ((t (:foreground "#fc0303" :inherit nil)))))
+          ((t (:foreground "#fc0303" :inherit nil)))))
      #+end_src
 
 *** Modeline
@@ -385,6 +344,7 @@
          (:map global-map
                ("C-x C-b" . bufler)))
      #+end_src
+
 **** Visiting-buffer
      #+begin_quote
      I often want to both delete a file and kill the buffer it's open in. I thought of writing a simple command to do that, but then realized I basically never want to delete the file and keep the buffer open. So instead, I'm advising delete-file so that if it is called interactively (i.e., I called the command directly, not that some Emacs Lisp called it), it also kills a buffer visiting the file if there is one.
@@ -398,7 +358,6 @@
        (use-package visiting-buffer
          :demand t)
      #+end_src
-
 
 *** Directories
 **** Dired
@@ -423,15 +382,6 @@
      #+BEGIN_SRC emacs-lisp
        (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
      #+END_SRC
-
-**** Dired-collapse
-     Collapse the folders if they only have an unique file.
-     #+begin_src emacs-lisp
-       (use-package dired-collapse
-         :hook (dired-load . (lambda () (dired-collapse)))
-         :disabled
-         :straight t)
-     #+end_src
 
 **** Dired-subtree
      This package defines function dired-subtree-insert which instead inserts the subdirectory directly below its line in the original listing, and indent the listing of subdirectory to resemble a tree-like structure (somewhat similar to tree(1) except the pretty graphics). The tree display is somewhat more intuitive than the default "flat" subdirectory manipulation provided by =i=.
@@ -458,9 +408,6 @@
                   ["Help Commands"
                    ["Mode & Bindings"
                     ("m m" "Mode" describe-mode)
-                    ;;("m B" "Major Bindings" which-key-show-full-major-mode)
-                    ;;("m b" "Minor Bindings" which-key-show-full-minor-mode-keymap)
-                    ;;("m t" "Top Bindings  " which-key-show-top-level)
                     ("m w" "Where Is" where-is)
                     ]
                    ["Describe"
@@ -507,20 +454,11 @@
          :straight t)
      #+end_src
 
-    
      Adding reference connection made easier with reftex.
      #+BEGIN_SRC emacs-lisp
        (use-package reftex
          :straight t
          :custom (reftex-cite-prompt-optional-args t))
-     #+END_SRC
-
-     Adding autodictionary in order to get completion on the words
-     that have been miss-typed.
-     #+BEGIN_SRC emacs-lisp
-       (use-package auto-dictionary
-         :straight t
-         :disabled)
      #+END_SRC
 
      Adding general configuration for tex files and latex-mode better defaults.
@@ -590,44 +528,10 @@
        (setq visible-bell 1)
      #+END_SRC
 
-**** Toolbar
-     Disabling toolbar.
-     #+BEGIN_SRC emacs-lisp :tangle no
-       (tool-bar-mode -1)
-     #+END_SRC
-
-**** Scroll-bar
-***** Removing scroll-bar.
-      #+begin_src emacs-lisp :tangle no
-        (when (fboundp 'set-scroll-bar-mode)
-          (set-scroll-bar-mode nil))
-        (defun qk/disable-scroll-bars (frame)
-          "Remove all possible scroll-bars, both vertical and horizontal."
-          (modify-frame-parameters frame
-                                   '((vertical-scroll-bars . nil)
-                                     (horizontal-scroll-bars . nil))))
-        (add-hook 'after-make-frame-functions 'qk/disable-scroll-bars)
-      #+end_src
-
-***** Smooth scrolling
-      Emacs works with the old graphics drivers, which turns its graphical support into a mess. There has been some efforts in making the old bovine better, but at the moment, we can only hope to remedy the smooth scrolling problem (which has also been called pixel scrolling) with packages trying to make the behavior better.
-      #+begin_src emacs-lisp :tangle no
-        (use-package good-scroll
-          :straight t
-          :config (good-scroll-mode 1))
-      #+end_src
-
-
 **** Menu-bar
      Disabling the menu-bar, prior to tab-mode-line configuration.
      #+BEGIN_SRC emacs-lisp
        (menu-bar-mode -1)
-     #+END_SRC
-
-**** Fonts
-     -*-Source Code Pro for Powerline-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1
-     #+BEGIN_SRC emacs-lisp
-       (setq default-frame-alist '((font . "Source Code Pro for Powerline-13")))
      #+END_SRC
 
 *** Indentation
@@ -658,27 +562,18 @@
         :straight t
         :commands impatient-mode)
 
-      (defun bb/markdown-filter (buffer)
-          (princ
-           (with-temp-buffer
-             (let ((tmp (buffer-name)))
-               (set-buffer buffer)
-               (set-buffer (markdown tmp))
-               (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css\"/>
-                <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
-           (current-buffer)))
-        (defun eh/markdown-html (buffer)
-          (princ (with-current-buffer buffer
-                   (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
-                 (current-buffer)))
-        (defun bb/markdown-preview ()
-          "Preview markdown."
-          (interactive)
-          (unless (process-status "httpd")
-            (httpd-start))
-          (impatient-mode)
-          (imp-set-user-filter 'eh/markdown-html)
-          (imp-visit-buffer))
+      (defun eh/markdown-html (buffer)
+        (princ (with-current-buffer buffer
+                 (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+               (current-buffer)))
+      (defun bb/markdown-preview ()
+        "Preview markdown."
+        (interactive)
+        (unless (process-status "httpd")
+          (httpd-start))
+        (impatient-mode)
+        (imp-set-user-filter 'eh/markdown-html)
+        (imp-visit-buffer))
 
       (use-package markdown-mode
         :straight nil
@@ -721,49 +616,6 @@
       (global-set-key (kbd "C-,") 'jump-to-mark)
       (define-key global-map [remap exchange-point-and-mark] 'exchange-point-and-mark-no-activate)
     #+END_SRC
-
-*** Window splitting
-    I want emacs to prefer vertical splits (splitting windows into left and right parts) over horizontal ones, even if both horizontal and vertical splitting is possible. This is what the manual says:
-    #+begin_quote
-    /The split can be either vertical or horizontal, depending on the variables split-height-threshold and split-width-threshold. These variables should have integer values. If split-height-threshold is smaller than the chosen window's height, the split puts the new window below. Otherwise, if split-width-threshold is smaller than the window's width, the split puts the new window on the right./
-    #+end_quote
-    #+begin_src emacs-lisp :tangle no
-      (use-package window
-        :custom
-        (split-height-threshold 4)
-        (split-width-threshold 160)
-        :config
-        (defcustom split-window-below nil
-          "If non-nil, vertical splits produce new windows below."
-          :group 'windows
-          :type 'boolean)
-
-        (defcustom split-window-right nil
-          "If non-nil, horizontal splits produce new windows to the right."
-          :group 'windows
-          :type 'boolean)
-
-        (fmakunbound #'split-window-sensibly)
-        (defun split-window-sensibly
-            (&optional window)
-          (setq window (or window (selected-window)))
-          (or (and (window-splittable-p window t)
-                   ;; Split window horizontally.
-                   (split-window window nil (if split-window-right 'left  'right)))
-              (and (window-splittable-p window)
-                   ;; Split window vertically.
-                   (split-window window nil (if split-window-below 'above 'below)))
-              (and (eq window (frame-root-window (window-frame window)))
-                   (not (window-minibuffer-p window))
-                   ;; If WINDOW is the only window on its frame and is not the
-                   ;; minibuffer window, try to split it horizontally disregarding the
-                   ;; value of `split-width-threshold'.
-                   (let ((split-width-threshold 0))
-                     (when (window-splittable-p window t)
-                       (split-window window nil (if split-window-right
-                                                    'left
-                                                  'right))))))))
-    #+end_src
 
 *** Window switching
     I'm trying ace-window in order to allow faster window switching, when working with
@@ -822,18 +674,6 @@
                     ("C-s" . isearch-forward)
                     ("C-r" . isearch-backward)))
     #+END_SRC
-
-*** Which key
-    Which key is the pinnacle of keybinding packages, with a helpful minibuffer that states the keybindings available for a certain prefix you start typing.
-    #+begin_src emacs-lisp :tangle no
-      (use-package which-key
-        :straight t
-        :custom
-        (which-key-show-early-on-C-h t)
-         (which-key-idle-delay .5)
-         (which-key-popup-type 'minibuffer)
-        :init (which-key-mode))
-    #+end_src
 
 *** Ripgrep
     Adding ripgrep configuration to be able to access the functionality from emacs.
@@ -948,19 +788,18 @@
       Source: URL `https://www.thepunctuationguide.com/hyphen.html'"
         (interactive)
         (help/real-insert ?-))
-      
     #+end_src
+
 **** Euro symbol
-    Bind the euro symbol to an easy to reach command.
-    #+begin_src emacs-lisp
-      (defun qk/insert-euro-symbol ()
-              (interactive)
-              (help/real-insert ?€))
+     Bind the euro symbol to an easy to reach command.
+     #+begin_src emacs-lisp
+       (defun qk/insert-euro-symbol ()
+         (interactive)
+         (help/real-insert ?€))
 
-      (use-package emacs
-        :bind ("C-c e" . qk/insert-euro-symbol))
-#+end_src
-
+       (use-package emacs
+         :bind ("C-c e" . qk/insert-euro-symbol))
+     #+end_src
 
 *** Browse-url
     Browse url is the package that controls the information that is passed to the browser when forwarded from emacs. I find that cookies are important when accessing chrome, might need to check again if I can select to save cookies only for Chrome browsing.
@@ -1144,7 +983,7 @@
        (use-package embark
          :straight t
          :bind
-         (("C-;" . embark-act)       ;; pick some comfortable binding
+         (("C-;" . embark-act)
           :map embark-file-map
           ("s" . embark-magit-status)
           :map minibuffer-local-map
@@ -1281,10 +1120,10 @@
                  ;; no merge conflicts remain.
                  :post (smerge-auto-leave))
          "
-             ^Heading^       
-             ^^-----------
-             _n_ext visible heading
-             _p_rev visible heading
+             ^Movement^                        ^Heading^       
+             ^^-----------                     ^^-----------
+             _n_ext visible heading            _w_ copy heading
+             _p_rev visible heading            _y_ank heading
              _u_p heading
              _b_ackward same level
              _f_orward same level
@@ -1294,7 +1133,9 @@
          ("u" outline-up-heading)
          ("b" outline-backward-same-level)
          ("f" outline-forward-same-level)
-         ("q" nil "cancel" :color blue))
+         ("q" nil "cancel" :color blue)
+         ("w" org-copy-special)
+         ("y" org-paste-subtree))
 
        (define-key org-mode-map (kbd "C-c ?") #'hydra-org-movement/body)
      #+end_src
