@@ -227,7 +227,7 @@
        (use-package smartparens
          :straight t
          :hook (prog-mode . smartparens-mode))
-  
+
        (use-package smartparens-config
          :after smartparens)
      #+end_src
@@ -973,6 +973,7 @@
           :bind (:map lsp-mode-map
                       ([remap xref-find-apropos] . consult-lsp-symbols)))
       #+end_src
+
 **** Embark
      This package provides a sort of right-click contextual menu for Emacs, accessed through the embark-act command (which you should bind to a convenient key), offering you relevant actions to use on a target determined by the context:
 
@@ -1106,7 +1107,7 @@
       (define-key org-mode-map (kbd "C-,") nil)
       (define-key org-mode-map (kbd "C-c o t") 'org-babel-tangle)
     #+END_SRC
-    
+
 **** Org-mode file movement
      There are already defined org-mode movement keys to navigate the header tree, but I find difficult to reach everytime for =C-c C-n= or =C-c C-u= to go to the next or parent header respectively.
 
@@ -1143,7 +1144,7 @@
 *** Initial configuration
     Initial configuration of org-directory and refile.org, with the
     intention of all capture created items to go there before correct refiling.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq org-roam-directory "~/Documents/slipbox")
       (use-package org
         :custom
