@@ -2582,7 +2582,7 @@
     =typo-mode= is a buffer-specific minor mode that will change a number of normal keys to make them insert typographically useful unicode characters. Some of those keys can be used repeatedly to cycle through variations. This includes in particular quotation marks and dashes.
 
     With typo.el we can insert different unicode characters without peeking into the default C-x 8 prefix map, which is cumbersome to remember.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package typo
         :straight t
         :hook (text-mode . typo-mode)
@@ -2675,7 +2675,7 @@
                    :key ?d)))
          :config
          (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
-         (straight-use-package 'mu4e-context)
+         (require 'mu4e-context)
          (setq mu4e-contexts
                (list
                 ;; Work account
