@@ -1351,7 +1351,7 @@
                 ("WAITING" . (:foreground "#fe2f92" :weight bold))
                 ("CANCELLED" . (:foreground "#999999" :weight bold))
                 ("SOMEDAY" . (:foreground "#ab82ff" :weight bold))
-                ("MEETING" . (get 'qk/meeting-todo-face 'face-defface-spec))
+                ("MEETING" . qk/meeting-todo-face)
                 ("NOTE" . (:foreground "#fcba03" :weight bold))
                 )))
       (qk/set-org-todo-keyword-faces)
