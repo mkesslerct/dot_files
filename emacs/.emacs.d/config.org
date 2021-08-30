@@ -252,7 +252,7 @@
 
 *** Modeline
 **** Doom-modeline
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (defvar doom-modeline-icon (display-graphic-p)
          "Whether show `all-the-icons' or not.
 
@@ -292,13 +292,13 @@
          :config
          (display-time-mode)
          (display-time-update))
-     #+END_SRC
+     #+end_src
 
 **** All-the-icons
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package all-the-icons
          :straight t)
-     #+END_SRC
+     #+end_src
 
 *** Commenting
 **** Smart comments
@@ -306,11 +306,11 @@
      When at the beginning or middle of the line, comments line.
      When pointing at region, comments full region.
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package smart-comment
          :straight t
          :bind ("M-;" . smart-comment))
-     #+END_SRC
+     #+end_src
 
 **** Copy and comment
      Custom function created with the intention of using the commented
@@ -374,14 +374,14 @@
      #+end_src
 
 **** Directories first on dired.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq dired-listing-switches "-aBhl")
-     #+END_SRC
+     #+end_src
 
 **** Backup directory
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
-     #+END_SRC
+     #+end_src
 
 **** Dired-subtree
      This package defines function dired-subtree-insert which instead inserts the subdirectory directly below its line in the original listing, and indent the listing of subdirectory to resemble a tree-like structure (somewhat similar to tree(1) except the pretty graphics). The tree display is somewhat more intuitive than the default "flat" subdirectory manipulation provided by =i=.
@@ -455,14 +455,14 @@
      #+end_src
 
      Adding reference connection made easier with reftex.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package reftex
          :straight t
          :custom (reftex-cite-prompt-optional-args t))
-     #+END_SRC
+     #+end_src
 
      Adding general configuration for tex files and latex-mode better defaults.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package tex
          :straight auctex
          :mode ("\\.tex\\'" . latex-mode)
@@ -483,7 +483,7 @@
                                (reftex-mode t)
                                (flyspell-mode t)))
                    ))
-     #+END_SRC
+     #+end_src
 
      Removing the mark keybindings on latex buffers, which are
      normally bound to the flyspell word correction keys.
@@ -496,50 +496,50 @@
 *** Appearence
 **** Cursor display
      Bar cursor instead of rectangle default.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq-default cursor-type 'bar)
-     #+END_SRC
+     #+end_src
 
 **** Yes/No with y/n
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (fset 'yes-or-no-p 'y-or-n-p)
-     #+END_SRC
+     #+end_src
 
 **** Splash screen and startup message
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq inhibit-startup-message t)
-     #+END_SRC
+     #+end_src
 
 **** Line numeration on left side
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (global-linum-mode t)
        (put 'erase-buffer 'disabled nil)
-     #+END_SRC
+     #+end_src
 
 **** New lines
      Adding newline at the end of the file.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq next-line-add-newlines t)    
-     #+END_SRC
+     #+end_src
 
 **** Sounds
      Disabling beep sound.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq visible-bell 1)
-     #+END_SRC
+     #+end_src
 
 **** Menu-bar
      Disabling the menu-bar, prior to tab-mode-line configuration.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (menu-bar-mode -1)
-     #+END_SRC
+     #+end_src
 
 *** Indentation
     Indentation to 4 spaces instead of tab.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq-default indent-tabs-mode nil)
       (setq-default tab-width 4)
-    #+END_SRC
+    #+end_src
 
 *** Markdown
     Markdown configuration, which I use specially often when editing README files
@@ -551,7 +551,7 @@
     from the [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][bits and bobs blog post.]]
 
     The second markdown function is from this link: [[https://stackoverflow.com/questions/36183071/how-can-i-preview-markdown-in-emacs-in-real-time/41288851#41288851][stack overflow markdown link]].
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package simple-httpd
         :straight t
         :custom
@@ -586,13 +586,13 @@
         :bind
         (:map markdown-mode-map
               ("C-c r" . bb/markdown-preview)))
-    #+END_SRC
+    #+end_src
 
 *** Mark commands
     Adding better defaults to the mark commands, as I find cumbersome to remove the
     region everytime I want to access the mark functionality.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defun push-mark-no-activate ()
         "Pushes `point' to `mark-ring' and does not activate the region
          Equivalent to \\[set-mark-command] when \\[transient-mark-mode] is disabled"
@@ -615,13 +615,13 @@
       (global-set-key (kbd "C-.") 'push-mark-no-activate)
       (global-set-key (kbd "C-,") 'jump-to-mark)
       (define-key global-map [remap exchange-point-and-mark] 'exchange-point-and-mark-no-activate)
-    #+END_SRC
+    #+end_src
 
 *** Window switching
     I'm trying ace-window in order to allow faster window switching, when working with
     multiple buffers in the same frame. Disabling also the undo command, trying to get
     used to C-/
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (global-unset-key (kbd "C-x o"))
       (global-unset-key (kbd "C-x u"))
 
@@ -632,7 +632,7 @@
         :custom
         (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
         (aw-background nil))
-    #+END_SRC
+    #+end_src
 
 *** Perspective.el
     The Perspective package provides multiple named workspaces (or "perspectives") in Emacs, similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on the Mac. Each perspective has its own buffer list and its own window layout, along with some other isolated niceties, like the xref ring.
@@ -646,6 +646,7 @@
         :custom
         (persp-sort 'created)
         (persp-state-default-file (concat persp-save-dir "persp-save-state.el"))
+        (persp-initial-frame-name "agenda")
         :config (persp-mode))
     #+end_src
 
@@ -655,15 +656,15 @@
     #+end_src
 
 *** Auto indent
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (define-key global-map (kbd "RET") 'newline-and-indent)
-    #+END_SRC
+    #+end_src
 
 *** pdf tools
     pdf tools so that pages are created on demand instead of preloading the entire file, which
     may freeze emacs. Also adding the hook in order to autorevert the pdf buffer when compiling
     with auctex.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package pdf-tools
         :straight t
         :custom
@@ -673,7 +674,7 @@
         :bind (:map pdf-view-mode-map
                     ("C-s" . isearch-forward)
                     ("C-r" . isearch-backward)))
-    #+END_SRC
+    #+end_src
 
 *** Ripgrep
     Adding ripgrep configuration to be able to access the functionality from emacs.
@@ -1099,14 +1100,14 @@
 ** Org-mode
 *** Keybindings
     Keybindings for org-mode as well as better defaults. Not in use-package format yet.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (define-key global-map (kbd "C-c o l") 'org-store-link)
       (define-key global-map (kbd "C-c a") 'org-agenda)
       (define-key global-map (kbd "C-c c") 'org-capture)
       (define-key org-mode-map (kbd "C-c o c") 'org-columns)
       (define-key org-mode-map (kbd "C-,") nil)
       (define-key org-mode-map (kbd "C-c o t") 'org-babel-tangle)
-    #+END_SRC
+    #+end_src
 
 **** Org-mode file movement
      There are already defined org-mode movement keys to navigate the header tree, but I find difficult to reach everytime for =C-c C-n= or =C-c C-u= to go to the next or parent header respectively.
@@ -1291,7 +1292,7 @@
     Refiling setup, using the file name as header. Last line is
     so that we ensure that tasks cannot be tagged as completed
     before subtasks have been done so.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defun qk/org-refile-target-verify-function ()
         "Function to be assigned to the `org-refile-target-verify-function'.
          Show only refile targets if they are tagged with PROJECT or the header
@@ -1307,13 +1308,12 @@
         (org-refile-allow-creating-parent-nodes 'confirm)
         (org-enforce-todo-dependencies t)
         (org-refile-target-verify-function 'qk/org-refile-target-verify-function))
-
-    #+END_SRC
+    #+end_src
 
     Adding keywords for easier refiling and capturing. Right side of
     the "|" key is used to indicate the keyword designing completion for
     a certain state.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq 
        org-todo-keywords
        (quote ((sequence "TODO(t)" "|" "DONE(d)")
@@ -1328,7 +1328,7 @@
               )
 
        )
-    #+END_SRC
+    #+end_src
 
     Change the faces of the keywords, I keep it in a different source block to tangle or untagle if necessary.
     #+begin_src emacs-lisp
@@ -1352,7 +1352,7 @@
               ("WAITING" . (:foreground "#fe2f92" :weight bold))
               ("CANCELLED" . (:foreground "#999999" :weight bold))
               ("SOMEDAY" . (:foreground "#ab82ff" :weight bold))
-              ("MEETING" . (get 'qk/meeting-todo-face 'face-defface-spec))
+              ("MEETING" . qk/meeting-todo-face)
               ("NOTE" . (:foreground "#fcba03" :weight bold))
               )))
       (qk/set-org-todo-keyword-faces)
@@ -1364,7 +1364,7 @@
 *** Org capture
     Capture templates are used with the intention of improving
     the workflow of adding several items and refiling.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defvar org-blog-directory-file (concat org-directory "/blog/refile.org"))
       (setq
        org-capture-templates
@@ -1685,9 +1685,9 @@
                            (langs org-babel-load-languages))
                       (unless (alist-get lang langs)
                         (indent-to 4))))))
-    #+END_SRC
+    #+end_src
 
-    Remove the anoying warnings when you compile a source block. 
+    Remove the annoying warnings when you compile a source block. 
     #+begin_src emacs-lisp
       (use-package ob
         :custom (org-confirm-babel-evaluate nil))
@@ -1700,7 +1700,7 @@
     Creating function which archives all files which contain only done (not necessarily
     in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defun qk/archive-done-org-files ()
         "Cycles all org files through checking function."
         (interactive) 
@@ -1748,7 +1748,7 @@
                 (kill-buffer (current-buffer))
                 (message "File '%s' successfully archived as '%s'."
                          name (file-name-nondirectory new-name)))))))
-    #+END_SRC
+    #+end_src
 
 *** Extension packages
 **** toc-org
@@ -1762,7 +1762,7 @@
 
 **** Org-roam
      I use the Zettelkasten (slip-box) method for taking and recalling notes and information. To be able to do so, I started with my own workflow, adding org-mode links to the different notes, and has been working for me for close to a month. As a way of improving this workflow, I decided to give org-roam a chance.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package org-roam
          :straight t
          :commands org-roam-db-query
@@ -1778,7 +1778,7 @@
                       ("C-c n l" . org-roam-buffer-toggle)
                       ("C-c n g" . org-roam-graph)))
          :config (org-roam-setup))
-     #+END_SRC
+     #+end_src
 
 ***** Org-agenda in Org-roam
       One of the possible options that org-roam provides is the use of org-roam to control the org-agenda files. The big problem in solving this is that org-agenda takes ages to load if the node count goes up. For that, we use clever techniques and advices to check on save and on load for a file, allowing to use per-note TODOs and fast query for the org-agenda buffer. This has been taken out of [[https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html][vulpea’s blog post]].
@@ -2036,7 +2036,7 @@
 
 *** Magit forge
     Magit with the integration of Github Issues.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package forge
         :straight t
         :after magit
@@ -2046,7 +2046,7 @@
                      ("e a" "assignees" forge-edit-topic-assignees)
                      ("e r" "review requests" forge-edit-topic-review-requests)])
                   ))
-    #+END_SRC
+    #+end_src
 
 *** Magit
     Obviously [[https://magit.vc/][Magit]].
@@ -2070,35 +2070,40 @@
     #+end_src
     
 ** Project management
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
+     (defvar qk/fd-command "fdfind")
+     (if (or (eq window-system 'ns)
+             (eq window-system 'mac))
+         (setq qk/fd-command "fd"))
+
      (use-package projectile
        :straight t
        :after consult-projectile
        :commands (projectile-remove-known-project projectile-find-file)
        :custom
-       (projectile-generic-command "fd . -0 --type f --color=never")
+       (projectile-generic-command (concat qk/fd-command " . -0 --type f --color=never"))
        (projectile-project-search-path '("~/Documents/"))
        :config
        (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
        (add-to-list 'projectile-project-root-files-bottom-up "BUILD")
        (projectile-global-mode))
-   #+END_SRC
+   #+end_src
 
 ** Snippets
 *** Yasnippet
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package yasnippet
         :straight t
         :hook ((prog-mode org-mode gfm-mode) . yas-minor-mode)
         :config (yas-reload-all))
-    #+END_SRC
+    #+end_src
 
 *** Better yasnippets for modes.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package yasnippet-snippets
         :straight t
         :after yasnippet)
-    #+END_SRC
+    #+end_src
 
 ** Programming
 *** Completion Overlay
@@ -2106,7 +2111,7 @@
      Company is used for better completion on the fly. :warning: UPDATE 2021/05/20: Instead of using company, the master branch will now be testing [[https://github.com/minad/corfu][corfu]], which seems a package that is better align with my goal of making the configuration as modular as possible.
 
      For completion reasons, I still leave the company configuration here, just in case someone might want to give it a try.
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
        (use-package company
          :straight t
          :config (progn 
@@ -2114,10 +2119,10 @@
                    (setq company-show-numbers t)
                    (setq company-dabbrev-downcase 0)
                    (setq company-idle-delay 0)))
-     #+END_SRC
+     #+end_src
 
      Adding completion on tab.
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
        (defun tab-indent-or-complete ()
          (interactive)
          (if (minibufferp)
@@ -2128,7 +2133,7 @@
                    (company-complete-common)
                  (indent-for-tab-command)))))
        (global-set-key [backtab] 'tab-indent-or-complete)
-     #+END_SRC
+     #+end_src
 
      Adding prescient sorting and filtering mechanism with the intention
      of enabling a better candidate mechanism.
@@ -2289,7 +2294,7 @@
      
 **** lsp-mode
      Client for Language Server Protocol (v3.14). =lsp-mode= aims to provide IDE-like experience by providing optional integration with the most popular Emacs packages.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package lsp-mode
          :straight t
          :commands (lsp lsp-deferred)
@@ -2313,7 +2318,7 @@
          (lsp-enable-links nil)
          :config
          (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
-     #+END_SRC
+     #+end_src
 
 ***** Html preview.
       Adding the html preview filter, which uses the httpd server and impatient-mode, in order to process all the information. Keep in mind that you would need to use the impatient-mode command on all the buffers that need to be refreshed on change, including possible stylesheets that are connected to the initial 
@@ -2329,17 +2334,17 @@
       
 ***** lsp-ui
       Better ui for lsp-mode, adding el-doc.
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package lsp-ui
           :requires (flycheck)
           :straight t
           :commands lsp-ui-mode
           :custom (lsp-ui-sideline-show-code-actions nil))
-      #+END_SRC
+      #+end_src
 
 ***** C++/C programming.
       Always works on C++, sometimes wrong on C programming.
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package ccls
           :straight t
           :disabled
@@ -2349,7 +2354,7 @@
                     (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
           :hook ((c-mode c++-mode objc-mode) .
                  (lambda () (require 'ccls) (lsp-deferred))))
-      #+END_SRC
+      #+end_src
 
 ****** Keybindings
        Disable some keybindings. For some reason c-mode, c++-mode binds the default keys like TAB, RET and more to their own changes. I don't really like that modes change some of the default keys.
@@ -2366,7 +2371,7 @@
        #+end_src
 
 ***** Dart/Flutter programming
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package lsp-dart 
           :straight t
           :hook (dart-mode . lsp-deferred)
@@ -2379,7 +2384,7 @@
           (lsp-dart-dap-flutter-hot-reload-on-save t)
           (dart-format-on-save t))
 
-      #+END_SRC
+      #+end_src
 
       Adding hover to emulate running flutter mobile application on dekstop.
       #+begin_src emacs-lisp
@@ -2396,7 +2401,7 @@
 
 ***** Java Programming
       Works with the eclipse server, not really sure if it is what I'm looking for.
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package lsp-java
           :straight t
           :hook (java-mode . lsp-deferred)
@@ -2408,7 +2413,7 @@
                                                          :path ,java_path
                                                          :default t)]
                       lsp-java-java-path (concat java_path "/bin/java")))))
-      #+END_SRC
+      #+end_src
 
 ***** Python programming
       Making sure the executable for python is not longer "python", but default to
@@ -2431,7 +2436,7 @@
                       ("C-c C-u" . mk/compile-python-buffer)))
       #+end_src
 
-****** lsp-pyls
+****** lsp-pylsp
        This is the configuration for the python lsp update palantir server, which is configured in the lsp-mode section, but I thought adding custom variables here would make the section cleaner.
        #+begin_src emacs-lisp
          (use-package lsp-mode
@@ -2442,7 +2447,6 @@
            (lsp-pylsp-plugins-rope-completion-enabled t)
            (lsp-pylsp-plugins-pylint-enabled t))
        #+end_src
-
 
 ****** lsp-pyright
        Need to configure the pyright lsp package to provide the pyright support to python buffers, which seems to be much faster than the other Palantir options.
@@ -2532,7 +2536,6 @@
            :mode ("\\.html\\'" "\\.hbs\\'")
            :straight nil)
        #+end_src
-
        
 ****** PHP
        PHP programming is not included in the default emacs implementation. For that reason, we can use the wonderful =php-mode= package, which is everything we can look for for a major mode.
@@ -2544,7 +2547,7 @@
        
 ****** Emmet-mode
        Better completion for html tags, very good documentation. This package is configured with my fork, as emmet-mode's default repo has problems using the =cl= package, instead of the updated =cl-lib=.
-       #+BEGIN_SRC emacs-lisp
+       #+begin_src emacs-lisp
          (use-package emmet-mode
            :straight (emmet-mode :type git :host github :repo "smihica/emmet-mode"
                                  :fork (:host github
@@ -2553,7 +2556,7 @@
          (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
          (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
          (add-hook 'js-mode-hook 'emmet-mode)
-       #+END_SRC
+       #+end_src
 
 ****** JavaScript environment
        Adding the JavaScript programming environment, trying only with lsp-mode and then
