@@ -2565,6 +2565,19 @@
     #+end_src
 
 ** Extra
+*** PlantUML
+    PlantUML is an open-source tool allowing users to create UML diagrams from a plain text language. The language of PlantUML is an example of an Application Specific Language. It uses Graphviz software to lay out its diagrams. It has been used to allow blind students to work with UML. PlantUML  also helps blind software engineers to design and read UML diagrams.
+
+    There have been multiple modes defined for Emacs editing of puml files, having the last one being the default: =plantuml-mode=.
+    #+begin_src emacs-lisp
+      (use-package plantuml-mode
+        :straight t
+        :mode ("\\.plantuml\\'" "\\.puml\\'")
+        :custom
+        (plantuml-executable-path "/usr/local/bin/plantuml")
+        (plantuml-default-exec-mode 'executable))
+    #+end_src
+
 *** Typo.el
     =typo-mode= is a buffer-specific minor mode that will change a number of normal keys to make them insert typographically useful unicode characters. Some of those keys can be used repeatedly to cycle through variations. This includes in particular quotation marks and dashes.
 
