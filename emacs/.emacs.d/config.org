@@ -1393,290 +1393,252 @@
           "* TODO #+TITLE: \n#+DATE: \n#+CATEGORY: \n#+TAGS: \n#+SUMMARY: \n #+IMAGE: \n")
          )
        )
-    #+END_SRC
+    #+end_src
 
 *** Org agenda
 **** Hiding tags 
-    Adding hiding the tags on org agenda.
-    #+BEGIN_SRC emacs-lisp
-      ;; (setq org-agenda-hide-tags-regexp (regexp-opt '(
-      ;;                                                 "REFILING" "MEETING" "IDEA" "EMAIL" "SOMEDAY" "WAITING" "OPTIONAL" "PROJECT" "NOTE" "@work" "@home")))
-      (setq org-agenda-hide-tags-regexp ".*")
+     Adding hiding the tags on org agenda.
+     #+begin_src emacs-lisp
+       (setq org-agenda-hide-tags-regexp ".*")
 
-      (use-package org-agenda
-        :bind (:map org-agenda-mode-map
-                    ("?" . qk/org-agenda-transient))
-        :custom
-        (org-agenda-prefix-format "  %?-12t% s")
-        (org-agenda-archives-mode nil)
-        (org-agenda-skip-comment-trees nil)
-        (org-agenda-skip-function nil)
-        :config
-        (transient-define-prefix qk/org-agenda-transient ()
-          "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
-          [
-           ["Entry"
-            ("e A" "Archive default" org-agenda-archive-default)
-            ("e k" "Remove entry" org-agenda-kill)
-            ("e r" "Refile" org-agenda-refile)
-            ("e p" "Set priority" org-agenda-priority)
-            ("e :" "Set tags" org-agenda-set-tags)
-            ("e t" "Set state" org-agenda-todo)
-            ("d d" "Set deadline" org-agenda-deadline)
-            ("d t" "Date prompt" org-agenda-date-prompt)
-            ("d s" "Schedule" org-agenda-schedule)
-            ("d +" "Next day" org-agenda-do-date-later)
-            ("d -" "Previous day" org-agenda-do-date-earlier)
-            ]
-           ["Show"
-            ("TAB" "Entry other buffer" org-agenda-goto)
-            ("SPC" "Show entry" org-agenda-show-and-scroll-up)
-            ("RET" "Switch to entry" org-agenda-switch-to)
-            "Calendar"
-            ("s o" "Show org calendar" qk/open-org-calendar)
-            ("s q" "Show qkessler calendar" qk/open-qk-calendar)
-            ("s e" "Show enrique.kesslerm calendar" qk/open-ekm-calendar)
-            ]
-           ["View"
-            ("v d" "Day view" org-agenda-day-view)
-            ("v w" "Week view" org-agenda-week-view)
-            ("v t" "Fortnight view" org-agenda-fortnight-view)
-            ("v m" "Month view" org-agenda-month-view)
-            ("v y" "Year view" org-agenda-year-view)
-            ("v n" "Next view" org-agenda-later)
-            ("v p" "Previous view" org-agenda-earlier)
-            ("v r" "Reset view" org-agenda-reset-view)
-            ("g d" "Go to date" org-agenda-goto-date)
-            ("g r" "Refresh" org-agenda-redo)
-            ("." "Go to today" org-agenda-goto-today)
-            ]
-           ]
-          [
-           ["Toggle"
-            ("t a" "Archives mode" org-agenda-archives-mode)
-            ("t r" "Clock report mode" org-agenda-clockreport-mode)
-            ("t f" "Follow mode" org-agenda-follow-mode)
-            ("t l" "Log mode" org-agenda-log-mode)
-            ("t d" "Diary" org-agenda-toggle-diary)
-            ]
-           ["Filter"
-            ("f c" "By category" org-agenda-filter-by-category)
-            ("f x" "By regexp" org-agenda-filter-by-regexp)
-            ("f t" "By tag" org-agenda-filter-by-tag)
-            ("f d" "Remove filters" org-agenda-filter-remove-all)
-            ]
-           ["Clock"
-            ("c q" "Cancel" org-agenda-clock-cancel)
-            ("c j" "Go to clock" org-agenda-clock-goto)
-            ("c i" "Clock in" org-agenda-clock-in)
-            ("c o" "Clock out" org-agenda-clock-out)
-            ("c p" "Clock pomodoro" org-pomodoro)
-            ]
-           ]))
-
-    #+END_SRC
-**** Auto-refresh org-agenda
-     I intend to auto-refresh the org-agenda buffer every minute, in order to have an updated timer indicator.
-     #+begin_src emacs-lisp :tangle no
        (use-package org-agenda
+         :bind (:map org-agenda-mode-map
+                     ("?" . qk/org-agenda-transient))
+         :custom
+         (org-agenda-prefix-format "  %?-12t% s")
+         (org-agenda-archives-mode nil)
+         (org-agenda-skip-comment-trees nil)
+         (org-agenda-skip-function nil)
          :config
-         (save-window-excursion (run-with-idle-timer 60 t (lambda () (org-agenda nil "d")))))
-#+end_src
+         (transient-define-prefix qk/org-agenda-transient ()
+           "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
+           [
+            ["Entry"
+             ("e A" "Archive default" org-agenda-archive-default)
+             ("e k" "Remove entry" org-agenda-kill)
+             ("e r" "Refile" org-agenda-refile)
+             ("e p" "Set priority" org-agenda-priority)
+             ("e :" "Set tags" org-agenda-set-tags)
+             ("e t" "Set state" org-agenda-todo)
+             ("d d" "Set deadline" org-agenda-deadline)
+             ("d t" "Date prompt" org-agenda-date-prompt)
+             ("d s" "Schedule" org-agenda-schedule)
+             ("d +" "Next day" org-agenda-do-date-later)
+             ("d -" "Previous day" org-agenda-do-date-earlier)
+             ]
+            ["Show"
+             ("TAB" "Entry other buffer" org-agenda-goto)
+             ("SPC" "Show entry" org-agenda-show-and-scroll-up)
+             ("RET" "Switch to entry" org-agenda-switch-to)
+             "Calendar"
+             ("s o" "Show org calendar" qk/open-org-calendar)
+             ("s q" "Show qkessler calendar" qk/open-qk-calendar)
+             ("s e" "Show enrique.kesslerm calendar" qk/open-ekm-calendar)
+             ]
+            ["View"
+             ("v d" "Day view" org-agenda-day-view)
+             ("v w" "Week view" org-agenda-week-view)
+             ("v t" "Fortnight view" org-agenda-fortnight-view)
+             ("v m" "Month view" org-agenda-month-view)
+             ("v y" "Year view" org-agenda-year-view)
+             ("v n" "Next view" org-agenda-later)
+             ("v p" "Previous view" org-agenda-earlier)
+             ("v r" "Reset view" org-agenda-reset-view)
+             ("g d" "Go to date" org-agenda-goto-date)
+             ("g r" "Refresh" org-agenda-redo)
+             ("." "Go to today" org-agenda-goto-today)
+             ]
+            ]
+           [
+            ["Toggle"
+             ("t a" "Archives mode" org-agenda-archives-mode)
+             ("t r" "Clock report mode" org-agenda-clockreport-mode)
+             ("t f" "Follow mode" org-agenda-follow-mode)
+             ("t l" "Log mode" org-agenda-log-mode)
+             ("t d" "Diary" org-agenda-toggle-diary)
+             ]
+            ["Filter"
+             ("f c" "By category" org-agenda-filter-by-category)
+             ("f x" "By regexp" org-agenda-filter-by-regexp)
+             ("f t" "By tag" org-agenda-filter-by-tag)
+             ("f d" "Remove filters" org-agenda-filter-remove-all)
+             ]
+            ["Clock"
+             ("c q" "Cancel" org-agenda-clock-cancel)
+             ("c j" "Go to clock" org-agenda-clock-goto)
+             ("c i" "Clock in" org-agenda-clock-in)
+             ("c o" "Clock out" org-agenda-clock-out)
+             ("c p" "Clock pomodoro" org-pomodoro)
+             ]
+            ]))
+     #+end_src
 
 **** Refiling workflow 
-    Removing inherited and REFILING tags in order to use the tags correctly
-    #+BEGIN_SRC emacs-lisp
-      (defun qk/org-remove-inherited-tag-strings ()
-        "Removes inherited tags from the headline-at-point's tag string.
-          Note this does not change the inherited tags for a headline,
-          just the tag string."
-        (org-set-tags (seq-remove (lambda (tag)
-                                    (get-text-property 0 'inherited tag))
-                                  (org-get-tags))))
+     Removing inherited and REFILING tags in order to use the tags correctly
+     #+begin_src emacs-lisp
+       (defun qk/org-remove-inherited-tag-strings ()
+         "Removes inherited tags from the headline-at-point's tag string.
+           Note this does not change the inherited tags for a headline,
+           just the tag string."
+         (org-set-tags (seq-remove (lambda (tag)
+                                     (get-text-property 0 'inherited tag))
+                                   (org-get-tags))))
 
-      (defun qk/org-remove-refiling-tag ()
-        "Remove the REFILING tag once the item has been refiled."
-        (org-toggle-tag "REFILING" 'off))
+       (defun qk/org-remove-refiling-tag ()
+         "Remove the REFILING tag once the item has been refiled."
+         (org-toggle-tag "REFILING" 'off))
 
-      (defun qk/org-clean-tags ()
-        "Visit last refiled headline and remove inherited tags from tag string."
-        (save-window-excursion
-          (org-refile-goto-last-stored)
-          (qk/org-remove-inherited-tag-strings)
-          (qk/org-remove-refiling-tag)))
+       (defun qk/org-clean-tags ()
+         "Visit last refiled headline and remove inherited tags from tag string."
+         (save-window-excursion
+           (org-refile-goto-last-stored)
+           (qk/org-remove-inherited-tag-strings)
+           (qk/org-remove-refiling-tag)))
 
-      (add-hook 'org-after-refile-insert-hook 'qk/org-clean-tags)
-    #+END_SRC
+       (add-hook 'org-after-refile-insert-hook 'qk/org-clean-tags)
+     #+end_src
 
 **** Series of tags on org-agenda 
-    Adding series of tags with the intention of tagging the items for better 
-    organization besides the refile file. Adding automated tasks to a tagged item.
-    #+BEGIN_SRC emacs-lisp
-      (setq org-tag-alist '((:startgroup . nil)
-                            ("@work" . ?w)
-                            ("@home" . ?h)
-                            (:endgroup . nil)
-                            ("literature" . ?n)
-                            ("coding" . ?c)
-                            ("writing" . ?p)
-                            ("emacs" . ?e)
-                            ("misc" . ?m)))
+     Adding series of tags with the intention of tagging the items for better 
+     organization besides the refile file. Adding automated tasks to a tagged item.
+     #+begin_src emacs-lisp
+       (setq org-tag-alist '((:startgroup . nil)
+                             ("@work" . ?w)
+                             ("@home" . ?h)
+                             (:endgroup . nil)
+                             ("literature" . ?n)
+                             ("coding" . ?c)
+                             ("writing" . ?p)
+                             ("emacs" . ?e)
+                             ("misc" . ?m)))
 
-      (setq
-       org-todo-state-tags-triggers
-       (quote (
-               ;; Move to cancelled adds the cancelled tag
-               ("CANCELLED" ("CANCELLED" . t))
-               ;; Move to waiting adds the waiting tag
-               ("WAITING" ("WAITING" . t))
-               ;; Move to a done state removes waiting/cancelled
-               (done ("WAITING") ("CANCELLED"))
-               ("DONE" ("WAITING") ("CANCELLED"))
-               ;; Move to todo, removes waiting/cancelled
-               ("TODO" ("WAITING") ("CANCELLED"))
+       (setq
+        org-todo-state-tags-triggers
+        (quote (
+                ;; Move to cancelled adds the cancelled tag
+                ("CANCELLED" ("CANCELLED" . t))
+                ;; Move to waiting adds the waiting tag
+                ("WAITING" ("WAITING" . t))
+                ;; Move to a done state removes waiting/cancelled
+                (done ("WAITING") ("CANCELLED"))
+                ("DONE" ("WAITING") ("CANCELLED"))
+                ;; Move to todo, removes waiting/cancelled
+                ("TODO" ("WAITING") ("CANCELLED"))
+                )
                )
-              )
-       )
-    #+END_SRC
+        )
+     #+end_src
 
 **** NEXT actions org-agenda view
      Configuration of a NEXT actions org-agenda view, getting the first valid TODO item in an open (non-stuck PROJECT). Depending on context, we are able to get the information. The context is represented on projects by tags: @work and @home. I got most of the configuration out of the [[https://www.adventuresinwhy.com/post/next-actions/][adventuresinwhy blog post]], which I recommend for a deeper explanation.
-    #+begin_src emacs-lisp
-      (defun aw/org-agenda-skip-all-siblings-but-first ()
-        "Skip all but the first non-done entry."
-        (let (should-skip-entry)
-          (unless (org-current-is-todo)
-            (setq should-skip-entry t))
-          (save-excursion
-            ;; If previous sibling exists and is TODO,
-            ;; skip this entry
-            (while (and (not should-skip-entry) (org-goto-sibling t))
-              (when (org-current-is-todo)
-                (setq should-skip-entry t))))
-          (let ((num-ancestors (org-current-level))
-                (ancestor-level 1))
-            (while (and (not should-skip-entry) (<= ancestor-level num-ancestors))
-              (save-excursion
-                ;; When ancestor (parent, grandparent, etc) exists
-                (when (ignore-errors (outline-up-heading ancestor-level t))
-                  ;; If ancestor is WAITING, skip entry
-                  (if (string= "WAITING" (org-get-todo-state))
-                      (setq should-skip-entry t)
-                    ;; Else if ancestor is TODO, check previous siblings of
-                    ;; ancestor ("uncles"); if any of them are TODO, skip
-                    (when (org-current-is-todo)
-                      (while (and (not should-skip-entry) (org-goto-sibling t))
-                        (when (org-current-is-todo)
-                          (setq should-skip-entry t)))))))
-              (setq ancestor-level (1+ ancestor-level))
-              ))
-          (when should-skip-entry
-            (or (outline-next-heading)
-                (goto-char (point-max))))))
+     #+begin_src emacs-lisp
+       (defun aw/org-agenda-skip-all-siblings-but-first ()
+         "Skip all but the first non-done entry."
+         (let (should-skip-entry)
+           (unless (org-current-is-todo)
+             (setq should-skip-entry t))
+           (save-excursion
+             ;; If previous sibling exists and is TODO,
+             ;; skip this entry
+             (while (and (not should-skip-entry) (org-goto-sibling t))
+               (when (org-current-is-todo)
+                 (setq should-skip-entry t))))
+           (let ((num-ancestors (org-current-level))
+                 (ancestor-level 1))
+             (while (and (not should-skip-entry) (<= ancestor-level num-ancestors))
+               (save-excursion
+                 ;; When ancestor (parent, grandparent, etc) exists
+                 (when (ignore-errors (outline-up-heading ancestor-level t))
+                   ;; If ancestor is WAITING, skip entry
+                   (if (string= "WAITING" (org-get-todo-state))
+                       (setq should-skip-entry t)
+                     ;; Else if ancestor is TODO, check previous siblings of
+                     ;; ancestor ("uncles"); if any of them are TODO, skip
+                     (when (org-current-is-todo)
+                       (while (and (not should-skip-entry) (org-goto-sibling t))
+                         (when (org-current-is-todo)
+                           (setq should-skip-entry t)))))))
+               (setq ancestor-level (1+ ancestor-level))
+               ))
+           (when should-skip-entry
+             (or (outline-next-heading)
+                 (goto-char (point-max))))))
 
-      (defun org-current-is-todo ()
-        (string= "TODO" (org-get-todo-state)))
-    #+end_src
+       (defun org-current-is-todo ()
+         (string= "TODO" (org-get-todo-state)))
+     #+end_src
 
 **** Org-agenda custom views
-    Adding more beautiful org-agenda view with all-icons and better configuration
-    of the layout, giving me a lot more information.
-    #+BEGIN_SRC emacs-lisp
-      (setq org-deadline-warning-days 3)
-      (setq org-agenda-block-separator ?—)
-      (setq org-agenda-category-icon-alist
-            `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
-      (setq org-agenda-custom-commands
-            '(
-              ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
-                                         (org-agenda-span 'day)
-                                         (org-agenda-ndays 1)
-                                         (org-agenda-start-on-weekday nil)
-                                         (org-agenda-start-day "+0d")
-                                         (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org") (outline-next-heading) (1- (point)))
-                                                                          (t (org-agenda-skip-entry-if 'todo 'done))))
-                                         (org-agenda-todo-ignore-deadlines nil)))
-                             ;; Project tickle list.
-                             (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
-                                              (org-tags-match-list-sublevels nil)))
-                             ;; Refiling category set file wide in file.
-                             (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
+     Adding more beautiful org-agenda view with all-icons and better configuration
+     of the layout, giving me a lot more information.
+     #+begin_src emacs-lisp
+       (setq org-deadline-warning-days 3)
+       (setq org-agenda-block-separator ?—)
+       (setq org-agenda-category-icon-alist
+             `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
+       (setq org-agenda-custom-commands
+             '(
+               ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
+                                          (org-agenda-span 'day)
+                                          (org-agenda-ndays 1)
+                                          (org-agenda-start-on-weekday nil)
+                                          (org-agenda-start-day "+0d")
+                                          (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org") (outline-next-heading) (1- (point)))
+                                                                           (t (org-agenda-skip-entry-if 'todo 'done))))
+                                          (org-agenda-todo-ignore-deadlines nil)))
+                              ;; Project tickle list.
+                              (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
                                                (org-tags-match-list-sublevels nil)))
-                             ;; Tasks that are unscheduled
-                             (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
-                                           (org-tags-match-list-sublevels nil)
-                                           (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
-                                           ))
-                             ;; Tasks that are waiting or someday
-                             (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
-                                                      (org-tags-match-list-sublevels nil)))
-                             (todo "NOTE" ((org-agenda-overriding-header "Notes:")
-                                           (org-tags-match-list-sublevels nil)))
-                             (agenda "" ((org-agenda-overriding-header "Upcoming:")
-                                         (org-agenda-span 7)
-                                         (org-agenda-start-day "+1d")
-                                         (org-agenda-start-on-weekday nil)
-                                         (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
-                                                                           (outline-next-heading) (1- (point)))
-                                                                          (t (org-agenda-skip-entry-if 'todo 'done))
-                                                                          ))
-                                         ;; I should set this next one to true, so that deadlines are ignored...?
-                                         (org-agenda-todo-ignore-deadlines nil)))))
-              ("N" "Next Actions"
-               ((tags-todo "@work"
-                           ((org-agenda-overriding-header "Work:")
-                            (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
-                (tags-todo "@home"
-                           ((org-agenda-overriding-header "Home:")
-                            (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
-                )))
+                              ;; Refiling category set file wide in file.
+                              (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
+                                                (org-tags-match-list-sublevels nil)))
+                              ;; Tasks that are unscheduled
+                              (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
+                                            (org-tags-match-list-sublevels nil)
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                                            ))
+                              ;; Tasks that are waiting or someday
+                              (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
+                                                       (org-tags-match-list-sublevels nil)))
+                              (todo "NOTE" ((org-agenda-overriding-header "Notes:")
+                                            (org-tags-match-list-sublevels nil)))
+                              (agenda "" ((org-agenda-overriding-header "Upcoming:")
+                                          (org-agenda-span 7)
+                                          (org-agenda-start-day "+1d")
+                                          (org-agenda-start-on-weekday nil)
+                                          (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
+                                                                            (outline-next-heading) (1- (point)))
+                                                                           (t (org-agenda-skip-entry-if 'todo 'done))
+                                                                           ))
+                                          ;; I should set this next one to true, so that deadlines are ignored...?
+                                          (org-agenda-todo-ignore-deadlines nil)))))
+               ("N" "Next Actions"
+                ((tags-todo "@work"
+                            ((org-agenda-overriding-header "Work:")
+                             (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
+                 (tags-todo "@home"
+                            ((org-agenda-overriding-header "Home:")
+                             (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
+                 )))
 
-            ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
-            org-agenda-skip-scheduled-if-deadline-is-shown t)
-    #+END_SRC
+             ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
+             org-agenda-skip-scheduled-if-deadline-is-shown t)
+     #+end_src
 
 **** Org-agenda keybindings
      Adding custom agenda commands, with the intention of making the refiling and
      tagging workflow a bit faster, as C-c C-w might be cumbersome to write in agenda-view.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (add-hook 'org-agenda-mode-hook
                  (lambda ()
                    (local-set-key (kbd "r") 'org-agenda-refile)))
-     #+END_SRC
-
-**** calfw
-     =emacs-calfw= is a calendar UI improvement package for Emacs, displaying a beautiful calendar using the sources that we configure. =calfw= has support for org-mode items, ical events (both from a local or remote file) and more.
-     #+begin_src emacs-lisp
-       (defun qk/open-org-calendar ()
-         "Open the calfw calendar using the org-agenda source."
-         (interactive)
-         (cfw:open-org-calendar))
-       (defun qk/open-qk-calendar ()
-         "Open the calfw calendar using qkessler's google calendar source."
-         (interactive)
-         (cfw:open-ical-calendar (password-store-get "qkessler gcal")))
-       (defun qk/open-ekm-calendar ()
-         "Open the calfw calendar using enrique.kesslerm's google calendar source."
-         (interactive)
-         (cfw:open-ical-calendar (password-store-get "enrique.kesslerm gcal")))
-
-       (use-package calfw
-         :straight (calfw :type git :host github :repo "Qkessler/emacs-calfw")
-         :commands (qk/open-qk-calendar qk/open-org-calendar qk/open-ekm-calendar))
-
-       (use-package calfw-ical
-         :after calfw)
-
-       (use-package calfw-org
-         :after calfw
-         :custom (cfw:org-overwrite-default-keybinding t))
      #+end_src
-     
+
 *** Org source blocks
     Tabs on org-mode source blocks try to find the language added.
     If for some reason the language on the source tag doesn't exist
     add 4 spaces.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (add-hook 'org-tab-first-hook
                 (lambda ()
                   (when (org-in-src-block-p t)
@@ -1842,7 +1804,6 @@
      #+begin_src emacs-lisp
        (use-package org-pdftools
          :straight t
-         :disabled
          :hook (org-mode . org-pdftools-setup-link))
      #+end_src
 
@@ -1860,7 +1821,6 @@
        (add-to-list 'org-export-backends 'md)
        (add-to-list 'org-export-backends 'epub)
      #+end_src
-
 
 **** Import to org-mode
      This package aims to reduce this pain by leveraging Pandoc to convert selected file types to org. The difference betweeen the defined =as= and =to= functions are that the first ones don’t create an org file with the exported file, but only a temporary buffer that can be acted upon.
@@ -1908,8 +1868,6 @@
          (org-pomodoro-keep-killed-pomodoro-time t)
          (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
          (org-pomodoro-short-break-sound (concat user-emacs-directory "extra/bell.wav"))
-         :bind-keymap("C-c o p" . qk/org-pomodoro-mode-global-map)
-         ;; :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
          :init 
          (defvar shu/org-pomodoro-columns-format
            "%22SCHEDULED %CATEGORY %42ITEM %4Effort(Effort){:} %4CLOCKSUM_T(Time)")
@@ -1940,7 +1898,7 @@
          :after org
          :hook (dired-mode . org-download-enable))
      #+end_src
-     
+
 ** Version control
 *** Symlinks
     As part of this =dot_files= repo, my configuration philosofy uses
@@ -2163,80 +2121,10 @@
          :config (corfu-global-mode))
 
        (use-package emacs
-         :init
-         ;; TAB cycle if there are only few candidates
-         (setq completion-cycle-threshold 3)
-
-         ;; Enable indentation+completion using the TAB key.
-         ;; `completion-at-point' is often bound to M-TAB.
-         (setq tab-always-indent 'complete))
-
+         :custom
+         (completion-cycle-threshold 3)
+         (tab-always-indent 'complete))
      #+end_src
-*** Open code in code.amazon
-    Helper to open the current file in code.amazon.
-    #+begin_src emacs-lisp
-      (defcustom amz-workspace-base-dirname "workplace"
-        "The name of your base workspace directory"
-        :type 'string)
-
-      (use-package java
-        :config
-        (defun amz-package (fname)
-          "break up the current class' filename into (package path, package, class path, classfile)"
-          (let (packagepath package classpath classfile count ptr1 ptr2)
-            (setq packagepath (split-string fname "/"))
-            (setq ptr1 packagepath)
-            (while (and
-                    (not (string= (car ptr1) amz-workspace-base-dirname))
-                    (not (null ptr1)))
-              (setq ptr1 (cdr ptr1)))
-            (if (null ptr1)
-                (error "not in a workspace"))
-            (setq count 0)
-            (while (and (< count 3)
-                        (not (null ptr1)))
-              (setq ptr2 ptr1)
-              (setq ptr1 (cdr ptr1))
-              (setq count (1+ count)))
-            (if (null ptr1)
-                (error "not in a package dir"))
-            (setcdr ptr2 nil)
-            (setq package (car ptr1))
-            (setq ptr2 ptr1)
-            (setq ptr1 (cdr ptr1))
-            (if (null ptr1)
-                (error "not in a package dir"))
-            (setcdr ptr2 nil)
-            (setq classpath ptr1)
-            (while (not (null (cdr ptr1)))
-              (setq ptr2 ptr1)
-              (setq ptr1 (cdr ptr1)))
-            (setcdr ptr2 nil)
-            (setq classfile (car ptr1))
-            (if (or (null package)
-                    (null classpath)
-                    (null packagepath)
-                    (null classfile))
-                (error "not in a classfile")
-              (list (mapconcat 'identity packagepath "/")
-                    package
-                    (mapconcat 'identity classpath "/")
-                    classfile))))
-        (defun open-code-amazon ()
-          "Open the current line of code, or highlighted lines of code, on code.amazon.
-         This assumes that the current file is under `amz-workspace-base-dirname'."
-          (interactive)
-          (let ((fname (buffer-file-name))
-                service path lines)
-            (setq pathparts (amz-package fname))
-            (if (not (use-region-p))
-                (setq lines (format "L%d" (line-number-at-pos)))
-              (setq lines (format "L%d-L%d" (line-number-at-pos (mark)) (- (line-number-at-pos) 1))))
-            (setq service (nth 1 pathparts))
-            (setq path (concat (nth 2 pathparts) "/" (nth 3 pathparts)))
-            (browse-url (format "https://code.amazon.com/packages/%s/blobs/mainline/--/%s#%s" service path lines))))
-        (define-key java-mode-map (kbd "C-c C-o") 'open-code-amazon))
-    #+end_src
 
 *** Server side functionality (LSP)
     Lsp-mode for server completion.
@@ -2307,7 +2195,6 @@
          (typescript-mode . lsp-deferred)
          (tex-mode . lsp-deferred)
          (latex-mode . lsp-deferred)
-         (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
          :custom
          (read-process-output-max (* 1024 1024))
          (lsp-completion-provider :none)
@@ -2572,10 +2459,8 @@
 
        In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
        is on the exec-path, not tangling this because the correct solution for this problem is the
-       [[*Syncing .profile env variables][exec-path-from-shell package]]
-       #+begin_src emacs-lisp
-         ;; (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.12.0/bin")))
-       #+end_src
+       [[*Syncing .profile env variables][exec-path-from-shell package]].
+       
        I've found this is often a misnaming error, if you install from a package
        manager you bin may be called nodejs so you just need to symlink it like so "ln
        -s /usr/bin/nodejs /usr/bin/node"
@@ -2681,11 +2566,24 @@
     #+end_src
 
 ** Extra
+*** PlantUML
+    PlantUML is an open-source tool allowing users to create UML diagrams from a plain text language. The language of PlantUML is an example of an Application Specific Language. It uses Graphviz software to lay out its diagrams. It has been used to allow blind students to work with UML. PlantUML  also helps blind software engineers to design and read UML diagrams.
+
+    There have been multiple modes defined for Emacs editing of puml files, having the last one being the default: =plantuml-mode=.
+    #+begin_src emacs-lisp
+      (use-package plantuml-mode
+        :straight t
+        :mode ("\\.plantuml\\'" "\\.puml\\'")
+        :custom
+        (plantuml-executable-path "/usr/local/bin/plantuml")
+        (plantuml-default-exec-mode 'executable))
+    #+end_src
+
 *** Typo.el
     =typo-mode= is a buffer-specific minor mode that will change a number of normal keys to make them insert typographically useful unicode characters. Some of those keys can be used repeatedly to cycle through variations. This includes in particular quotation marks and dashes.
 
     With typo.el we can insert different unicode characters without peeking into the default C-x 8 prefix map, which is cumbersome to remember.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package typo
         :straight t
         :hook (text-mode . typo-mode)
@@ -2819,6 +2717,7 @@
             "flag:unread"
             " AND NOT flag:trashed"
             " AND (to:enrikes@amazon.com OR to:enrikes@amazon.es)"))
+          :config
           (mu4e-alert-enable-mode-line-display)
           (defun gjstein-refresh-mu4e-alert-mode-line ()
             (interactive)
@@ -2827,31 +2726,7 @@
             )
           (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line))
       #+end_src
-***** mu4e-thread-folding
-      #+begin_quote
-      =mu4e-thread-folding.el= is a small library to enable threads folding in mu4e. This works by using overlays with an invisible property and setting hooks at the right place. It is possible to configure colors to better highlight a thread and also to have a prefix string indicating if a thread is folded or not. Note that when a thread is folded, any unread child remains visible.
-      #+end_quote
-      [[https://github.com/rougier/mu4e-thread-folding][- link]]
-      #+begin_src emacs-lisp :tangle no
-        (use-package mu4e-thread-folding
-          :straight (mu4e-thread-folding :type git :host github :repo "rougier/mu4e-thread-folding")
-          :after mu4e
-          :init
-          (add-to-list 'mu4e-header-info-custom
-                       '(:empty . (:name "Empty"
-                                         :shortname ""
-                                         :function (lambda (msg) "  "))))
-          :custom (mu4e-headers-fields '((:empty         .    2)
-                                          (:human-date    .   12)
-                                          (:flags         .    6)
-                                          (:mailing-list  .   10)
-                                          (:from          .   22)
-                                          (:subject       .   nil)))
-          :bind (:map mu4e-headers-mode-map
-                      ("<tab>" . mu4e-headers-toggle-at-point)))
-      #+end_src
 
-      
 **** Message package
      Adding the configuration for the message package, in order to allow for
      easier sending and composing of emails. The package comes already installed
@@ -3014,9 +2889,7 @@
     #+end_src
 
 *** Accounting from emacs
-    Thanks to the amazing Ledger command line tool, which is an double-entry
-    accounting system that allows for fast queries and reports we are able to
-    connect our emacs --and ledger files-- to the amazing ledger-mode.
+    Thanks to the amazing Ledger command line tool, which is an double-entry accounting system that allows for fast queries and reports we are able to connect our emacs --and ledger files-- to the amazing ledger-mode.
     #+begin_src emacs-lisp
       (use-package ledger-mode
         :straight t
