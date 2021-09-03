@@ -1393,12 +1393,12 @@
           "* TODO #+TITLE: \n#+DATE: \n#+CATEGORY: \n#+TAGS: \n#+SUMMARY: \n #+IMAGE: \n")
          )
        )
-    #+END_SRC
+    #+end_src
 
 *** Org agenda
 **** Hiding tags 
     Adding hiding the tags on org agenda.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       ;; (setq org-agenda-hide-tags-regexp (regexp-opt '(
       ;;                                                 "REFILING" "MEETING" "IDEA" "EMAIL" "SOMEDAY" "WAITING" "OPTIONAL" "PROJECT" "NOTE" "@work" "@home")))
       (setq org-agenda-hide-tags-regexp ".*")
@@ -1474,7 +1474,7 @@
             ]
            ]))
 
-    #+END_SRC
+    #+end_src
 **** Auto-refresh org-agenda
      I intend to auto-refresh the org-agenda buffer every minute, in order to have an updated timer indicator.
      #+begin_src emacs-lisp :tangle no
@@ -1485,7 +1485,7 @@
 
 **** Refiling workflow 
     Removing inherited and REFILING tags in order to use the tags correctly
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defun qk/org-remove-inherited-tag-strings ()
         "Removes inherited tags from the headline-at-point's tag string.
           Note this does not change the inherited tags for a headline,
@@ -1506,12 +1506,12 @@
           (qk/org-remove-refiling-tag)))
 
       (add-hook 'org-after-refile-insert-hook 'qk/org-clean-tags)
-    #+END_SRC
+    #+end_src
 
 **** Series of tags on org-agenda 
     Adding series of tags with the intention of tagging the items for better 
     organization besides the refile file. Adding automated tasks to a tagged item.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq org-tag-alist '((:startgroup . nil)
                             ("@work" . ?w)
                             ("@home" . ?h)
@@ -1537,7 +1537,7 @@
                )
               )
        )
-    #+END_SRC
+    #+end_src
 
 **** NEXT actions org-agenda view
      Configuration of a NEXT actions org-agenda view, getting the first valid TODO item in an open (non-stuck PROJECT). Depending on context, we are able to get the information. The context is represented on projects by tags: @work and @home. I got most of the configuration out of the [[https://www.adventuresinwhy.com/post/next-actions/][adventuresinwhy blog post]], which I recommend for a deeper explanation.
@@ -1581,7 +1581,7 @@
 **** Org-agenda custom views
     Adding more beautiful org-agenda view with all-icons and better configuration
     of the layout, giving me a lot more information.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq org-deadline-warning-days 3)
       (setq org-agenda-block-separator ?—)
       (setq org-agenda-category-icon-alist
@@ -1633,16 +1633,16 @@
 
             ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
             org-agenda-skip-scheduled-if-deadline-is-shown t)
-    #+END_SRC
+    #+end_src
 
 **** Org-agenda keybindings
      Adding custom agenda commands, with the intention of making the refiling and
      tagging workflow a bit faster, as C-c C-w might be cumbersome to write in agenda-view.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (add-hook 'org-agenda-mode-hook
                  (lambda ()
                    (local-set-key (kbd "r") 'org-agenda-refile)))
-     #+END_SRC
+     #+end_src
 
 **** calfw
      =emacs-calfw= is a calendar UI improvement package for Emacs, displaying a beautiful calendar using the sources that we configure. =calfw= has support for org-mode items, ical events (both from a local or remote file) and more.
@@ -1676,7 +1676,7 @@
     Tabs on org-mode source blocks try to find the language added.
     If for some reason the language on the source tag doesn't exist
     add 4 spaces.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (add-hook 'org-tab-first-hook
                 (lambda ()
                   (when (org-in-src-block-p t)
@@ -2685,7 +2685,7 @@
     =typo-mode= is a buffer-specific minor mode that will change a number of normal keys to make them insert typographically useful unicode characters. Some of those keys can be used repeatedly to cycle through variations. This includes in particular quotation marks and dashes.
 
     With typo.el we can insert different unicode characters without peeking into the default C-x 8 prefix map, which is cumbersome to remember.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package typo
         :straight t
         :hook (text-mode . typo-mode)
