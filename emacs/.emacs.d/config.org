@@ -403,45 +403,47 @@
         :straight t
         :bind (:map global-map
                     ("C-h" . qk/help-transient))
-        :config (transient-define-prefix qk/help-transient ()
-                  "Help commands that I use. A subset of C-h with others thrown in."
-                  ["Help Commands"
-                   ["Mode & Bindings"
-                    ("m m" "Mode" describe-mode)
-                    ("m w" "Where Is" where-is)
-                    ]
-                   ["Describe"
-                    ("d C" "Command" helpful-command)
-                    ("d f" "Function" helpful-function)
-                    ("d v" "Variable" helpful-variable)
-                    ("d m" "Macro" helpful-macro)
-                    ("d k" "Key" helpful-key)
-                    ]
-                   ["Info on"
-                    ("C-c" "M-x function" Info-goto-emacs-command-node)
-                    ("C-k" "Emacs Key" Info-goto-emacs-key-command-node)
-                    ]
-                   ]
-                  [
-                   ["Internals"
-                    ("i I" "Input Method" describe-input-method)
-                    ("i G" "Language Env" describe-language-environment)
-                    ("i S" "Syntax" describe-syntax)
-                    ("i O" "Coding System" describe-coding-system)
-                    ("i C-o" "Coding Brief" describe-current-coding-system-briefly)
-                    ("i T" "Display Table" describe-current-display-table)
-                    ("i e" "Echo Messages" view-echo-area-messages)
-                    ("i l" "Lossage" view-lossage)
-                    ]
-                   ["DWIM"
-                    ("." "At Point   " helpful-at-point)
-                    ]
-                   ["Info Manuals"
-                    ("i RET" "Info" info)
-                    ("4" "Other Window " info-other-window)
-                    ("C-e" "Emacs" info-emacs-manual)
-                    ]
-                   ]))
+        :config
+        (straight-use-package 'transient)
+        (transient-define-prefix qk/help-transient ()
+                                 "Help commands that I use. A subset of C-h with others thrown in."
+                                 ["Help Commands"
+                                  ["Mode & Bindings"
+                                   ("m m" "Mode" describe-mode)
+                                   ("m w" "Where Is" where-is)
+                                   ]
+                                  ["Describe"
+                                   ("d C" "Command" helpful-command)
+                                   ("d f" "Function" helpful-function)
+                                   ("d v" "Variable" helpful-variable)
+                                   ("d m" "Macro" helpful-macro)
+                                   ("d k" "Key" helpful-key)
+                                   ]
+                                  ["Info on"
+                                   ("C-c" "M-x function" Info-goto-emacs-command-node)
+                                   ("C-k" "Emacs Key" Info-goto-emacs-key-command-node)
+                                   ]
+                                  ]
+                                 [
+                                  ["Internals"
+                                   ("i I" "Input Method" describe-input-method)
+                                   ("i G" "Language Env" describe-language-environment)
+                                   ("i S" "Syntax" describe-syntax)
+                                   ("i O" "Coding System" describe-coding-system)
+                                   ("i C-o" "Coding Brief" describe-current-coding-system-briefly)
+                                   ("i T" "Display Table" describe-current-display-table)
+                                   ("i e" "Echo Messages" view-echo-area-messages)
+                                   ("i l" "Lossage" view-lossage)
+                                   ]
+                                  ["DWIM"
+                                   ("." "At Point   " helpful-at-point)
+                                   ]
+                                  ["Info Manuals"
+                                   ("i RET" "Info" info)
+                                   ("4" "Other Window " info-other-window)
+                                   ("C-e" "Emacs" info-emacs-manual)
+                                   ]
+                                  ]))
     #+end_src
 
 *** Latex
@@ -959,7 +961,7 @@
       Consult-projectile is a package that is still in development, adding this here only means I'm interested in having something of the sort. I might need to do a more in-depth search a few weeks forward.
       #+begin_src emacs-lisp
         (use-package consult-projectile
-          :straight (consult-projectile :type git :host github :repo "Qkessler/consult-projectile")
+          :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile" :branch "master")
           :bind ("C-c p" . consult-projectile)
           :config
           (setq consult-projectile-preview-key (kbd "M-."))
@@ -1399,8 +1401,6 @@
 **** Hiding tags 
     Adding hiding the tags on org agenda.
     #+begin_src emacs-lisp
-      ;; (setq org-agenda-hide-tags-regexp (regexp-opt '(
-      ;;                                                 "REFILING" "MEETING" "IDEA" "EMAIL" "SOMEDAY" "WAITING" "OPTIONAL" "PROJECT" "NOTE" "@work" "@home")))
       (setq org-agenda-hide-tags-regexp ".*")
 
       (use-package org-agenda
@@ -1411,6 +1411,7 @@
         (org-agenda-archives-mode nil)
         (org-agenda-skip-comment-trees nil)
         (org-agenda-skip-function nil)
+        (org-roam-v2-ack t)
         :config
         (transient-define-prefix qk/org-agenda-transient ()
           "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
@@ -1771,6 +1772,7 @@
                                        ("d" "default" plain "%?" :if-new
                                         (file+head "pages/${slug}.org" ":PROPERTIES:\n:ID:  %(org-id-uuid)\n:END:\n#+title: ${title}\n#+filetags: \n\n")
                                         :unnarrowed t)))
+         (org-roam-v2-ack t)
          :bind (:map global-map
                      ("C-c n f" . org-roam-node-find)
                      :map org-mode-map
@@ -2615,6 +2617,14 @@
            :hook (json-mode . flycheck-mode)
            :custom (js-indent-level 2))
        #+end_src
+
+***** Scala programming
+      Here is the simple mode to syntax highlight and format scala code.
+      #+begin_src emacs-lisp
+        (use-package scala-mode
+          :straight t
+          :mode "\\.scala\\'")
+      #+end_src
 
 ***** treemacs-all-the-icons
       Adding all-the-icons support to treemacs, configuring better default icons.
