@@ -1083,7 +1083,9 @@
       (use-package vterm
         :straight t
         :commands vterm
-        :custom (vterm-max-scrollback 10000))
+        :custom
+        (vterm-max-scrollback 10000)
+        (vterm-timer-delay 0.01))
     #+end_src
 
 **** Vterm toggle
@@ -1149,6 +1151,7 @@
     intention of all capture created items to go there before correct refiling.
     #+begin_src emacs-lisp
       (setq org-roam-directory "~/Documents/slipbox")
+      (setq org-roam-v2-ack t)
       (use-package org
         :custom
         (org-directory "~/Documents/org_files")
@@ -2830,12 +2833,13 @@
             " AND NOT flag:trashed"
             " AND (to:enrikes@amazon.com OR to:enrikes@amazon.es)"))
           (mu4e-alert-enable-mode-line-display)
-          (defun gjstein-refresh-mu4e-alert-mode-line ()
-            (interactive)
-            (mu4e~proc-kill)
-            (mu4e-alert-enable-mode-line-display)
-            )
-          (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line))
+          ;; (defun gjstein-refresh-mu4e-alert-mode-line ()
+          ;;   (interactive)
+          ;;   (mu4e~proc-kill)
+          ;;   (mu4e-alert-enable-mode-line-display)
+          ;;   )
+          ;; (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line)
+          )
       #+end_src
 ***** mu4e-thread-folding
       #+begin_quote
