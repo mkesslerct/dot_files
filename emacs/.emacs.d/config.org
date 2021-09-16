@@ -1086,6 +1086,7 @@ s
      #+begin_src emacs-lisp
        (use-package mediator
          :straight (mediator :type git :host github :repo "dalanicolai/mediator")
+         :if mediator-load-p
          :bind (:map embark-file-map
                      ("o" . mediator-open-file)))
      #+end_src
@@ -1097,7 +1098,7 @@ s
      #+begin_src emacs-lisp
        (use-package affe
          :straight (affe :type git :host github :repo "minad/affe" )
-         :after orderless
+         :if affe-load-p
          :bind (("M-s f" . affe-find)
                 ("M-s g" . affe-grep))
          :custom
@@ -1142,11 +1143,11 @@ s
             (window-configuration-to-register ?Z))))
     #+end_src
 
-
 *** Vterm
     #+begin_src emacs-lisp
       (use-package vterm
         :straight t
+        :if vterm-load-p
         :commands vterm
         :custom
         (vterm-max-scrollback 10000)
@@ -1160,7 +1161,8 @@ s
      #+begin_src emacs-lisp
        (use-package vterm-toggle
          :straight t
-         ;; :bind ("C-c x" . vterm-toggle-cd)
+         :if vterm-load-p
+         :bind ("C-c x" . vterm-toggle-cd)
          :custom
          (vterm-toggle-reset-window-configration-after-exit 'kill-window-only)
          (vterm-toggle-hide-method 'delete-window))
@@ -1183,6 +1185,7 @@ s
      #+begin_src emacs-lisp
        (use-package god-mode
          :straight t
+         :if god-mode-load-p
          :custom
          (god-mode-enable-function-key-translation nil)
          :bind (("<escape>" . god-local-mode)

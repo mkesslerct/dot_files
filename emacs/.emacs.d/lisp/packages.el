@@ -43,6 +43,14 @@
   ;; Whole-line-or-region package.
   (whole-line-or-region-load-p t)
   ;; Completion framework: Vertico, Consult, Embark, Marginalia.
-  (completion-framework-load-p t))
+  (completion-framework-load-p t)
+  ;; Mediator package: open files with their default OS opener.
+  (mediator-load-p t)
+  ;; Affe: Incremental find and rip-grep commands.
+  (affe-load-p t)
+  ;; Vterm package: Terminal emulator compiled in C, inside of Emacs.
+  (vterm-load-p t)
+  ;; God-mode: minor-mode to reduce modifier use.
+  (god-mode-load-p t))
 
 (provide 'packages)

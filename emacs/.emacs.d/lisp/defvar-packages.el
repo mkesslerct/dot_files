@@ -21,5 +21,9 @@
 (defvar rg-load-p t)
 (defvar whole-line-or-region-load-p t)
 (defvar completion-framework-load-p t)
+(defvar mediator-load-p t)
+(defvar affe-load-p t)
+(defvar vterm-load-p t)
+(defvar god-mode-load-p t)
 
 (provide 'defvar-packages)
