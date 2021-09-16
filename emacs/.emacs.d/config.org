@@ -14,6 +14,7 @@
     #+begin_src emacs-lisp
       (use-package doom-themes
         :straight t
+        :if nord-theme-load-p
         :init
         (add-to-list 'qk/themes-list 'doom-nord))
     #+end_src
@@ -23,6 +24,7 @@
     #+begin_src emacs-lisp
       (use-package solarized-theme
         :straight t
+        :if solarized-theme-load-p
         :custom
         ;; make the fringe stand out from the background
         (solarized-distinct-fringe-background t)
@@ -87,6 +89,7 @@
     Emacs captures the right Meta key too, which makes writing with accented keys impossible. The fix for this is removing the behaviour of the right option modifier (Right Alt), which lets the OS capture the keypress.
     #+begin_src emacs-lisp
       (use-package emacs
+        :if mac-modifiers-load-p
         :custom (mac-right-option-modifier 'none))
     #+end_src
 s
@@ -126,6 +129,7 @@ s
       (pending-delete-mode)
       (use-package expand-region
         :straight t
+        :if expand-region-load-p
         :bind ("C-=" . er/expand-region))
     #+end_src
 
@@ -133,6 +137,7 @@ s
     Instead of using the default authinfo password manager, which defaults to the =.authinfo.gpg= file, configure Emacs to use [[https://www.passwordstore.org/][Pass: The Standard Unix Password Manager]].
     #+begin_src emacs-lisp
       (use-package auth-source-pass
+        :if pass-load-p
         :init (auth-source-pass-enable))
     #+end_src
 
@@ -140,6 +145,7 @@ s
     #+begin_src emacs-lisp
       (use-package pass
         :straight t
+        :if pass-load-p
         :commands pass
         :custom (pass-username-field "login"))
     #+end_src
@@ -157,7 +163,9 @@ s
 
 **** Load-path
      Whenever a package is too experimental to be uploaded to MELPA, you can still install the =.el= file through the load-path list, which can hold a directory. The convention is to use the =/lisp= folder.
-     #+begin_src emacs-lisp
+
+     This has already been loaded in the =init.el= file, just adding here for visibility.
+     #+begin_src emacs-lisp :tangle no
        (add-to-list 'load-path "~/.emacs.d/lisp/")
      #+end_src
 
@@ -231,6 +239,7 @@ s
      #+begin_src emacs-lisp
        (use-package smartparens
          :straight t
+         :if smartparens-load-p
          :hook (prog-mode . smartparens-mode))
 
        (use-package smartparens-config
@@ -245,6 +254,7 @@ s
      #+begin_src emacs-lisp
        (use-package rainbow-delimiters
          :straight t
+         :if rainbow-delimiters-load-p
          :hook (prog-mode . rainbow-delimiters-mode)
          :custom-face
          (rainbow-delimiters-base-error-face
@@ -285,6 +295,7 @@ s
 
        (use-package doom-modeline
          :straight t
+         :if doom-modeline-load-p
          :custom
          (doom-modeline-mu4e t)
          (doom-modeline-icon t)
@@ -302,6 +313,7 @@ s
 **** All-the-icons
      #+begin_src emacs-lisp
        (use-package all-the-icons
+         :if all-the-icons-load-p
          :straight t)
      #+end_src
 
@@ -314,6 +326,7 @@ s
      #+begin_src emacs-lisp
        (use-package smart-comment
          :straight t
+         :if smart-comment-load-p
          :bind ("M-;" . smart-comment))
      #+end_src
 
@@ -340,6 +353,7 @@ s
      #+begin_src emacs-lisp
        (use-package bufler
          :straight t
+         :if bufler-load-p
          :config (defhydra+ hydra:bufler ()
                    ("o" #'delete-other-windows "Full screen"))
          :bind
@@ -374,8 +388,7 @@ s
      #+begin_src emacs-lisp
        (use-package dired
          :bind (:map dired-mode-map 
-                     ("b" . dired-up-directory)
-                     ("M-s f" . affe-find)))
+                     ("b" . dired-up-directory)))
      #+end_src
 
 **** Directories first on dired.
@@ -393,6 +406,7 @@ s
      #+begin_src emacs-lisp
        (use-package dired-subtree
          :straight t
+         :if dired-subtree-load-p
          :after dired
          :custom (dired-subtree-use-backgrounds nil)
          :bind (:map dired-mode-map
@@ -406,6 +420,7 @@ s
     #+begin_src emacs-lisp
       (use-package helpful
         :straight t
+        :if helpful-load-p
         :bind (:map global-map
                     ("C-h" . qk/help-transient))
         :config
@@ -458,6 +473,7 @@ s
      We defer the package, as the lsp-mode package is already calling it with its hooks.
      #+begin_src emacs-lisp
        (use-package lsp-latex
+         :if lsp-load-p
          :straight t)
      #+end_src
 
@@ -561,12 +577,14 @@ s
     #+begin_src emacs-lisp
       (use-package simple-httpd
         :straight t
+        :if markdown-server-load-p
         :custom
         (httpd-port 7070)
         (httpd-host (system-name)))
 
       (use-package impatient-mode
         :straight t
+        :if markdown-server-load-p
         :commands impatient-mode)
 
       (defun eh/markdown-html (buffer)
@@ -584,6 +602,7 @@ s
 
       (use-package markdown-mode
         :straight nil
+        :if markdown-server-load-p
         :mode ("\\.md\\'" . gfm-mode)
         :commands (markdown-mode gfm-mode)
         :custom (markdown-command "pandoc -t html5")
@@ -634,6 +653,7 @@ s
 
       (use-package ace-window
         :straight t
+        :if ace-window-load-p
         :bind (:map global-map
                     ("M-o" . ace-window))
         :custom
@@ -646,6 +666,7 @@ s
     #+begin_src emacs-lisp
       (use-package perspective
         :straight t
+        :if perspective-load-p
         :bind
         ("C-x x s" . persp-switch)
         ("s-]" . persp-next)
@@ -674,6 +695,7 @@ s
     #+begin_src emacs-lisp
       (use-package pdf-tools
         :straight t
+        :if pdf-tools-load-p
         :custom
         (pdf-view-display-size . 'fit-page)
         (pdf-annot-activate-created-annotations t)
@@ -688,6 +710,7 @@ s
     #+begin_src emacs-lisp
       (use-package rg
         :straight t
+        :if rg-load-p
         :bind ("C-c s" . rg-menu)
         :config (rg-enable-default-bindings))
     #+end_src
@@ -826,6 +849,7 @@ s
     #+begin_src emacs-lisp
       (use-package whole-line-or-region
         :straight t
+        :if whole-line-or-region-load-p
         :init (whole-line-or-region-global-mode))
     #+end_src
 
@@ -838,6 +862,7 @@ s
      #+begin_src emacs-lisp
        (use-package vertico
          :straight t
+         :if completion-framework-load-p
          :init (vertico-mode)
          :custom (vertico-cycle t))
      #+end_src
@@ -847,6 +872,7 @@ s
      #+begin_src emacs-lisp
        (use-package orderless
          :straight t
+         :if completion-framework-load-p
          :custom
          (completion-styles '(orderless))
          (completion-category-defaults nil)
@@ -872,6 +898,7 @@ s
      Adding a prompt indicator that the completing-read-multiple command is enabled. The other configuration is enabling recursive minibuffers. I also disabled the cursor in the minibuffer prompt, avoid clicking by accident.
      #+begin_src emacs-lisp
        (use-package emacs
+         :if completion-framework-load-p
          :init
          ;; Add prompt indicator to `completing-read-multiple'.
          (defun crm-indicator (args)
@@ -892,6 +919,7 @@ s
      #+begin_src emacs-lisp
        (use-package marginalia
          :straight t
+         :if completion-framework-load-p
          :init (marginalia-mode)
          :config
          (add-to-list 'marginalia-prompt-categories '("tab by name" . tab)))
@@ -900,14 +928,9 @@ s
 **** Consult
      Consult provides various practical commands based on the Emacs completion function completing-read, which allows to quickly select an item from a list of candidates with completion. Consult offers in particular an advanced buffer switching command consult-buffer to switch between buffers and recently opened files. Multiple search commands are provided, an asynchronous consult-grep and consult-ripgrep, and consult-line, which resembles Swiper. Some of the Consult commands are enhanced versions of built-in Emacs commands. For example the command consult-imenu presents a flat list of the Imenu with live preview and narrowing support.
      #+begin_src emacs-lisp
-       (defun consult-fd (&optional dir initial)
-         (interactive "P")
-         (let ((consult-find-command "fdfind --color=never --full-path ARG OPTS"))
-           (consult-find dir initial)))
-
        (use-package consult
-         ;; Replace bindings. Lazily loaded due by `use-package'.
          :straight t
+         :if completion-framework-load-p
          :bind (;; C-x bindings (ctl-x-map)
                 ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
                 ;; ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
@@ -940,9 +963,9 @@ s
                 ("M-e" . consult-isearch)                 ;; orig. `isearch-edit-string'
                 ("M-s e" . consult-isearch)               ;; orig. `isearch-edit-string'
                 ("M-s l" . consult-line))
-                ;;:map global-map
-                ;; ("C-s" . consult-isearch)
-                ;; ("C-r" . consult-isearch))
+         ;;:map global-map
+         ;; ("C-s" . consult-isearch)
+         ;; ("C-r" . consult-isearch))
 
          ;; The :init configuration is always executed (Not lazy)
          :init
@@ -959,7 +982,11 @@ s
           ;; Disable preview for `consult-theme' completely.
           consult-theme :preview-key nil
           ;; Set preview for `consult-buffer' to key `M-.'n
-          consult-buffer :preview-key (kbd "M-.")))
+          consult-buffer :preview-key (kbd "M-."))
+         (defun consult-fd (&optional dir initial)
+           (interactive "P")
+           (let ((consult-find-command "fdfind --color=never --full-path ARG OPTS"))
+             (consult-find dir initial))))
      #+end_src
 
 ***** Consult-projectile
@@ -967,6 +994,7 @@ s
       #+begin_src emacs-lisp
         (use-package consult-projectile
           :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile" :branch "master")
+          :if completion-framework-load-p
           :bind ("C-c p" . consult-projectile)
           :config
           (consult-customize consult-projectile consult-projectile--file :preview-key (kbd "M-.")))
@@ -977,6 +1005,7 @@ s
       #+begin_src emacs-lisp
         (use-package consult-lsp
           :straight t
+          :if completion-framework-load-p
           :bind (:map lsp-mode-map
                       ([remap xref-find-apropos] . consult-lsp-symbols)))
       #+end_src
@@ -990,6 +1019,7 @@ s
      #+begin_src emacs-lisp
        (use-package embark
          :straight t
+         :if completion-framework-load-p
          :bind
          (("C-;" . embark-act)
           :map embark-file-map
@@ -1044,6 +1074,7 @@ s
       #+begin_src emacs-lisp
         (use-package embark-consult
           :straight t
+          :if completion-framework-load-p
           :after (embark consult)
           :demand t
           :hook
