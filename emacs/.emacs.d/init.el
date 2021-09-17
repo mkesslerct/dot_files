@@ -61,21 +61,17 @@
 (straight-use-package '(org :type built-in))
 
 (setq dired-use-ls-dired nil)
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+
+;; Create variables for loading the packages with the use-package :if keyword.
+(use-package defvar-packages
+  :demand t)
+
+;; Load packages defined in the packages.el file.
+(use-package packages
+  :demand t)
 
 (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
-
-;; (when (featurep 'ns)
-;;   (defun ns-raise-emacs ()
-;;     "Raise Emacs."
-;;     (ns-do-applescript "tell application \"Emacs\" to activate"))
-;;   (defun ns-raise-emacs-with-frame (frame)
-;;     "Raise Emacs and select the provided frame."
-;;     (with-selected-frame frame
-;;       (when (display-graphic-p)
-;;         (ns-raise-emacs))))
-;;   (add-hook 'after-make-frame-functions 'ns-raise-emacs-with-frame)
-;;   (when (display-graphic-p)
-;;     (ns-raise-emacs)))
 
 (setq custom-file "~/.emacs.d/var/custom.el")
 ;; (load custom-file)
