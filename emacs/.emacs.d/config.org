@@ -1156,7 +1156,7 @@ s
          (god-mode-enable-function-key-translation nil)
          :bind (("<escape>" . god-local-mode)
                 :map god-local-mode-map
-                ("z" . repeat)
+                ("." . repeat)
                 ("i" . god-local-mode)
                 :map global-map
                 ("C-x C-1" . delete-other-windows)
@@ -1236,6 +1236,14 @@ s
         :config
         (defvar org-book-list-file (concat org-directory "/book_list.org")))
     #+end_src
+
+**** Projects inside org-roam
+     With the intention of improving the flow I have creating projects, and looking for projects only, I define a function to create project nodes, based on the "project" tag, making the process of creating projects easier. I need these projects to refile tasks to them, and they appear in the [[*Org agenda][org-agenda view]].
+     #+begin_src emacs-lisp
+       (use-package org-roam-projects
+         :bind (:map global-map
+                     ("C-c n p" . sc/org-roam-find-project)))
+     #+end_src
 
 **** org-insert-link DWIM
      I followed the [[https://xenodium.com/emacs-dwim-do-what-i-mean/][xenodium blog post]] talking about DWIM and its interactive commands already in Emacs. He implements his DWIM changes to to org-insert-link, and I found his changes to be interesting enough to add them to my own command.
@@ -1444,7 +1452,7 @@ s
          ("pw" "@work Project entry" entry (file org-default-notes-file)
           "* PROJECT %? :@work:REFILING:PROJECT:\n" :clock-in t :clock-resume t)
          ("ph" "@home Project entry" entry (file org-default-notes-file)
-          "* PROJECT %? :@work:REFILING:PROJECT:\n" :clock-in t :clock-resume t)
+          "* PROJECT %? :@home:REFILING:PROJECT:\n" :clock-in t :clock-resume t)
          ("o" "Optional item" entry (file org-default-notes-file)
           "* OPTIONAL %? :REFILING:OPTIONAL:\n" :clock-in t :clock-resume t)
          ("b" "Book" entry (file org-book-list-file)
