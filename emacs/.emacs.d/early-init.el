@@ -17,7 +17,7 @@
 ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
-(push '(font . "Source Code Pro for Powerline-11") default-frame-alist)
+(push '(font . "Source Code Pro for Powerline-10") default-frame-alist)
 
 ;; Faster to disable these here (before they've been initialized)
 (setq tool-bar-mode nil

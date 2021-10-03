@@ -1,25 +1,68 @@
-IMAPAccount amazon
-Host ballard.amazon.com
-Port 1993
-User enrikes
-PassCmd "pass outlook.office365.com/enrikes@amazon.com"
+IMAPAccount gmail-personal
+Host imap.gmail.com
+User qkessler@gmail.com
+PassCmd "pass show smtp.gmail.com/qkessler@gmail.com"
+PipelineDepth 50
 SSLType IMAPS
-Timeout 120
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore amazon-remote
-Account amazon
+IMAPStore gmail-personal-remote
+Account gmail-personal
 
-MaildirStore amazon-local
+MaildirStore gmail-personal-local
 Subfolders Verbatim
-Path ~/.Mail/amazon/
-Inbox ~/.Mail/amazon/Inbox
+Path ~/.Mail/Gmail/Personal/
+Inbox ~/.Mail/Gmail/Personal/Inbox
 
-Channel amazon
-Far :amazon-remote:
-Near :amazon-local:
-Patterns *
-CopyArrivalDate yes
+Channel gmail-personal
+Master :gmail-personal-remote:
+Slave :gmail-personal-local:
+Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Trash"
 Create Both
 SyncState *
-Sync All
-Expunge Both
+
+IMAPAccount gmail-work
+Host imap.gmail.com
+User enrique.kesslerm@gmail.com
+PassCmd "pass show smtp.gmail.com/enrique.kesslerm@gmail.com"
+PipelineDepth 50
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore gmail-work-remote
+Account gmail-work
+
+MaildirStore gmail-work-local
+Subfolders Verbatim
+Path ~/.Mail/Gmail/Work/
+Inbox ~/.Mail/Gmail/Work/Inbox
+
+Channel gmail-work
+Master :gmail-work-remote:
+Slave :gmail-work-local:
+Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail" "[Gmail]/Trash"
+Create Both
+SyncState *
+
+IMAPAccount umu
+Host imap.um.es
+User enrique.kesslerm@um.es
+PassCmd "pass show smtp.um.es/enrique.kesslerm@um.es"
+PipelineDepth 50
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore umu-remote
+Account umu
+
+MaildirStore umu-local
+Subfolders Verbatim
+Path ~/.Mail/UMU/
+Inbox ~/.Mail/UMU/Inbox
+
+Channel umu
+Master :umu-remote:
+Slave :umu-local:
+Patterns *
+Create Both
+SyncState *

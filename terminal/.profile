@@ -34,6 +34,6 @@ export PATH="/usr/local/lib/ruby/gems/3.0.0/bin:$PATH"
 export PATH=$HOME/.toolbox/bin:$PATH
 export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
 export PATH="/Library/TeX/texbin/:$PATH"
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-16.jdk/Contents/Home
 
 xcape -e 'Control_L=Escape'
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
