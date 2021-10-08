@@ -63,14 +63,6 @@
 (setq dired-use-ls-dired nil)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
-;; Create variables for loading the packages with the use-package :if keyword.
-(use-package defvar-packages
-  :demand t)
-
-;; Load packages defined in the packages.el file.
-(use-package packages
-  :demand t)
-
 (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
 
 (setq custom-file "~/.emacs.d/var/custom.el")
