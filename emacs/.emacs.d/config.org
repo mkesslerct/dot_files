@@ -87,22 +87,6 @@
         (run-hooks 'after-load-theme-hook))
     #+end_src
 
-** Keybindings
-*** general.el
-    general.el is a fantastic library for defining prefixed keybindings, especially in conjunction with Evil modes.
-    #+begin_src emacs-lisp
-      (use-package general
-        :straight t
-        :demand t
-        :config
-        (general-evil-setup t)
-
-        (general-create-definer qk/leader-key-def
-                                :keymaps '(normal insert visual emacs)
-                                :prefix "SPC"
-                                :global-prefix "C-SPC")
-    #+end_src
-
 ** Better defaults
 *** Make-silent macro
     #+begin_src emacs-lisp
@@ -118,7 +102,7 @@
       (use-package emacs
         :custom (mac-right-option-modifier 'none))
     #+end_src
-s
+
 *** Encoding system
     #+begin_src emacs-lisp
       (prefer-coding-system 'utf-8)
@@ -320,6 +304,7 @@ s
          (doom-modeline-mu4e t)
          (doom-modeline-icon t)
          (doom-modeline-project-detection 'project)
+         (doom-modeline-modal-icon nil)
          (doom-modeline-window-width-limit fill-column)
          (display-time-string-forms
           '((propertize (concat " " 24-hours ":" minutes " ")
@@ -797,10 +782,103 @@ s
 
     Whole-line-or-region implementes some changes to add the mentioned funcionality. Using the remapped C-w and M-w (cut and copy) without a region selected with select the whole line.
     #+begin_src emacs-lisp
-(message "not reaching whole-line-or-region")
       (use-package whole-line-or-region
         :straight t
         :init (whole-line-or-region-global-mode))
+    #+end_src
+
+*** Undo-tree
+    Instead of treating undo/redo as a linear sequence of changes, undo-tree-mode treats undo history as a branching tree of changes, similar to the way Vim handles it. This makes it substantially easier to undo and redo any change, while preserving the entire history of past states.
+    #+begin_src emacs-lisp
+      (use-package undo-tree
+        :straight t
+        :demand t
+        :config (global-undo-tree-mode 1))
+
+    #+end_src
+
+** Keybindings
+*** Evil
+**** Evil-mode
+     [[https://github.com/emacs-evil/evil][Evil]] is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions. Also see our page on EmacsWiki.
+     #+begin_src emacs-lisp
+       (use-package evil
+         :straight t
+         :demand t
+         :custom
+         (evil-want-integration t)
+         (evil-want-keybinding nil)
+         (evil-want-C-u-scroll t)
+         (evil-want-C-i-jump nil)
+         (evil-respect-visual-line-mode t)
+         (evil-undo-system 'undo-tree)
+         :bind (:map evil-insert-state-map
+                     ("C-g" . evil-normal-state))
+         :config
+         (defun qk/evil-hook ()
+           (dolist (mode '(custom-mode
+                           eshell-mode
+                           git-rebase-mode
+                           erc-mode
+                           circe-server-mode
+                           circe-chat-mode
+                           circe-query-mode
+                           sauron-mode
+                           term-mode))
+             (add-to-list 'evil-emacs-state-modes mode)))
+           (add-hook 'evil-mode-hook 'qk/evil-hook)
+
+           (evil-mode 1)
+           ;; Use visual line motions even outside of visual-line-mode buffers
+           (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+           (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+           (evil-set-initial-state 'messages-buffer-mode 'normal)
+           (evil-set-initial-state 'dashboard-mode 'normal))
+  
+     #+end_src
+
+**** Evil-collection
+     #+begin_src emacs-lisp
+       (use-package evil-collection
+         :after evil
+         :init
+         (setq evil-collection-company-use-tng nil)  ;; Is this a bug in evil-collection?
+         :custom
+         (evil-collection-outline-bind-tab-p nil)
+         :config
+         (setq evil-collection-mode-list
+               (remove 'lispy evil-collection-mode-list))
+         (evil-collection-init))
+     #+end_src
+
+**** Evil-org
+     Supplemental evil-mode key-bindings to Emacs org-mode. This project is a continuation of https://github.com/edwtjo/evil-org-mode/blob/master/evil-org.el by Edward Tjörnhammar.
+     #+begin_src emacs-lisp
+       (use-package evil-org
+         :straight t
+         :after org
+         :hook (org-mode . (lambda () evil-org-mode)))
+       (use-package evil-org-agenda
+         :after evil-org
+         :config 
+         (evil-org-agenda-set-keys))
+     #+end_src
+
+
+*** general.el
+    general.el is a fantastic library for defining prefixed keybindings, especially in conjunction with Evil modes.
+    #+begin_src emacs-lisp
+      (use-package general
+        :straight t
+        :demand t
+        :config
+        (general-evil-setup t)
+
+        (general-create-definer qk/leader-key-def
+          :keymaps '(normal insert visual emacs)
+          :prefix "SPC"
+          :global-prefix "C-SPC"))
     #+end_src
 
 ** Completion framework
@@ -1069,7 +1147,7 @@ s
 
 **** God-mode
      This is a global minor mode for entering Emacs commands without modifier keys. It's similar to Vim's separation of command mode and insert mode. All existing key bindings will work in God mode. It's only there to reduce your usage of modifier keys.
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (use-package god-mode
          :straight t
          :custom
