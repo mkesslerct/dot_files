@@ -832,10 +832,10 @@
            ;; Use visual line motions even outside of visual-line-mode buffers
            (evil-global-set-key 'motion "j" 'evil-next-visual-line)
            (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
+    
            (evil-set-initial-state 'messages-buffer-mode 'normal)
+           (evil-set-initial-state 'git-commit-mode 'normal)
            (evil-set-initial-state 'dashboard-mode 'normal))
-  
      #+end_src
 
 **** Evil-collection
@@ -857,12 +857,16 @@
      #+begin_src emacs-lisp
        (use-package evil-org
          :straight t
+         :commands evil-org-mode
          :after org
-         :hook (org-mode . (lambda () evil-org-mode)))
-       (use-package evil-org-agenda
-         :after evil-org
-         :config 
-         (evil-org-agenda-set-keys))
+         :init
+         (add-hook 'org-mode-hook 'evil-org-mode)
+         :config
+         (require 'evil-org-agenda)
+         (evil-org-agenda-set-keys)
+         (add-hook 'evil-org-mode-hook
+                   (lambda ()
+                     (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading)))))
      #+end_src
 
 
