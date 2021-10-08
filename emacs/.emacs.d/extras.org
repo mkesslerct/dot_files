@@ -1,0 +1,993 @@
+* Extras
+  In this file I intend to add all the extras that I use in my config, in order to only import them when I really need them. An special scenario that comes to mind is when changing between configs. I intend to have a minimal configuration that I can replicate easily in =config.org= and all the rest here: in =extras.org=.
+
+** Ripgrep
+   Adding ripgrep configuration to be able to access the functionality from emacs.
+   #+begin_src emacs-lisp
+     (use-package rg
+       :straight t
+       :bind ("C-c s" . rg-menu)
+       :config (rg-enable-default-bindings))
+   #+end_src
+
+** Affe
+   Affe is another package from the great =minad=, which keeps coming out with these amazing integrations to the emacs default functionality, improving the performance out of the park. In this case, he is trying to come up with a replacement to the commonly known fzf.el and fuzzy-find.el modes, which emulate fuzzy find matching running fzf in an emacs terminal process.
+
+   This ends up not being that performant, as they need the default candidate list to be updated all the time —every time the command is called. Affe tries to improve on that functionality (it is still on development, this is only a test configuration) defining the functions: =affe-grep=, using ripgrep, and =affe-find= using find —it could also be configured to use fd.
+   #+begin_src emacs-lisp
+     (use-package affe
+       :straight (affe :type git :host github :repo "minad/affe" )
+       :bind (("M-s f" . affe-find)
+              ("M-s g" . affe-grep))
+       :custom
+       (affe-find-command "fd --color=never -H -t f")
+       (affe-grep-command "rg --null --color=never --max-columns=1000 --no-heading --hidden --no-ignore --line-number -v ^$ .")
+       (affe-regexp-function 'orderless-pattern-compiler)
+       (affe-highlight-function 'orderless--highlight)
+       :config
+       (consult-customize affe-grep :preview-key (kbd "M-.")))
+   #+end_src
+
+** Vterm
+   #+begin_src emacs-lisp
+     (use-package vterm
+       :straight t
+       :commands vterm
+       :bind (:map vterm-mode-map
+                   ("M-m" . vterm-send-C-a))
+       :custom
+       (vterm-max-scrollback 10000)
+       (vterm-timer-delay 0.01)
+       :config
+       (add-to-list 'vterm-keymap-exceptions "M-m"))
+   #+end_src
+
+*** Vterm toggle
+    Package which gives us the possibility to toggle between the terminal and
+    the current buffer easily, without distorting the page and allowing for vterm
+    buffer creation if the buffer was non-existing.
+    #+begin_src emacs-lisp
+      (use-package vterm-toggle
+        :straight t
+        :bind ("C-c x" . vterm-toggle-cd)
+        :custom
+        (vterm-toggle-reset-window-configration-after-exit 'kill-window-only)
+        (vterm-toggle-hide-method 'delete-window))
+    #+end_src
+
+** Org-roam
+   I use the Zettelkasten (slip-box) method for taking and recalling notes and information. To be able to do so, I started with my own workflow, adding org-mode links to the different notes, and has been working for me for close to a month. As a way of improving this workflow, I decided to give org-roam a chance.
+   #+begin_src emacs-lisp
+     (use-package org-roam
+       :straight t
+       :commands org-roam-db-query
+       :custom
+       (org-roam-capture-templates '(
+                                     ("d" "default" plain "%?" :if-new
+                                      (file+head "pages/${slug}.org" ":PROPERTIES:\n:ID:  %(org-id-uuid)\n:END:\n#+title: ${title}\n#+filetags: \n\n")
+                                      :unnarrowed t)))
+       (org-roam-v2-ack t)
+       :bind (:map global-map
+                   ("C-c n f" . org-roam-node-find)
+                   :map org-mode-map
+                   (("C-c n i" . org-roam-node-insert)
+                    ("C-c n l" . org-roam-buffer-toggle)
+                    ("C-c n I" . org-roam-node-insert-immediate)
+                    ("C-c n g" . org-roam-graph)))
+       :config
+       (defun org-roam-node-insert-immediate (arg &rest args)
+         (interactive "P")
+         (let ((args (cons arg args))
+               (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                         '(:immediate-finish t)))))
+           (apply #'org-roam-node-insert args)))
+       (org-roam-setup))
+
+   #+end_src
+
+*** Org-agenda in Org-roam
+    One of the possible options that org-roam provides is the use of org-roam to control the org-agenda files. The big problem in solving this is that org-agenda takes ages to load if the node count goes up. For that, we use clever techniques and advices to check on save and on load for a file, allowing to use per-note TODOs and fast query for the org-agenda buffer. This has been taken out of [[https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html][vulpea’s blog post]].
+      
+**** Vuelpea's option
+    #+begin_src emacs-lisp
+      (use-package vulpea
+        :straight t
+        :commands (vulpea-buffer-tags-get vulpea-buffer-tags-add))
+
+      (use-package vulpea-org-roam
+        :commands vulpea-agenda-files-update
+        :hook
+        (find-file . vulpea-project-update-tag)
+        (before-save . vulpea-project-update-tag))
+
+      (use-package org-agenda
+        :hook (kill-emacs . org-save-all-org-buffers))
+
+      (advice-add 'vulpea-agenda-files-update :before #'org-save-all-org-buffers)
+      (advice-add 'vulpea-agenda-files-update :after #'org-save-all-org-buffers)
+      (advice-add 'org-agenda :before #'org-save-all-org-buffers)
+      (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
+
+    #+end_src
+
+*** Projects inside org-roam
+    With the intention of improving the flow I have creating projects, and looking for projects only, I define a function to create project nodes, based on the "project" tag, making the process of creating projects easier. I need these projects to refile tasks to them, and they appear in the [[*Org agenda][org-agenda view]].
+    #+begin_src emacs-lisp
+      (use-package org-roam-projects
+        :bind (:map global-map
+                    ("C-c n p" . sc/org-roam-find-project)))
+    #+end_src
+
+*** toc-org
+    Package designed to update a table of contents for the org-mode file, super
+    useful when creating readme files, which are easier to format in org.
+    #+begin_src emacs-lisp
+      (use-package toc-org
+        :straight t
+        :hook (org-mode . toc-org-mode))
+    #+end_src
+
+** Org-mode exporting/importing
+   This is the configuration for the exporting backends, which need to be configured in order to create a hook to the =org-export-dispatch= function.
+   #+begin_src emacs-lisp
+     (add-to-list 'org-export-backends 'md)
+     (add-to-list 'org-export-backends 'epub)
+   #+end_src
+*** Exporting to epub
+    This is an attempt to have org-mode export to epub, in order to produce ebooks that I can later convert to mobi in order to include in my kindle. The books that was interested in converting would most likely be collections of blog posts.
+    #+begin_src emacs-lisp
+      (use-package ox-epub
+        :straight t
+        :after org-export)
+    #+end_src
+*** Import to org-mode
+    This package aims to reduce this pain by leveraging Pandoc to convert selected file types to org. The difference betweeen the defined =as= and =to= functions are that the first ones don’t create an org file with the exported file, but only a temporary buffer that can be acted upon.
+    #+begin_src emacs-lisp
+      (use-package org-pandoc-import
+        :straight (:host github
+                         :repo "tecosaur/org-pandoc-import"
+                         :files ("*.el" "filters" "preprocessors")))
+    #+end_src
+
+*** Export from org-mode
+    Even though org-mode has an already built in export dispatch, it is a good idea to complement the default modes (i.e =md=) with *pandoc*, which is a powerful file converter.
+    #+begin_src emacs-lisp
+      (use-package ox-pandoc
+        :straight t
+        :commands (org-pandoc-export-to-md org-pandoc-export-as-md))
+    #+end_src
+
+** Programming
+*** Open code in code.amazon
+    Helper to open the current file in code.amazon.
+    #+begin_src emacs-lisp
+      (defcustom amz-workspace-base-dirname "workplace"
+        "The name of your base workspace directory"
+        :type 'string)
+
+      (use-package java
+        :config
+        (defun amz-package (fname)
+          "break up the current class' filename into (package path, package, class path, classfile)"
+          (let (packagepath package classpath classfile count ptr1 ptr2)
+            (setq packagepath (split-string fname "/"))
+            (setq ptr1 packagepath)
+            (while (and
+                    (not (string= (car ptr1) amz-workspace-base-dirname))
+                    (not (null ptr1)))
+              (setq ptr1 (cdr ptr1)))
+            (if (null ptr1)
+                (error "not in a workspace"))
+            (setq count 0)
+            (while (and (< count 3)
+                        (not (null ptr1)))
+              (setq ptr2 ptr1)
+              (setq ptr1 (cdr ptr1))
+              (setq count (1+ count)))
+            (if (null ptr1)
+                (error "not in a package dir"))
+            (setcdr ptr2 nil)
+            (setq package (car ptr1))
+            (setq ptr2 ptr1)
+            (setq ptr1 (cdr ptr1))
+            (if (null ptr1)
+                (error "not in a package dir"))
+            (setcdr ptr2 nil)
+            (setq classpath ptr1)
+            (while (not (null (cdr ptr1)))
+              (setq ptr2 ptr1)
+              (setq ptr1 (cdr ptr1)))
+            (setcdr ptr2 nil)
+            (setq classfile (car ptr1))
+            (if (or (null package)
+                    (null classpath)
+                    (null packagepath)
+                    (null classfile))
+                (error "not in a classfile")
+              (list (mapconcat 'identity packagepath "/")
+                    package
+                    (mapconcat 'identity classpath "/")
+                    classfile))))
+        (defun open-code-amazon ()
+          "Open the current line of code, or highlighted lines of code, on code.amazon.
+         This assumes that the current file is under `amz-workspace-base-dirname'."
+          (interactive)
+          (let ((fname (buffer-file-name))
+                service path lines)
+            (setq pathparts (amz-package fname))
+            (if (not (use-region-p))
+                (setq lines (format "L%d" (line-number-at-pos)))
+              (setq lines (format "L%d-L%d" (line-number-at-pos (mark)) (- (line-number-at-pos) 1))))
+            (setq service (nth 1 pathparts))
+            (setq path (concat (nth 2 pathparts) "/" (nth 3 pathparts)))
+            (browse-url (format "https://code.amazon.com/packages/%s/blobs/mainline/--/%s#%s" service path lines))))
+        (define-key java-mode-map (kbd "C-c C-o") 'open-code-amazon))
+    #+end_src
+*** Language Server Protocol
+Lsp-mode for server completion.
+**** Flycheck
+     Sintax checking on the fly.
+     #+begin_src emacs-lisp
+       (use-package flycheck
+         :straight t
+         :custom (flycheck-display-errors-function nil))
+     #+end_src
+
+**** Treemacs
+     Treemacs is a package explorer that has been created taking a ton of inspiration
+     from Eclipse's package explorer. It allows to have a ton of project and workspace
+     functionality that I find interesting for some of my applications. Mostly it will
+     be used when there are a ton of files in the project and I can benefit from having
+     a bird-view.
+
+     I use the following keybindings:
+    
+     - =C-c T=: =treemacs=, I normally use it to close treemacs.
+     - =C-c t=: =treemacs-select-window=, this second one is the one that I most use,
+       considering that treemacs opens when this command is called and the treemacs
+       window was hidden.
+     #+begin_src emacs-lisp
+       (defvar treemacs-no-load-time-warnings t)
+       (use-package treemacs
+         :straight t
+         :bind (:map global-map (("C-c T" . treemacs)
+                                 ("C-c t" . treemacs-select-window))))
+     #+end_src
+
+***** treemacs-projectile
+      treemacs-projectile is a little extension to the comprehensive treemacs functionality, focused on providing an easy exprerience adding projects, specially some of which have already been imported by projectile.
+      #+begin_src emacs-lisp
+        (use-package treemacs-projectile
+          :straight t
+          :after treemacs)
+      #+end_src
+
+**** Tree-sitter-mode
+     Tree-sitter is a parser generator tool and an incremental parsing library. It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited. It could be the next generation of sintax parsers, as it has been really accepted by the community and the Github's Atom team has been working on implementing a ton of languages.
+
+     Even though support has been scarce for the last months, the =emacs-tree-sitter= package now supports most of the most I work with, making the experience snappier, specially with big buffers. It doesn't really hurt to try, considering the sintax-highlighting already provided by =font-lock-mode=, which is not specially fast (it is regex based).
+
+     With the following documenation, tree-sitter-hl-mode will be enabled on all supported major modes, and you will be start to benefit from incremental parsing.
+     #+begin_src emacs-lisp
+       (use-package tree-sitter
+         :straight t)
+       (use-package tree-sitter-langs
+         :straight t
+         :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+         :init (global-tree-sitter-mode))
+     #+end_src
+     
+**** lsp-mode
+     Client for Language Server Protocol (v3.14). =lsp-mode= aims to provide IDE-like experience by providing optional integration with the most popular Emacs packages.
+     #+begin_src emacs-lisp
+       (use-package lsp-mode
+         :straight t
+         :commands (lsp lsp-deferred)
+         :hook
+         (mhtml-mode . lsp-deferred)
+         (css-mode . lsp-deferred)
+         (python-mode . lsp-deferred)
+         (csharp-mode . lsp-deferred)
+         (js-mode . lsp-deferred)
+         (typescript-mode . lsp-deferred)
+         (tex-mode . lsp-deferred)
+         (latex-mode . lsp-deferred)
+         (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
+         :custom
+         (read-process-output-max (* 1024 1024))
+         (lsp-completion-provider :none)
+         (lsp-idle-delay 0.500)
+         (lsp-enable-file-watchers nil)
+         (lsp-signature-auto-activate nil)
+         (lsp-headerline-breadcrumb-enable nil)
+         (lsp-enable-links nil)
+         :config
+         (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+     #+end_src
+
+***** Html preview.
+      Adding the html preview filter, which uses the httpd server and impatient-mode, in order to process all the information. Keep in mind that you would need to use the impatient-mode command on all the buffers that need to be refreshed on change, including possible stylesheets that are connected to the initial 
+      #+begin_src emacs-lisp
+        (defun qk/html-preview ()
+          "Preview html using httpd and impatient-mode"
+          (interactive)
+          (unless (process-status "httpd")
+            (httpd-start))
+          (impatient-mode)
+          (imp-visit-buffer))
+      #+end_src
+      
+***** lsp-ui
+      Better ui for lsp-mode, adding el-doc.
+      #+begin_src emacs-lisp
+        (use-package lsp-ui
+          :requires (flycheck)
+          :straight t
+          :commands lsp-ui-mode
+          :custom (lsp-ui-sideline-show-code-actions nil))
+      #+end_src
+
+***** C++/C programming.
+      Always works on C++, sometimes wrong on C programming.
+      #+begin_src emacs-lisp
+        (use-package ccls
+          :straight t
+          :disabled
+          :config (progn
+                    (setq ccls-executable "ccls")
+                    (setq lsp-prefer-flymake nil)
+                    (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
+          :hook ((c-mode c++-mode objc-mode) .
+                 (lambda () (require 'ccls) (lsp-deferred))))
+      #+end_src
+
+****** Keybindings
+       Disable some keybindings. For some reason c-mode, c++-mode binds the default keys like TAB, RET and more to their own changes. I don't really like that modes change some of the default keys.
+       #+begin_src emacs-lisp
+         (use-package c++-mode
+           :mode ("\\.cpp\\'" "\\.c\\'")
+           :custom (c-basic-offset 4)
+           :bind
+           (:map c-mode-base-map
+                 ("TAB" . nil))
+           (:map c-mode-map
+                 ("TAB" . nil))
+           (:map c++-mode-map
+                 ("TAB" . nil)))
+       #+end_src
+
+***** Dart/Flutter programming
+      #+begin_src emacs-lisp
+        (use-package lsp-dart 
+          :straight t
+          :hook (dart-mode . lsp-deferred)
+          :custom
+          (dart-sdk-path "~/.local/flutter/bin/cache/dart-sdk")
+          (lsp-dart-sdk-dir "~/.local/flutter/bin/cache/dart-sdk")
+          ;; (lsp-dart-flutter-sdk-dir "~/.local/flutter")
+          (lsp-dart-flutter-sdk-dir "/home/qkessler/.local/flutter")
+          (lsp-dart-main-code-lens nil)
+          (lsp-dart-dap-flutter-hot-reload-on-save t)
+          (dart-format-on-save t))
+
+      #+end_src
+
+      Adding hover to emulate running flutter mobile application on dekstop.
+      #+begin_src emacs-lisp
+        (use-package hover
+          :straight t
+          :after dart-mode
+          :custom (hover-hot-reload-on-save t)
+          (hover-clear-buffer-on-hot-restart t)
+          (hover-command-path "~/go/bin/hover")
+          :bind (:map dart-mode-map
+                      ("C-c h z" . #'hover-run-or-hot-reload)
+                      ("C-c h x" . #'hover-run-or-hot-restart)))
+      #+end_src
+
+***** Java Programming
+      Works with the eclipse server, not really sure if it is what I'm looking for.
+      #+begin_src emacs-lisp
+        (use-package lsp-java
+          :straight t
+          :hook (java-mode . lsp-deferred))
+      #+end_src
+
+***** Python programming
+      Making sure the executable for python is not longer "python", but default to
+      using the "python3" binary. Remember that pip3, when installing
+      python-language-server saves the information in ~/.local/bin, which may not be
+      in your path, check the "echo $PATH" output.
+      #+begin_src emacs-lisp
+        (use-package python
+          :custom
+          (python-shell-interpreter "python3")
+          (compilation-ask-about-save nil)
+          (python-indent-guess-indent-offset-verbose nil)
+          (compilation-scroll-output t)
+          :init
+          (defun mk/compile-python-buffer ()
+            "Use compile to run python programs."
+            (interactive)
+            (compile (concat "python3 " (buffer-name))))
+          :bind (:map python-mode-map
+                      ("C-c C-u" . mk/compile-python-buffer)))
+      #+end_src
+
+****** lsp-pylsp
+       This is the configuration for the python lsp update palantir server, which is configured in the lsp-mode section, but I thought adding custom variables here would make the section cleaner.
+       #+begin_src emacs-lisp
+         (use-package lsp-mode
+           :custom
+           (lsp-pylsp-jedi-completion-fuzzy t)
+           (lsp-pylsp-plugins-jedi-use-pyenv-environment t)
+           (lsp-pylsp-plugins-black-enabled t)
+           (lsp-pylsp-plugins-rope-completion-enabled t)
+           (lsp-pylsp-plugins-pylint-enabled t))
+       #+end_src
+
+****** lsp-pyright
+       Need to configure the pyright lsp package to provide the pyright support to python buffers, which seems to be much faster than the other Palantir options.
+       #+begin_src emacs-lisp
+         (use-package lsp-pyright
+           :straight t
+           :disabled
+           :hook (python-mode . (lambda ()
+                                  (require 'lsp-pyright)
+                                  (lsp-deferred))))
+       #+end_src
+****** pip-requirements
+       Adding pip-requirements in order to benefit from syntax and completion for pip requirements files.
+       #+begin_src emacs-lisp
+         (use-package pip-requirements
+           :straight t)  
+       #+end_src
+
+****** pyvenv
+       This is a simple global minor mode which will replicate the changes done by virtualenv activation inside Emacs.
+
+       The main entry points are pyvenv-activate, which queries the user for a virtual environment directory to activate, and pyvenv-workon.
+       #+begin_src emacs-lisp
+         (use-package pyvenv
+           :straight t
+           :hook (python-mode . rh/pyvenv-autoload)
+           :init
+           (defun rh/pyvenv-autoload ()
+             (interactive)
+             "auto activate venv directory if exists"
+             (f-traverse-upwards (lambda (path)
+                                   (let ((venv-path (f-expand ".env" path)))
+                                     (when (f-exists? venv-path)
+                                       (pyvenv-activate venv-path)))))))
+       #+end_src
+
+****** Conda
+       Conda is an easy to use, packaged set of libraries that comes with package versioning, environments and different kernels, containing the set of packages that you need. Conda contains all the major Machine Learning and Data Science libraries.
+       #+begin_src emacs-lisp
+         (use-package conda
+           :straight t
+           :commands conda-env-activate
+           :custom (conda-anaconda-home "/Users/enrikes/opt/anaconda3/")
+           :config (conda-env-initialize-interactive-shells))
+       #+end_src
+
+****** Jupyter
+       Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. Uses include: data cleaning and transformation, numerical simulation, statistical modeling, data visualization, machine learning, and much more.
+       #+begin_src emacs-lisp :tangle no
+         (use-package jupyter
+           :straight t
+           :custom
+           (jupyter-repl-echo-eval-p t)
+           (org-babel-default-header-args:jupyter-python '((:async . "yes")
+                                                                   (:session . "py"))))
+         (use-package ob-jupyter
+           :commands (org-babel-execute:jupyter org-babel-expand-body:jupyter))
+       #+end_src
+
+***** C# programming
+      C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support, for syntax highlighting and more, which uses [[*Tree-sitter-mode][Tree-sitter-mode]].
+      #+begin_src emacs-lisp
+        (use-package csharp-mode
+          :straight t
+          :mode "\\.cs\\'"
+          :hook (csharp-mode . csharp-tree-sitter-mode))
+      #+end_src
+    
+***** Web programming
+****** CSS
+       Css programming is helped with the lsp-mode server: css-ls, installed with
+       the command M-x lsp-install-server RET css-ls RET.
+
+       Colors need to be highlighted in other buffers too, i.e. elisp-mode. For that I intend to use rainbow-mode, which may be enabled with =M-x rainbow-mode=.
+       #+begin_src emacs-lisp
+         (use-package rainbow-mode
+           :straight t
+           :commands rainbow-mode)
+       #+end_src
+
+****** HTML
+       Exactly the same with the html server, installed with lsp-install-server: html-ls.
+       To use html-mode in other mode files, I needed to configure .hsb template
+       files, using express.
+       #+begin_src emacs-lisp
+         (use-package mhtml-mode
+           :mode ("\\.html\\'" "\\.hbs\\'")
+           :straight nil)
+       #+end_src
+       
+****** PHP
+       PHP programming is not included in the default emacs implementation. For that reason, we can use the wonderful =php-mode= package, which is everything we can look for for a major mode.
+       #+begin_src emacs-lisp
+         (use-package php-mode
+           :straight t
+           :mode "\\.php\\'")
+       #+end_src
+       
+****** Emmet-mode
+       Better completion for html tags, very good documentation. This package is configured with my fork, as emmet-mode's default repo has problems using the =cl= package, instead of the updated =cl-lib=.
+       #+begin_src emacs-lisp
+         (use-package emmet-mode
+           :straight (emmet-mode :type git :host github :repo "smihica/emmet-mode"
+                                 :fork (:host github
+                                              :repo "Qkessler/emmet-mode"))
+           :custom (emmet-move-cursor-between-quotes t))
+         (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+         (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+         (add-hook 'js-mode-hook 'emmet-mode)
+       #+end_src
+
+****** JavaScript environment
+       Adding the JavaScript programming environment, trying only with lsp-mode and then
+       considering "tide", which is a full-fledged environment, close to what elpy was
+       for python3. Adding the rjsx-mode package, which allows for updated sintax documentation
+       and keywords, considering the updated react components and new sintax, deriving js2-mode.
+
+       The following lines are needed to run the language server. We need to install the server
+       inside every project, we have it defined as a npm package. You might need to run it with
+       admin privileges (sudo):
+       - npm i -g typescript-language-server; npm i -g typescript
+       - npm i -g javascript-typescript-langserver
+
+       In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
+       is on the exec-path, not tangling this because the correct solution for this problem is the
+       [[*Syncing .profile env variables][exec-path-from-shell package]]
+       #+begin_src emacs-lisp
+         ;; (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.12.0/bin")))
+       #+end_src
+       I've found this is often a misnaming error, if you install from a package
+       manager you bin may be called nodejs so you just need to symlink it like so "ln
+       -s /usr/bin/nodejs /usr/bin/node"
+
+       Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
+       #+begin_src emacs-lisp
+         (use-package js2-mode
+           :disabled
+           :straight t)
+       #+end_src
+
+       js-mode, which was introduced in Emacs 27, including full support for
+       jsx highlighting, indenting and more.
+       #+begin_src emacs-lisp
+         (use-package js-mode
+           :mode ("\\.js\\'" "\\.tsx\\'" "\\.ts\\'")
+           :bind (:map js-mode-map ("M-." . nil))
+           :hook (js-mode . (lambda ()
+                              (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+       #+end_src
+
+       xref-js2, makes use of "rg" for searching the project for definitions and jumping
+       between them, which is key to software developing.
+       #+begin_src emacs-lisp
+         (use-package xref-js2
+           :straight t
+           :after js-mode
+           :custom (xref-js2-search-program 'rg))
+       #+end_src
+
+       Adding json-mode configuration, which is a major mode for editing json files, providing
+       better sintax highlights, and some nice editing keybindings.
+       #+begin_src emacs-lisp
+         (use-package json-mode
+           :straight t
+           :mode "\\.json\\'"
+           :hook (json-mode . flycheck-mode)
+           :custom (js-indent-level 2))
+       #+end_src
+
+***** Scala programming
+      Here is the simple mode to syntax highlight and format scala code.
+      #+begin_src emacs-lisp
+        (use-package scala-mode
+          :straight t
+          :mode "\\.scala\\'")
+      #+end_src
+
+***** treemacs-all-the-icons
+      Adding all-the-icons support to treemacs, configuring better default icons.
+      #+begin_src emacs-lisp
+        (use-package treemacs-all-the-icons
+          :straight t
+          :after treemacs
+          :config (treemacs-load-theme "Netbeans"))
+      #+end_src
+
+***** Dap-mode
+      Server side debugging protocol, seemed to be installed with lsp-dart, I'm adding the package here just to make sure, as I couldn't load lsp-dart or lsp-java because dap-mode wasn't available.
+      #+begin_src emacs-lisp
+        (use-package dap-mode
+          :straight t
+          :after lsp-mode
+          :bind (:map lsp-mode-map
+                      ("C-c l d" . dap-hydra))
+          :hook (dap-stopped . (lambda (arg) (call-interactively #'dap-hydra)))
+          :config (dap-auto-configure-mode))
+      #+end_src
+
+****** Dap-java
+       In order to be able to access the java functionality (debugger with dap-java), I needed to update the =jdtls= server, and require the dap-java package. As I'm using =straight=, I figured I would use the =straight-use-package= function.
+       #+begin_src emacs-lisp
+         (use-package dap-java
+           :straight nil
+           :after dap-mode)
+       #+end_src
+
+****** Dap-python
+       Here is the dap extension for debugging python files. Since I intend to connect to remote machines for debugging, I might need to dive a bit deeper on dap-python’s configuration variables.
+       #+begin_src emacs-lisp
+         (use-package dap-python
+           :straight nil
+           :after dap-mode)
+       #+end_src
+
+*** DevDocs
+    Instead of having to search for online documentation for each of the modes a certain buffer is in, we can now browse API documentations provided by [[https://devdocs.io/][devdocs.io]] inside emacs using EWW, improving formatting, highlighting code blocks, using the package [[https://github.com/blahgeek/emacs-devdocs-browser][emacs-devdocs-browser]]. We can also install, upgrade docsets, even adding new jumping functions and default browser support. Overall I find that this packages takes a really interesting take at documentation, and I love when they force me to stay inside Emacs.
+    #+begin_src emacs-lisp
+      (use-package emacs-devdocs-browser
+        :straight (emacs-devdocs-browser :type git :host github :repo "blahgeek/emacs-devdocs-browser" )
+        :custom
+        (devdocs-browser-cache-directory (no-littering-expand-var-file-name "devdocs-browser"))
+        :bind ("C-c d" . devdocs-browser-open-in))
+    #+end_src
+
+*** Yaml-mode
+    The yaml-mode package provides indentation features for programming with
+    yaml files, in which indentantion is key and a slip-up is really easy.
+    #+begin_src emacs-lisp
+      (use-package yaml-mode
+        :mode "\\.yml\\'"
+        :straight t)
+    #+end_src
+    
+** Anki
+   =anki-editor= – Emacs minor mode for making Anki cards with Org
+   #+begin_src emacs-lisp
+     (use-package anki-editor
+       :straight t
+       :after org
+       :hook
+       (org-capture-after-finalize . anki-editor-reset-cloze-number)
+       :custom
+       (anki-editor-create-decks t)
+       (anki-editor-org-tags-as-anki-tags t)
+       :bind (:map org-mode-map
+                   ("C-c 1" . anki-editor-cloze-region-auto-incr)
+                   ("C-c 2" . anki-editor-cloze-region-dont-incr)
+                   ("C-c 3" . anki-editor-reset-cloze-number)
+                   ("C-c 4"  . anki-editor-push-tree))
+       :config
+       (defun anki-editor-cloze-region-auto-incr (&optional arg)
+         "Cloze region without hint and increase card number."
+         (interactive)
+         (anki-editor-cloze-region my-anki-editor-cloze-number "")
+         (setq my-anki-editor-cloze-number (1+ my-anki-editor-cloze-number))
+         (forward-sexp))
+
+       (defun anki-editor-cloze-region-dont-incr (&optional arg)
+         "Cloze region without hint using the previous card number."
+         (interactive)
+         (anki-editor-cloze-region (1- my-anki-editor-cloze-number) "")
+         (forward-sexp))
+
+       (defun anki-editor-reset-cloze-number (&optional arg)
+         "Reset cloze number to ARG or 1"
+         (interactive)
+         (setq my-anki-editor-cloze-number (or arg 1)))
+
+       (defun anki-editor-push-tree ()
+         "Push all notes under a tree."
+         (interactive)
+         (anki-editor-push-notes '(4))
+         (anki-editor-reset-cloze-number))
+
+       ;; Initialize
+       (anki-editor-reset-cloze-number))
+   #+end_src
+
+**** Anki org-capture
+     Now that we know what a proper Anki note should look like in Org-mode, we can define a template and use org-capture to create cards swiftly as we came across different materials on web.
+     #+begin_src emacs-lisp
+       (defun qk/org-capture-here ()
+         "Org-capture in the current buffer, passing the 0 prefix
+       to the org-capture function."
+         (interactive)
+         (setq current-prefix-arg 0) ; C-0
+         (call-interactively 'org-capture))
+
+       (use-package  org-capture
+         :custom
+         (x-select-enable-clipboard t)
+         (x-select-enable-primary t)
+         :bind (:map org-mode-map
+                     ("C-c C-a" . qk/org-capture-here))
+         :config
+         (add-to-list 'org-capture-templates
+                      '("a" "Anki basic" entry (file org-default-notes-file)
+                        "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Basic\n:ANKI_DECK: %?\n:END:\n** Front\n\n** Back\n\n"))
+         (add-to-list 'org-capture-templates
+                      '("A" "Anki cloze" entry (file org-default-notes-file)
+                        "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Cloze\n:ANKI_DECK: %?\n:END:\n** Text\n\n** Extra\n")))
+     #+end_src
+     
+** Email from emacs
+   Adding email integration for the email indexer mu, called mu4e.
+**** Mu4e
+     Adding mu4e configuration that was configured with mbsync.
+     We have installed it with the package manager, in order to make sure
+     that the mu4e version is in sync with the mu binary from my distro.
+
+     In order to be able to send email, we need to configure smtp in the
+     different contexts.
+     #+begin_src emacs-lisp
+       (use-package mu4e
+         :straight nil
+         :load-path "/usr/local/share/emacs/site-lisp/mu4e/"
+         :hook (after-init . mu4e)
+         :bind (("C-c m" . mu4e)
+                :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message)
+                :map mu4e-view-mode-map ("C-h" . nil))
+         :hook (mu4e-compose-mode . flyspell-mode)
+         :custom
+         (mu4e-maildir "~/.Mail")
+         (mu4e-attachment-dir "~/Downloads")
+         (mu4e-get-mail-command "mbsync -a")
+         (mu4e-change-filenames-when-moving t)
+         (mu4e-headers-show-threads nil)
+         ;;         (mu4e-html2text-command 'mu4e-shr2text)
+         (mu4e-update-interval (* 1 60))
+         (mu4e-hide-index-messages t)
+         (mu4e-compose-signature "Enrique Kessler Martínez\n")
+         (mu4e-compose-signature-auto-include t)
+         (mu4e-confirm-quit nil)
+         (mu4e-sent-messages-behavior 'sent)
+         (mu4e-headers-auto-update t)
+         (message-kill-buffer-on-exit t)
+         (mu4e-headers-skip-duplicates t)
+         (mu4e-headers-fields
+          '((:human-date . 12)
+            (:flags . 6)
+            (:mailing-list . 10)
+            (:from . 22)
+            (:subject)))
+         (mu4e-view-show-addresses t)
+         (mu4e-display-update-status-in-modeline t)
+         (mu4e-view-show-images nil)
+         (mu4e-context-policy 'pick-first)
+         (mu4e-compose-format-flowed t)
+         (mu4e-maildir-shortcuts
+          '( (:maildir "/Gmail/Personal/Inbox" :key  ?p :hide-unread t)
+             (:maildir "/Gmail/Work/Inbox" :key  ?w :hide-unread t)
+             (:maildir "/UMU/Inbox" :key  ?u :hide-unread t)))
+
+         (mu4e-bookmarks
+          '(
+            (:name "Last 7 days" :query `,"d:7d..now" :key ?w)
+            (:name "Today's messages" :query "d:today..now" :key ?t)
+            (:name "Work Unread"
+                   :query "to:enrique.kesslerm@gmail.com AND g:unread AND NOT g:trashed"
+                   :key ?s)
+            (:name "Personal Unread"
+                   :query "to:qkessler@gmail.com AND g:unread AND NOT g:trashed"
+                   :key ?p)
+            (:name "UMU Unread"
+                   :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
+                   :key ?u)))
+         :config
+         (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
+         (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
+         (require 'mu4e-context)
+         (setq mu4e-contexts
+               (list
+                ;; Personal account
+                (make-mu4e-context
+                 :name "Personal"
+                 :match-func
+                 (lambda (msg)
+                   (when msg
+                     (string-prefix-p "/Gmail/Personal" (mu4e-message-field msg :maildir))))
+                 :vars '((user-mail-address . "qkessler@gmail.com")
+                         (user-full-name    . "Enrique Kessler Martínez")
+                         (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
+                         (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
+                         (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
+                         (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
+                         (smtpmail-smtp-user . "qkessler@gmail.com")
+                         (smtpmail-default-smtp-server . "smtp.gmail.com")
+                         (smtpmail-smtp-server . "smtp.gmail.com")
+                         (smtpmail-smtp-service . 587)))
+                (make-mu4e-context
+                 :name "Work"
+                 :match-func
+                 (lambda (msg)
+                   (when msg
+                     (string-prefix-p "/Gmail/Work" (mu4e-message-field msg :maildir))))
+                 :vars '((user-mail-address . "enrique.kesslerm@gmail.com")
+                         (user-full-name    . "Enrique Kessler Martínez")
+                         (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
+                         (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
+                         (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
+                         (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
+                         (smtpmail-default-smtp-server . "smtp.gmail.com")
+                         (smtpmail-smtp-user . "enrique.kesslerm@gmail.com")
+                         (smtpmail-smtp-server . "smtp.gmail.com")
+                         (smtpmail-smtp-service . 587)))
+                (make-mu4e-context
+                 :name "UMU"
+                 :match-func
+                 (lambda (msg)
+                   (when msg
+                     (string-prefix-p "/UMU" (mu4e-message-field msg :maildir))))
+                 :vars '((user-mail-address . "enrique.kesslerm@um.es")
+                         (user-full-name    . "Enrique Kessler Martínez")
+                         (mu4e-drafts-folder  . "/UMU/Drafts")
+                         (mu4e-sent-folder  . "/UMU/Sent")
+                         (mu4e-trash-folder  . "/UMU/Trash")
+                         (smtpmail-smtp-user . "enrique.kesslerm@um.es")
+                         (smtpmail-default-smtp-server . "smtp.um.es")
+                         (smtpmail-smtp-server . "smtp.um.es")
+                         (smtpmail-smtp-service . 587)))))
+         (use-package mu4e-icalendar
+           :demand t
+           :straight nil)
+         (mu4e-icalendar-setup)
+         (setq gnus-icalendar-org-capture-file (concat org-roam-directory "/pages/meetings.org"))
+         (setq gnus-icalendar-org-capture-headline '("Meetings"))
+         (gnus-icalendar-org-setup))
+     #+end_src
+
+***** mu4e-alert
+      mu4e-alert is an Emacs extension providing desktop notifications for mu4e, additionally it can display the number of unread emails in the mode-line. This is a test, I might need to disable it manually for concentration times.
+      #+begin_src emacs-lisp
+        (use-package mu4e-alert
+          :straight t
+          :after mu4e
+          :custom
+          (mu4e-alert-interesting-mail-query
+           (concat
+            "flag:unread"
+            " AND NOT flag:trashed"
+            " AND (to:enrikes@amazon.com OR to:enrikes@amazon.es)"))
+          (mu4e-alert-enable-mode-line-display)
+          ;; (defun gjstein-refresh-mu4e-alert-mode-line ()
+          ;;   (interactive)
+          ;;   (mu4e~proc-kill)
+          ;;   (mu4e-alert-enable-mode-line-display)
+          ;;   )
+          ;; (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line)
+          )
+      #+end_src
+***** mu4e-thread-folding
+      #+begin_quote
+      =mu4e-thread-folding.el= is a small library to enable threads folding in mu4e. This works by using overlays with an invisible property and setting hooks at the right place. It is possible to configure colors to better highlight a thread and also to have a prefix string indicating if a thread is folded or not. Note that when a thread is folded, any unread child remains visible.
+      #+end_quote
+      [[https://github.com/rougier/mu4e-thread-folding][- link]]
+      #+begin_src emacs-lisp :tangle no
+        (use-package mu4e-thread-folding
+          :straight (mu4e-thread-folding :type git :host github :repo "rougier/mu4e-thread-folding")
+          :after mu4e
+          :init
+          (add-to-list 'mu4e-header-info-custom
+                       '(:empty . (:name "Empty"
+                                         :shortname ""
+                                         :function (lambda (msg) "  "))))
+          :custom (mu4e-headers-fields '((:empty         .    2)
+                                          (:human-date    .   12)
+                                          (:flags         .    6)
+                                          (:mailing-list  .   10)
+                                          (:from          .   22)
+                                          (:subject       .   nil)))
+          :bind (:map mu4e-headers-mode-map
+                      ("<tab>" . mu4e-headers-toggle-at-point)))
+      #+end_src
+
+**** Message package
+     Adding the configuration for the message package, in order to allow for
+     easier sending and composing of emails. The package comes already installed
+     with emacs.
+     #+begin_src emacs-lisp
+       (use-package message
+         :commands mu4e
+         :custom
+         (mail-user-agent 'mu4e-user-agent)
+         (compose-mail-user-agent-warnings nil)
+         (starttls-use-gnutls t)
+         (message-mail-user-agent nil)    ; default is `gnus'
+         (message-citation-line-format "On %Y-%m-%d, %R %z, %f wrote:\n")
+         (message-citation-line-function
+          'message-insert-formatted-citation-line)
+         (message-wide-reply-confirm-recipients t)
+         (send-mail-function 'smtpmail-send-it)
+         (message-send-mail-function 'smtpmail-send-it)
+         (message-default-charset 'utf-8)
+         :config (add-to-list 'mm-body-charset-encoding-alist '(utf-8 . base64)))
+     #+end_src
+
+**** SMTP
+     SMTP configuration in order to be able to send messages via smtp,
+     adding the async functionality.
+
+     #+begin_src emacs-lisp :tangle no
+       (use-package async
+         :straight t)
+       (use-package smtpmail-async
+         :straight nil
+         :custom (send-mail-function 'async-smtpmail-send-it)
+         (message-send-mail-function 'async-smtpmail-send-it))
+     #+end_src
+**** Icalendar support
+     mu4e provides support for icalendar files, which are defined with the =.ics= extension. In order to benefit from the support, we need to run the gnus-icalendar-setup, which generates the RSVP buttons (accept, tentative, decline) in mu4e. The option =mu4e-view-use-gnus= also should be true.
+     #+begin_src emacs-lisp
+       (use-package mu4e-icalendar
+         :after mu4e
+         :config (mu4e-icalendar-setup))
+     #+end_src
+     
+
+** Emojify
+   Adding emoji support in order to be able to use it in
+    org-mode files, with using them in a blog post in sight.
+    #+begin_src emacs-lisp
+      (use-package emojify
+        :straight t
+        :hook (after-init . global-emojify-mode)
+        :custom (emojify-emoji-set "emojione-v2.2.6-22"))  
+    #+end_src
+
+** Accounting from emacs
+    Thanks to the amazing Ledger command line tool, which is an double-entry
+    accounting system that allows for fast queries and reports we are able to
+    connect our emacs --and ledger files-- to the amazing ledger-mode.
+    #+begin_src emacs-lisp
+      (use-package ledger-mode
+        :straight t
+        :mode "\\.ledger\\'"
+        :custom
+        (ledger-clear-whole-transactions t)
+        (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
+                          ("reg" "%(binary) -f %(ledger-file) reg")
+                          ("reg this month" "%(binary) -f %(ledger-file) reg -p \"this month\"")
+                          ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                          ("account" "%(binary) -f %(ledger-file) reg %(account)")
+                          ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
+      \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
+                          ("budget" "%(binary) -f %(ledger-file) -E bal ^Budget and not Budget:Checking")))
+        :custom-face
+        (ledger-occur-xact-face ((t (:background "#222324" :inherit nil)))))
+    #+end_src
+
+** Todo in code
+    Using the hl-todo package, we are able to highlight keywords related to
+    the working environment, like: TODO, FIXME and some more.
+    #+begin_src emacs-lisp
+      (use-package hl-todo
+        :hook (prog-mode . hl-todo-mode)
+        :straight t
+        :config
+        (setq hl-todo-highlight-punctuation ":"
+              hl-todo-keyword-faces
+              `(("TODO"       warning bold)
+                ("FIXME"      error bold)
+                ("HACK"       font-lock-constant-face bold)
+                ("REVIEW"     font-lock-keyword-face bold)
+                ("NOTE"       success bold)
+                ("DEPRECATED" font-lock-doc-face bold))))
+    #+end_src
