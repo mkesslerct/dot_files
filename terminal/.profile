@@ -35,5 +35,4 @@ export PATH=$HOME/.toolbox/bin:$PATH
 export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
 export PATH="/Library/TeX/texbin/:$PATH"
 
-xcape -e 'Control_L=Escape'
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
