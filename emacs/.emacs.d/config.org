@@ -87,6 +87,22 @@
         (run-hooks 'after-load-theme-hook))
     #+end_src
 
+** Keybindings
+*** general.el
+    general.el is a fantastic library for defining prefixed keybindings, especially in conjunction with Evil modes.
+    #+begin_src emacs-lisp
+      (use-package general
+        :straight t
+        :demand t
+        :config
+        (general-evil-setup t)
+
+        (general-create-definer qk/leader-key-def
+                                :keymaps '(normal insert visual emacs)
+                                :prefix "SPC"
+                                :global-prefix "C-SPC")
+    #+end_src
+
 ** Better defaults
 *** Make-silent macro
     #+begin_src emacs-lisp
