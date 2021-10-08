@@ -12,7 +12,7 @@
     I add the theme list here to be able to add to it when a theme is tangled, considering that I will most likely want to toggle two themes, the ones that are tangled: dark and light.
     #+begin_src emacs-lisp
       (setq qk/themes-list nil)
-      (setq qk/themes-index 0)
+      (setq qk/themes-index 1)
     #+end_src
     
 *** Nord theme
@@ -90,6 +90,14 @@
     #+end_src
 
 ** Better defaults
+*** Make-silent macro
+    #+begin_src emacs-lisp
+      (defun make-silent (func &rest args)
+        (cl-letf (((symbol-function 'message)
+                   (lambda (&rest args) nil)))
+          (apply func args)))
+    #+end_src
+
 *** Mac modifiers
     Emacs captures the right Meta key too, which makes writing with accented keys impossible. The fix for this is removing the behaviour of the right option modifier (Right Alt), which lets the OS capture the keypress.
     #+begin_src emacs-lisp
@@ -510,12 +518,27 @@ s
 **** Custom latex classes
      I add a custom latex class for exporting my essays and class asignments.
      #+begin_src emacs-lisp
-       (use-package org-roam-projects
-         :bind ("C-c n a" . sc/org-roam-find-latex-assignment)
+       (defvar org-export-output-directory-prefix "export_"
+         "prefix of directory used for org-mode export")
+
+       (defadvice org-export-output-file-name (before org-add-export-dir activate)
+         "Modifies org-export to place exported files in a different directory"
+         (when (not pub-dir)
+           (setq pub-dir (concat org-export-output-directory-prefix (substring extension 1)))
+           (when (not (file-directory-p pub-dir))
+             (make-directory pub-dir))))
+
+       (use-package ox-latex
+         :custom
+         (org-latex-hyperref-template "\\hypersetup{\n pdfauthor={%a},\n pdftitle={%t},\n pdfkeywords={%k},\n pdfsubject={%d},\n pdfcreator={%c}, \n pdflang={%L}, colorlinks=true, \n linkcolor=blue, urlcolor=blue}\n")
+         (org-latex-toc-command "\\tableofcontents\n\\newpage")
+         (org-latex-listings nil)
+         (org-latex-pdf-process   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f" "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
          :config
-         (require 'ox-latex)
+         (add-to-list 'org-latex-packages-alist '("" "color"))
+         (add-to-list 'org-latex-packages-alist '("" "listings"))
          (add-to-list 'org-latex-classes
-                      '("assignment" "\\documentclass[titlepage]{article}"
+                      '("assignment"  "\\documentclass[titlepage]{article}\n\\usepackage[left=4cm,right=4cm,bottom=1in]{geometry}\n\\addtolength{\\textwidth}{4cm}\n\\addtolength{\\hoffset}{-2cm}\n\\topmargin -1cm\n\\usepackage[AUTO]{babel}"
                         ("\\section{%s}" . "\\section*{%s}")
                         ("\\subsection{%s}" . "\\subsection*{%s}")
                         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
@@ -1213,6 +1236,7 @@ s
            (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
          (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
          (add-to-list 'god-exempt-major-modes 'vterm-mode)
+         (advice-add 'god-mode :around #'make-silent)
          (god-mode))
      #+end_src
      
@@ -2870,17 +2894,26 @@ s
 **** Anki org-capture
      Now that we know what a proper Anki note should look like in Org-mode, we can define a template and use org-capture to create cards swiftly as we came across different materials on web.
      #+begin_src emacs-lisp
+       (defun qk/org-capture-here ()
+         "Org-capture in the current buffer, passing the 0 prefix
+       to the org-capture function."
+         (interactive)
+         (setq current-prefix-arg 0) ; C-0
+         (call-interactively 'org-capture))
+
        (use-package  org-capture
          :custom
          (x-select-enable-clipboard t)
          (x-select-enable-primary t)
+         :bind (:map org-mode-map
+                     ("C-c C-a" . qk/org-capture-here))
          :config
          (add-to-list 'org-capture-templates
                       '("a" "Anki basic" entry (file org-default-notes-file)
-                        "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Basic\n:ANKI_DECK: %?\n:END:\n** Front\n\n** Back\n%x\n"))
+                        "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Basic\n:ANKI_DECK: %?\n:END:\n** Front\n\n** Back\n\n"))
          (add-to-list 'org-capture-templates
                       '("A" "Anki cloze" entry (file org-default-notes-file)
-                                       "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Cloze\n:ANKI_DECK: %?\n:END:\n** Text\n%x\n** Extra\n")))
+                                       "* %<%H:%M>   %^g\n:PROPERTIES:\n:ANKI_NOTE_TYPE: Cloze\n:ANKI_DECK: %?\n:END:\n** Text\n\n** Extra\n")))
      #+end_src
      
 *** Typo.el
