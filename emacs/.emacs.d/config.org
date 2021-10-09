@@ -944,6 +944,7 @@
           "b" 'switch-to-buffer
           "r"  'rename-buffer
           "R"  'revert-buffer)
+        ;; Evaluation commands.
         (+general-global-menu! "eval" "e"
           "b" 'eval-buffer
           "d" 'eval-defun
