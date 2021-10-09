@@ -906,11 +906,52 @@
 *** Spacemacs inspired keys
     general.el is a fantastic library for defining prefixed keybindings, especially in conjunction with Evil modes.
     #+begin_src emacs-lisp
-      (use-package spacemacs-bindings
-        :after which-key 
+      (use-package general
+        :straight t
+        :after which-key
         :config
-        (general-evil-setup t))
-    #+end_src
+        (general-create-definer global-definer
+          :keymaps 'override
+          :states  '(insert emacs normal hybrid motion visual operator)
+          :prefix  "SPC"
+          :non-normal-prefix "S-SPC")
+        (general-evil-setup)
+        (global-definer
+         ""     nil
+         "c"   (general-simulate-key "C-c")
+         "h"   (general-simulate-key "C-h")
+         "u"   (general-simulate-key "C-u")
+         "x"   (general-simulate-key "C-x"))
+
+        (defmacro +general-global-menu! (name infix-key &rest body)
+          "Create a definer named +general-global-NAME wrapping global-definer.
+      Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY."
+          (declare (indent 2))
+          `(progn
+             (general-create-definer ,(intern (concat "+general-global-" name))
+               :wrapping global-definer
+               :prefix-map (quote ,(intern (concat "+general-global-" name "-map")))
+               :infix ,infix-key
+               :wk-full-keys nil
+               "" '(:ignore t :which-key ,name))
+             (,(intern (concat "+general-global-" name))
+              ,@body)))
+        (+general-global-menu! "buffer" "b"
+                               "d"  'kill-current-buffer
+                               "o" '((lambda () (interactive) (switch-to-buffer nil))
+                                     :which-key "other-buffer")
+                               "p"  'previous-buffer
+                               "r"  'rename-buffer
+                               "M" '((lambda () (interactive) (switch-to-buffer "*Messages*"))
+                                     :which-key "messages-buffer")
+                               "n"  'next-buffer
+                               "s" '((lambda () (interactive) (switch-to-buffer "*scratch*"))
+                                     :which-key "scratch-buffer")
+                               "TAB" '((lambda () (interactive) (switch-to-buffer nil))
+                                       :which-key "other-buffer")))
+
+
+     #+end_src
 
 ** Completion framework
 *** Modular completion
