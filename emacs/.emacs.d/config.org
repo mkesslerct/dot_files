@@ -956,7 +956,8 @@
           "=" 'balance-windows
           "v" 'split-window-vertically
           "h" 'split-window-horizontally
-          "m" 'delete-other-windows)
+          "m" 'delete-other-windows
+          "d" 'delete-window)
         )
      #+end_src
 
