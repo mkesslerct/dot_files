@@ -633,8 +633,9 @@
 
       (use-package ace-window
         :straight t
-        :bind (:map global-map
-                    ("M-o" . ace-window))
+        :general
+        (+general-global-buffer
+          "o" 'ace-window)
         :custom
         (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
         (aw-background nil))
@@ -871,7 +872,7 @@
          (evil-collection-outline-bind-tab-p nil)
          (evil-collection-setup-minibuffer t)
          :config
-         (setq evil-collection-mode-list '(dired))
+         (setq evil-collection-mode-list '(dired magit))
          (evil-collection-init))
      #+end_src
 
@@ -938,17 +939,14 @@
               ,@body)))
         (+general-global-menu! "buffer" "b"
                                "d"  'kill-current-buffer
-                               "o" '((lambda () (interactive) (switch-to-buffer nil))
-                                     :which-key "other-buffer")
+                               "b" 'switch-to-buffer
                                "p"  'previous-buffer
                                "r"  'rename-buffer
                                "M" '((lambda () (interactive) (switch-to-buffer "*Messages*"))
                                      :which-key "messages-buffer")
                                "n"  'next-buffer
                                "s" '((lambda () (interactive) (switch-to-buffer "*scratch*"))
-                                     :which-key "scratch-buffer")
-                               "TAB" '((lambda () (interactive) (switch-to-buffer nil))
-                                       :which-key "other-buffer")))
+                                     :which-key "scratch-buffer")))
 
 
      #+end_src
