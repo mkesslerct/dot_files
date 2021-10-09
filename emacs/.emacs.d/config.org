@@ -904,8 +904,8 @@
         (which-key-mode))
 #+end_src
 
-*** Spacemacs inspired keys
-    general.el is a fantastic library for defining prefixed keybindings, especially in conjunction with Evil modes.
+*** Personal bindings
+    Here are the personal bindings that I control, having defined them using the =general-global-menu= macro, which makes the defining and configuration of key-pockets really easy and painless.
     #+begin_src emacs-lisp
       (use-package general
         :straight t
@@ -918,11 +918,11 @@
           :non-normal-prefix "S-SPC")
         (general-evil-setup)
         (global-definer
-         ""     nil
-         "c"   (general-simulate-key "C-c")
-         "h"   (general-simulate-key "C-h")
-         "u"   (general-simulate-key "C-u")
-         "x"   (general-simulate-key "C-x"))
+          ""     nil
+          "c"   (general-simulate-key "C-c")
+          "h"   (general-simulate-key "C-h" :which-key "help")
+          "u"   (general-simulate-key "C-u")
+          "x"   (general-simulate-key "C-x"))
 
         (defmacro +general-global-menu! (name infix-key &rest body)
           "Create a definer named +general-global-NAME wrapping global-definer.
@@ -937,18 +937,18 @@
                "" '(:ignore t :which-key ,name))
              (,(intern (concat "+general-global-" name))
               ,@body)))
+
+        ;; Buffer commands.
         (+general-global-menu! "buffer" "b"
-                               "d"  'kill-current-buffer
-                               "b" 'switch-to-buffer
-                               "p"  'previous-buffer
-                               "r"  'rename-buffer
-                               "M" '((lambda () (interactive) (switch-to-buffer "*Messages*"))
-                                     :which-key "messages-buffer")
-                               "n"  'next-buffer
-                               "s" '((lambda () (interactive) (switch-to-buffer "*scratch*"))
-                                     :which-key "scratch-buffer")))
-
-
+          "k"  'kill-current-buffer
+          "b" 'switch-to-buffer
+          "r"  'rename-buffer
+          "R"  'revert-buffer)
+        (+general-global-menu! "eval" "e"
+          "b" 'eval-buffer
+          "d" 'eval-defun
+          "e" 'eval-expression
+          "s" 'eval-last-sexp))
      #+end_src
 
 ** Completion framework
