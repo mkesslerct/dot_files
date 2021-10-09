@@ -564,7 +564,7 @@
 **** Sounds
      Disabling beep sound.
      #+begin_src emacs-lisp
-       (setq visible-bell 1)
+       (setq visible-bell nil)
      #+end_src
 
 **** Menu-bar
@@ -1939,7 +1939,9 @@
     #+begin_src emacs-lisp
       (use-package transient
         :straight t
-        :commands transient-define-prefix)
+        :commands transient-define-prefix
+        :bind (:map transient-base-map
+                    ("<escape>" . transient-quit-one)))
     #+end_src
     
 ** Project management: Projectile
