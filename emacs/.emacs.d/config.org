@@ -869,6 +869,7 @@
          :after evil
          :custom
          (evil-collection-outline-bind-tab-p nil)
+         (evil-collection-setup-minibuffer t)
          :config
          (setq evil-collection-mode-list '(dired))
          (evil-collection-init))
@@ -891,20 +892,24 @@
                      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading)))))
      #+end_src
 
-
-*** general.el
-    general.el is a fantastic library for defining prefixed keybindings, especially in conjunction with Evil modes.
+*** which-key
+    =which-key= is a minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup. For example, after enabling the minor mode if you enter C-x and wait for the default of 1 second the minibuffer will expand with all of the available key bindings that follow C-x (or as many as space allows given your settings).
     #+begin_src emacs-lisp
-      (use-package general
+      (use-package which-key
         :straight t
         :demand t
         :config
-        (general-evil-setup t)
+        (which-key-setup-minibuffer)
+        (which-key-mode))
+#+end_src
 
-        (general-create-definer qk/leader-key-def
-          :keymaps '(normal insert visual emacs)
-          :prefix "SPC"
-          :global-prefix "C-SPC"))
+*** Spacemacs inspired keys
+    general.el is a fantastic library for defining prefixed keybindings, especially in conjunction with Evil modes.
+    #+begin_src emacs-lisp
+      (use-package spacemacs-bindings
+        :after which-key 
+        :config
+        (general-evil-setup t))
     #+end_src
 
 ** Completion framework
