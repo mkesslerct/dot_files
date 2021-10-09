@@ -818,12 +818,20 @@
 **** Evil-mode
      [[https://github.com/emacs-evil/evil][Evil]] is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions. Also see our page on EmacsWiki.
      #+begin_src emacs-lisp
+       (defun qk/set-quit-with-scape ()
+         (define-key evil-normal-state-map [escape] 'keyboard-quit)
+         (define-key evil-visual-state-map [escape] 'keyboard-quit)
+         (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+         (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+         (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+         (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+         (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
+
        (use-package evil
          :straight t
          :demand t
          :custom
          (evil-want-integration t)
-         (evil-want-keybinding nil)
          (evil-want-C-u-scroll t)
          (evil-want-C-i-jump nil)
          (evil-respect-visual-line-mode t)
@@ -831,6 +839,7 @@
          :bind (:map evil-insert-state-map
                      ("C-g" . evil-normal-state))
          :config
+         (qk/set-quit-with-scape)
          (defun qk/evil-hook ()
            (dolist (mode '(custom-mode
                            eshell-mode
@@ -842,29 +851,26 @@
                            sauron-mode
                            term-mode))
              (add-to-list 'evil-emacs-state-modes mode)))
-           (add-hook 'evil-mode-hook 'qk/evil-hook)
+         (add-hook 'evil-mode-hook 'qk/evil-hook)
 
-           (evil-mode 1)
-           ;; Use visual line motions even outside of visual-line-mode buffers
-           (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-           (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-    
-           (evil-set-initial-state 'messages-buffer-mode 'normal)
-           (evil-set-initial-state 'git-commit-mode 'insert)
-           (evil-set-initial-state 'dashboard-mode 'normal))
+         (evil-mode 1)
+         ;; Use visual line motions even outside of visual-line-mode buffers
+         (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+         (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+         (evil-set-initial-state 'messages-buffer-mode 'normal)
+         (evil-set-initial-state 'git-commit-mode 'insert)
+         (evil-set-initial-state 'dashboard-mode 'normal))
      #+end_src
 
 **** Evil-collection
      #+begin_src emacs-lisp
        (use-package evil-collection
          :after evil
-         :init
-         (setq evil-collection-company-use-tng nil)  ;; Is this a bug in evil-collection?
          :custom
          (evil-collection-outline-bind-tab-p nil)
          :config
-         (setq evil-collection-mode-list
-               (remove 'lispy evil-collection-mode-list))
+         (setq evil-collection-mode-list '(dired))
          (evil-collection-init))
      #+end_src
 
