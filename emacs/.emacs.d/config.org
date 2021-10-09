@@ -921,6 +921,7 @@
           ""     nil
           "c"   (general-simulate-key "C-c")
           "h"   (general-simulate-key "C-h" :which-key "help")
+          "SPC" 'execute-extended-command
           "u"   (general-simulate-key "C-u")
           "x"   (general-simulate-key "C-x"))
 
@@ -949,7 +950,14 @@
           "b" 'eval-buffer
           "d" 'eval-defun
           "e" 'eval-expression
-          "s" 'eval-last-sexp))
+          "s" 'eval-last-sexp)
+        ;; Window commands.
+        (+general-global-menu! "window" "w"
+          "=" 'balance-windows
+          "v" 'split-window-vertically
+          "h" 'split-window-horizontally
+          "m" 'delete-other-windows)
+        )
      #+end_src
 
 ** Completion framework
