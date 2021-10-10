@@ -567,6 +567,7 @@ Lsp-mode for server completion.
 
        js-mode, which was introduced in Emacs 27, including full support for
        jsx highlighting, indenting and more.
+
        #+begin_src emacs-lisp
          (use-package js-mode
            :mode ("\\.js\\'" "\\.tsx\\'" "\\.ts\\'")
@@ -991,3 +992,12 @@ Lsp-mode for server completion.
                 ("NOTE"       success bold)
                 ("DEPRECATED" font-lock-doc-face bold))))
     #+end_src
+
+** Emacs-everywhere
+   A new Emacs frame will appear, within which you can type away to your heart’s content. It will remember which window you have focused.
+   #+begin_src emacs-lisp
+     (use-package emacs-everywhere
+       :straight t
+       :commands emacs-everywhere)
+   #+end_src
+

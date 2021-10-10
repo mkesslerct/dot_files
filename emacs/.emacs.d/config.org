@@ -633,7 +633,7 @@
 
       (use-package ace-window
         :straight t
-        :general
+        :config
         (+general-global-buffer
           "o" 'ace-window)
         :custom
@@ -862,7 +862,8 @@
 
          (evil-set-initial-state 'messages-buffer-mode 'normal)
          (evil-set-initial-state 'git-commit-mode 'insert)
-         (evil-set-initial-state 'dashboard-mode 'normal))
+         (evil-set-initial-state 'dashboard-mode 'normal)
+         (evil-normalize-keymaps))
      #+end_src
 
 **** Evil-collection
@@ -942,10 +943,12 @@
 
         ;; Buffer commands.
         (+general-global-menu! "buffer" "b"
-          "k"  'kill-current-buffer
+          "d"  'kill-current-buffer
           "b" 'switch-to-buffer
           "r"  'rename-buffer
           "R"  'revert-buffer)
+        (+general-global-buffer
+          "o" 'ace-window)
         ;; Evaluation commands.
         (+general-global-menu! "eval" "e"
           "b" 'eval-buffer
