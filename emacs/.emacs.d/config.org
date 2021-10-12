@@ -811,7 +811,6 @@
         :straight t
         :demand t
         :config (global-undo-tree-mode 1))
-
     #+end_src
 
 ** Keybindings
@@ -830,7 +829,6 @@
 
        (use-package evil
          :straight t
-         :demand t
          :custom
          (evil-want-integration t)
          (evil-want-keybinding nil)
@@ -840,6 +838,7 @@
          (evil-undo-system 'undo-tree)
          :bind (:map evil-insert-state-map
                      ("C-g" . evil-normal-state))
+         :hook (after-init . evil-mode)
          :config
          (qk/set-quit-with-scape)
          (defun qk/evil-hook ()
@@ -870,12 +869,12 @@
 **** Evil-collection
      #+begin_src emacs-lisp
        (use-package evil-collection
+         :straight t
          :after evil
          :custom
          (evil-collection-outline-bind-tab-p nil)
          (evil-collection-setup-minibuffer t)
          :config
-         (setq evil-collection-mode-list '(dired magit))
          (evil-collection-init))
      #+end_src
 
@@ -916,7 +915,7 @@
         :config
         (general-create-definer global-definer
           :keymaps 'override
-          :states  '(insert emacs normal hybrid motion visual operator)
+          :states  '(emacs normal hybrid motion visual operator)
           :prefix  "SPC"
           :non-normal-prefix "S-SPC")
         (general-evil-setup)
@@ -960,7 +959,7 @@
         (+general-global-menu! "window" "w"
           "=" 'balance-windows
           "v" 'split-window-vertically
-          "h" 'split-window-horizontally
+          "s" 'split-window-horizontally
           "m" 'delete-other-windows
           "d" 'delete-window)
         )
