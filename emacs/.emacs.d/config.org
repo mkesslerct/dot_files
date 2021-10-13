@@ -836,25 +836,9 @@
          (evil-want-C-i-jump nil)
          (evil-respect-visual-line-mode t)
          (evil-undo-system 'undo-tree)
-         :bind (:map evil-insert-state-map
-                     ("C-g" . evil-normal-state))
          :hook (after-init . evil-mode)
          :config
          (qk/set-quit-with-scape)
-         (defun qk/evil-hook ()
-           (dolist (mode '(custom-mode
-                           eshell-mode
-                           git-rebase-mode
-                           erc-mode
-                           circe-server-mode
-                           circe-chat-mode
-                           circe-query-mode
-                           sauron-mode
-                           term-mode))
-             (add-to-list 'evil-emacs-state-modes mode)))
-         (add-hook 'evil-mode-hook 'qk/evil-hook)
-
-         (evil-mode 1)
          ;; Use visual line motions even outside of visual-line-mode buffers
          (evil-global-set-key 'motion "j" 'evil-next-visual-line)
          (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
@@ -863,7 +847,8 @@
          (evil-set-initial-state 'magit-status-mode 'normal)
          (evil-set-initial-state 'git-commit-mode 'insert)
          (evil-set-initial-state 'dashboard-mode 'normal)
-         (evil-normalize-keymaps))
+         (evil-normalize-keymaps)
+         (evil-mode 1))
      #+end_src
 
 **** Evil-collection
