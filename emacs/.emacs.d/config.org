@@ -923,7 +923,8 @@
           "j" 'dired-jump
           "s" 'save-buffer
           "S" 'save-some-buffers
-          "d" 'save-buffers-kill-terminal))
+          "d" 'save-buffers-kill-terminal)
+        (+general-global-menu! "search" "s"))
      #+end_src
 
 ** Window switching
@@ -1051,7 +1052,9 @@
                 ("M-s l" . consult-line))
          :general
          (+general-global-file
-          "r" 'consult-recent-file)
+           "r" 'consult-recent-file)
+         (+general-global-search
+          "l" 'consult-line)
          ;; The :init configuration is always executed (Not lazy)
          :init
          (setq register-preview-delay 0
@@ -1068,6 +1071,7 @@
           consult-theme :preview-key nil
           ;; Set preview for `consult-buffer' to key `M-.'n
           consult-buffer :preview-key (kbd "M-."))
+         :preface
          (defun consult-fd (&optional dir initial)
            (interactive "P")
            (let ((consult-find-command "fdfind --color=never --full-path ARG OPTS"))

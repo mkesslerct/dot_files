@@ -16,12 +16,13 @@
    This ends up not being that performant, as they need the default candidate list to be updated all the time —every time the command is called. Affe tries to improve on that functionality (it is still on development, this is only a test configuration) defining the functions: =affe-grep=, using ripgrep, and =affe-find= using find —it could also be configured to use fd.
    #+begin_src emacs-lisp
      (use-package affe
-       :straight (affe :type git :host github :repo "minad/affe" )
-       :bind (("M-s f" . affe-find)
-              ("M-s g" . affe-grep))
+       :straight t
+       :general
+       (+general-global-search
+         "f" 'affe-find
+         "g" 'affe-grep)
        :custom
-       (affe-find-command "fd --color=never -H -t f")
-       (affe-grep-command "rg --null --color=never --max-columns=1000 --no-heading --hidden --no-ignore --line-number -v ^$ .")
+       (affe-find-command (concat qk/fd-command " --color=never -H -t f"))
        (affe-regexp-function 'orderless-pattern-compiler)
        (affe-highlight-function 'orderless--highlight)
        :config
