@@ -103,14 +103,6 @@
           (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 #+end_src
 
-*** Make-silent macro
-    #+begin_src emacs-lisp
-      (defun make-silent (func &rest args)
-        (cl-letf (((symbol-function 'message)
-                   (lambda (&rest args) nil)))
-          (apply func args)))
-    #+end_src
-
 *** Mac modifiers
     Emacs captures the right Meta key too, which makes writing with accented keys impossible. The fix for this is removing the behaviour of the right option modifier (Right Alt), which lets the OS capture the keypress.
     #+begin_src emacs-lisp
@@ -181,14 +173,6 @@
      #+begin_src emacs-lisp
        (use-package emacs
          :custom (ad-redefinition-action 'accept))
-     #+end_src
-
-**** Load-path
-     Whenever a package is too experimental to be uploaded to MELPA, you can still install the =.el= file through the load-path list, which can hold a directory. The convention is to use the =/lisp= folder.
-
-     This has already been loaded in the =init.el= file, just adding here for visibility.
-     #+begin_src emacs-lisp :tangle no
-       (add-to-list 'load-path "~/.emacs.d/lisp/")
      #+end_src
 
 **** No-littering
@@ -418,7 +402,7 @@
      
 *** Help
     The default emacs help buffers could use some tweaking, and the Helpful package is there to assist. It provides better formatting and links for help buffers, and defines different functions to limit the disruption effect in your emacs configuration.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp 
       (use-package helpful
         :straight t
         :bind (:map global-map
@@ -794,9 +778,23 @@
          (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
          (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
 
+       (defun qk/stop-using-emacs-bindings ()
+         "Function created to flash the screen if I'm using old Emacs bindings, and
+       not the evil ones I'm trying to learn."
+         (interactive)
+         (message "Stop using Emacs bindings: use evil-mode ones please."))
+
        (use-package evil
          :straight t
          :demand t
+         :bind
+         ("C-x 0" . qk/stop-using-emacs-bindings)
+         ("C-x 1" . qk/stop-using-emacs-bindings)
+         ("C-x 2" . qk/stop-using-emacs-bindings)
+         ("C-x 3" . qk/stop-using-emacs-bindings)
+         ("C-x b" . qk/stop-using-emacs-bindings)
+         ("C-x k" . qk/stop-using-emacs-bindings)
+         ("C-x e" . qk/stop-using-emacs-bindings)
          :custom
          (evil-want-integration t)
          (evil-want-keybinding nil)
@@ -815,7 +813,6 @@
          (evil-set-initial-state 'git-commit-mode 'insert)
          (evil-set-initial-state 'dashboard-mode 'normal)
          (evil-normalize-keymaps)
-         (message "<qk> Loaded evil.")
          (evil-mode 1))
      #+end_src
 
@@ -828,7 +825,6 @@
          (evil-collection-outline-bind-tab-p nil)
          (evil-collection-setup-minibuffer t)
          :config
-         (message "<qk> Loaded evil-collection.")
          (evil-collection-init))
      #+end_src
 
@@ -854,7 +850,7 @@
     #+begin_src emacs-lisp
       (use-package which-key
         :straight t
-        :demand t
+        :defer 1
         :config
         (which-key-setup-minibuffer)
         (which-key-mode))
@@ -865,7 +861,7 @@
     #+begin_src emacs-lisp
       (use-package general
         :straight t
-        :after which-key
+        :after evil
         :config
         (general-create-definer global-definer
           :keymaps 'override
@@ -920,7 +916,14 @@
           "s" 'split-window-horizontally
           "m" 'delete-other-windows
           "d" 'delete-window)
-        (+general-global-menu! "project" "p"))
+        (+general-global-menu! "project" "p")
+        (+general-global-menu! "file" "f"
+          "E" 'sudo-edit
+          "f" 'find-file
+          "j" 'dired-jump
+          "s" 'save-buffer
+          "S" 'save-some-buffers
+          "d" 'save-buffers-kill-terminal))
      #+end_src
 
 ** Window switching
@@ -930,8 +933,11 @@
    #+begin_src emacs-lisp
      (use-package ace-window
        :straight t
+       :bind
+       ("M-o" . qk/stop-using-emacs-bindings)
+       ("C-x o" . qk/stop-using-emacs-bindings)
        :general
-       (+general-global-buffer
+       (+general-global-window
          "o" 'ace-window)
        :custom
        (aw-keys '(?h ?j ?k ?l ?a ?s ?d ?f ?g))
@@ -1043,10 +1049,9 @@
                 ("M-e" . consult-isearch)                 ;; orig. `isearch-edit-string'
                 ("M-s e" . consult-isearch)               ;; orig. `isearch-edit-string'
                 ("M-s l" . consult-line))
-         ;;:map global-map
-         ;; ("C-s" . consult-isearch)
-         ;; ("C-r" . consult-isearch))
-
+         :general
+         (+general-global-file
+          "r" 'consult-recent-file)
          ;; The :init configuration is always executed (Not lazy)
          :init
          (setq register-preview-delay 0
@@ -1207,14 +1212,14 @@
       (setq org-roam-directory "~/Documents/slipbox")
       (setq org-roam-v2-ack t)
       (use-package org
-        :mode "\\.org\\'"
+        :defer 2
         :bind (:map global-map
                     ("C-c o l" . org-store-link)
                     ("C-c a" . org-agenda)
                     ("C-c c" . org-capture)
                     :map org-mode-map
                     ("C-," . nil)
-                    ("C-c o t" . org-babel-tangle)
+                    ("C-c o t" . org-babel-tangle))
         :custom
         (org-directory "~/Documents/org_files")
         (org-default-notes-file (concat org-roam-directory "/pages/refile.org"))
@@ -1681,68 +1686,7 @@
     #+end_src
 
 *** Archiving of files
-    Creating function which archives all files which contain only done (not necessarily
-    in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
-
-    #+begin_src emacs-lisp
-      (defun qk/archive-done-org-files ()
-        "Cycles all org files through checking function."
-        (interactive) 
-        (save-excursion
-          (mapc 'check-org-file-finito (directory-files (concat org-directory "/org-agenda") t ".org$"))
-          ))
-
-      (defun check-org-file-finito (f)
-        "Checks TODO keyword items are DONE then archives."
-        (find-file f)
-        ;; Shows open Todo items whether agenda or todo
-        (let (
-              (kwd-re
-               (cond (org-not-done-regexp)
-                     (
-                      (let ((kwd
-                             (completing-read "Keyword (or KWD1|KWD2|...): "
-                                              (mapcar #'list org-todo-keywords-1))))
-                        (concat "\\("
-                                (mapconcat 'identity (org-split-string kwd "|") "\\|")
-                                "\\)\\>")))
-                     ((<= (prefix-numeric-value) (length org-todo-keywords-1))
-                      (regexp-quote (nth (1- (prefix-numeric-value))
-                                         org-todo-keywords-1)))
-                     (t (user-error "Invalid prefix argument: %s")))))
-          (if (= (org-occur (concat "^" org-outline-regexp " *" kwd-re )) 0)
-              (rename-file-buffer-to-org-archive)
-            (kill-buffer (current-buffer))
-            )))
-
-      (defun rename-file-buffer-to-org-archive ()
-        "Renames current buffer and file it's visiting."
-        (let ((name (buffer-name))
-              (filename (buffer-file-name))
-              )
-          (if (not (and filename (file-exists-p filename)))
-              (error "Buffer '%s' is not visiting a file!" name)
-            (let ((new-name (concat (file-name-sans-extension filename) ".org_archive")))
-              (if (get-buffer new-name)
-                  (error "A buffer named '%s' already exists!" new-name)
-                (rename-file filename new-name 1)
-                (rename-buffer new-name)
-                (set-visited-file-name new-name)
-                (set-buffer-modified-p nil)
-                (kill-buffer (current-buffer))
-                (message "File '%s' successfully archived as '%s'."
-                         name (file-name-nondirectory new-name)))))))
-    #+end_src
-
 *** Extension packages
-
-****** SystemsCrafters' option
-       After having some trouble with vulpea's option (i.e I need to save all the buffers before starting org-agenda, for some reason) I continued looking for alternatives, and I began trying David's.
-       #+begin_src emacs-lisp
-
-       #+end_src
-
-
 ***** Hide properties
       The V2 version of org-roam adds properties to the files, which are then used to query and index the files. Using this org-mode native sintax (instead of buffer properties), a higher performance and consistency is achieved.
       #+begin_src emacs-lisp
@@ -1896,7 +1840,8 @@
          "!" 'projectile-run-shell-command-in-root
          "&" 'projectile-run-async-shell-command-in-root
          "d" 'projectile-find-dir
-         "D" 'projectile-dired)
+         "D" 'projectile-dired
+         "k" 'projectile-kill-buffers)
        :config
        (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
        (add-to-list 'projectile-project-root-files-bottom-up "BUILD")

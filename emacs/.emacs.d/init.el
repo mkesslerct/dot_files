@@ -21,30 +21,15 @@
 
 ;; Always defer use-package packages. This means that if I really need a package, I will go to my config and edit the use-package recipe to lazy load it. This reduces my startup time significantly.
 (setq use-package-always-defer t)
-(setq use-package-verbose t
-      use-package-compute-statistics t
-      use-package-minimum-reported-time 0)
 (straight-use-package 'use-package)
 (eval-when-compile
   (require 'use-package))
 
-;; Keep a ref to the actual file-name-handler
-(defvar default-file-name-handler-alist file-name-handler-alist)
+;; Add personal lisp directory to load-path
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 
-;; Set the file-name-handler to nil (because regexing is cpu intensive)
-(setq file-name-handler-alist nil)
-
-;; Reset file-name-handler-alist after initialization
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (setq file-name-handler-alist default-file-name-handler-alist)))
-
-;; Garbage collection strategy used by doom-emacs.
-(use-package gcmh
-  :straight t
-  :demand t
-  :custom (gcmh-idle-delay 0.3))
-(gcmh-mode 1)
+;; Core variable setting and gcmh controller.
+(require 'core)
 
 ;; Start-up time profiler
 (use-package esup
@@ -59,11 +44,9 @@
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
-(add-to-list 'load-path "~/.emacs.d/lisp/")
 (straight-use-package '(org :type built-in))
 
 (setq dired-use-ls-dired nil)
-(add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
 
