@@ -366,21 +366,6 @@
      #+end_src
 
 *** Buffers
-**** Bufler
-     Better bufler list, creating projects and groups.
-     #+begin_src emacs-lisp
-       (use-package bufler
-         :straight t
-         :config (defhydra+ hydra:bufler ()
-                   ("o" #'delete-other-windows "Full screen"))
-         :bind
-         (:map bufler-list-mode-map
-               ("o" . delete-other-windows)
-               ("u" . magit-section-up))
-         (:map global-map
-               ("C-x C-b" . bufler)))
-     #+end_src
-
 **** Visiting-buffer
      #+begin_quote
      I often want to both delete a file and kill the buffer it's open in. I thought of writing a simple command to do that, but then realized I basically never want to delete the file and keep the buffer open. So instead, I'm advising delete-file so that if it is called interactively (i.e., I called the command directly, not that some Emacs Lisp called it), it also kills a buffer visiting the file if there is one.
@@ -623,24 +608,6 @@
       (define-key global-map [remap exchange-point-and-mark] 'exchange-point-and-mark-no-activate)
     #+end_src
 
-*** Window switching
-    I'm trying ace-window in order to allow faster window switching, when working with
-    multiple buffers in the same frame. Disabling also the undo command, trying to get
-    used to C-/
-    #+begin_src emacs-lisp
-      (global-unset-key (kbd "C-x o"))
-      (global-unset-key (kbd "C-x u"))
-
-      (use-package ace-window
-        :straight t
-        :config
-        (+general-global-buffer
-          "o" 'ace-window)
-        :custom
-        (aw-keys '(?h ?j ?k ?l ?a ?s ?d ?f ?g))
-        (aw-background nil))
-    #+end_src
-
 *** Perspective.el
     The Perspective package provides multiple named workspaces (or "perspectives") in Emacs, similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on the Mac. Each perspective has its own buffer list and its own window layout, along with some other isolated niceties, like the xref ring.
     #+begin_src emacs-lisp
@@ -829,6 +796,7 @@
 
        (use-package evil
          :straight t
+         :demand t
          :custom
          (evil-want-integration t)
          (evil-want-keybinding nil)
@@ -836,7 +804,6 @@
          (evil-want-C-i-jump nil)
          (evil-respect-visual-line-mode t)
          (evil-undo-system 'undo-tree)
-         :hook (after-init . evil-mode)
          :config
          (qk/set-quit-with-scape)
          ;; Use visual line motions even outside of visual-line-mode buffers
@@ -848,6 +815,7 @@
          (evil-set-initial-state 'git-commit-mode 'insert)
          (evil-set-initial-state 'dashboard-mode 'normal)
          (evil-normalize-keymaps)
+         (message "<qk> Loaded evil.")
          (evil-mode 1))
      #+end_src
 
@@ -855,11 +823,12 @@
      #+begin_src emacs-lisp
        (use-package evil-collection
          :straight t
-         :after evil
+         :demand t
          :custom
          (evil-collection-outline-bind-tab-p nil)
          (evil-collection-setup-minibuffer t)
          :config
+         (message "<qk> Loaded evil-collection.")
          (evil-collection-init))
      #+end_src
 
@@ -938,8 +907,6 @@
           "b" 'switch-to-buffer
           "r"  'rename-buffer
           "R"  'revert-buffer)
-        (+general-global-buffer
-          "o" 'ace-window)
         ;; Evaluation commands.
         (+general-global-menu! "eval" "e"
           "b" 'eval-buffer
@@ -955,6 +922,21 @@
           "d" 'delete-window)
         (+general-global-menu! "project" "p"))
      #+end_src
+
+** Window switching
+   I'm trying ace-window in order to allow faster window switching, when working with
+   multiple buffers in the same frame. Disabling also the undo command, trying to get
+   used to C-/
+   #+begin_src emacs-lisp
+     (use-package ace-window
+       :straight t
+       :general
+       (+general-global-buffer
+         "o" 'ace-window)
+       :custom
+       (aw-keys '(?h ?j ?k ?l ?a ?s ?d ?f ?g))
+       (aw-background nil))
+   #+end_src
 
 ** Completion framework
 *** Modular completion
@@ -1174,6 +1156,16 @@
           (embark-collect-mode . consult-preview-at-point-mode))
       #+end_src
 
+** Hydra
+   This is a package for GNU Emacs that can be used to tie related commands into a family of short bindings with a common prefix - a Hydra.
+      #+begin_src emacs-lisp
+        (use-package hydra
+          :straight t
+          :commands (defhydra defhydra+)
+          :hook
+          (embark-collect-mode . consult-preview-at-point-mode))
+      #+end_src
+
 ** Terminal
    Configuration related to terminal emulators and modes. Recently, 
    I started using vterm which is faster than any of the others.
@@ -1208,75 +1200,6 @@
     #+end_src
 
 ** Org-mode
-*** Keybindings
-    Keybindings for org-mode as well as better defaults. Not in use-package format yet.
-    #+begin_src emacs-lisp
-      (define-key global-map (kbd "C-c o l") 'org-store-link)
-      (define-key global-map (kbd "C-c a") 'org-agenda)
-      (define-key global-map (kbd "C-c c") 'org-capture)
-      (define-key org-mode-map (kbd "C-c o c") 'org-columns)
-      (define-key org-mode-map (kbd "C-,") nil)
-      (define-key org-mode-map (kbd "C-c o t") 'org-babel-tangle)
-    #+end_src
-
-**** God-mode
-     This is a global minor mode for entering Emacs commands without modifier keys. It's similar to Vim's separation of command mode and insert mode. All existing key bindings will work in God mode. It's only there to reduce your usage of modifier keys.
-     #+begin_src emacs-lisp :tangle no
-       (use-package god-mode
-         :straight t
-         :custom
-         (god-mode-enable-function-key-translation nil)
-         :bind (("<escape>" . god-local-mode)
-                :map god-local-mode-map
-                ("." . repeat)
-                ("i" . god-local-mode)
-                :map global-map
-                ("C-x C-1" . delete-other-windows)
-                ("C-x C-2" . split-window-below)
-                ("C-x C-3" . split-window-right)
-                ("C-x C-0" . delete-window))
-         :config
-         (defun my-god-mode-update-cursor-type ()
-           (setq cursor-type (if (or god-local-mode buffer-read-only) 'box 'bar)))
-         (add-hook 'post-command-hook #'my-god-mode-update-cursor-type)
-         (add-to-list 'god-exempt-major-modes 'vterm-mode)
-         (advice-add 'god-mode :around #'make-silent)
-         (god-mode))
-     #+end_src
-     
-**** Org-mode file movement
-     There are already defined org-mode movement keys to navigate the header tree, but I find difficult to reach everytime for =C-c C-n= or =C-c C-u= to go to the next or parent header respectively.
-
-     That said, I find that a hydra would fit nicely in the mix, maybe consider hercules?
-     #+begin_src emacs-lisp
-       (defhydra hydra-org-movement
-         (:color pink
-                 :hint nil
-                 :pre (smerge-mode 1)
-                 ;; Disable `smerge-mode' when quitting hydra if
-                 ;; no merge conflicts remain.
-                 :post (smerge-auto-leave))
-         "
-             ^Movement^                        ^Heading^       
-             ^^-----------                     ^^-----------
-             _n_ext visible heading            _w_ copy heading
-             _p_rev visible heading            _y_ank heading
-             _u_p heading
-             _b_ackward same level
-             _f_orward same level
-             "
-         ("n" outline-next-visible-heading)
-         ("p" outline-previous-visible-heading)
-         ("u" outline-up-heading)
-         ("b" outline-backward-same-level)
-         ("f" outline-forward-same-level)
-         ("q" nil "cancel" :color blue)
-         ("w" org-copy-special)
-         ("y" org-paste-subtree))
-
-       (define-key org-mode-map (kbd "C-c ?") #'hydra-org-movement/body)
-     #+end_src
-
 *** Initial configuration
     Initial configuration of org-directory and refile.org, with the
     intention of all capture created items to go there before correct refiling.
@@ -1284,6 +1207,14 @@
       (setq org-roam-directory "~/Documents/slipbox")
       (setq org-roam-v2-ack t)
       (use-package org
+        :mode "\\.org\\'"
+        :bind (:map global-map
+                    ("C-c o l" . org-store-link)
+                    ("C-c a" . org-agenda)
+                    ("C-c c" . org-capture)
+                    :map org-mode-map
+                    ("C-," . nil)
+                    ("C-c o t" . org-babel-tangle)
         :custom
         (org-directory "~/Documents/org_files")
         (org-default-notes-file (concat org-roam-directory "/pages/refile.org"))

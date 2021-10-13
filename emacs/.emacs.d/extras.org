@@ -160,7 +160,7 @@
 ** Programming
 *** Open code in code.amazon
     Helper to open the current file in code.amazon.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (defcustom amz-workspace-base-dirname "workplace"
         "The name of your base workspace directory"
         :type 'string)
@@ -868,12 +868,6 @@ Lsp-mode for server completion.
             " AND NOT flag:trashed"
             " AND (to:enrikes@amazon.com OR to:enrikes@amazon.es)"))
           (mu4e-alert-enable-mode-line-display)
-          ;; (defun gjstein-refresh-mu4e-alert-mode-line ()
-          ;;   (interactive)
-          ;;   (mu4e~proc-kill)
-          ;;   (mu4e-alert-enable-mode-line-display)
-          ;;   )
-          ;; (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line)
           )
       #+end_src
 ***** mu4e-thread-folding
@@ -1000,4 +994,3 @@ Lsp-mode for server completion.
        :straight t
        :commands emacs-everywhere)
    #+end_src
-

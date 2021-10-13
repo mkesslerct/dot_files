@@ -21,7 +21,9 @@
 
 ;; Always defer use-package packages. This means that if I really need a package, I will go to my config and edit the use-package recipe to lazy load it. This reduces my startup time significantly.
 (setq use-package-always-defer t)
-
+(setq use-package-verbose t
+      use-package-compute-statistics t
+      use-package-minimum-reported-time 0)
 (straight-use-package 'use-package)
 (eval-when-compile
   (require 'use-package))
@@ -40,7 +42,7 @@
 ;; Garbage collection strategy used by doom-emacs.
 (use-package gcmh
   :straight t
-  :commands gcmh-mode
+  :demand t
   :custom (gcmh-idle-delay 0.3))
 (gcmh-mode 1)
 
