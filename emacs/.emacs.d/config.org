@@ -565,6 +565,7 @@
      Disabling beep sound.
      #+begin_src emacs-lisp
        (setq visible-bell nil)
+       (setq ring-bell-function 'ignore)
      #+end_src
 
 **** Menu-bar
@@ -917,7 +918,7 @@
           :keymaps 'override
           :states  '(emacs normal hybrid motion visual operator)
           :prefix  "SPC"
-          :non-normal-prefix "S-SPC")
+          :non-normal-prefix "C-SPC")
         (general-evil-setup)
         (global-definer
           ""     nil
@@ -929,7 +930,7 @@
 
         (defmacro +general-global-menu! (name infix-key &rest body)
           "Create a definer named +general-global-NAME wrapping global-definer.
-      Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY."
+            Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY."
           (declare (indent 2))
           `(progn
              (general-create-definer ,(intern (concat "+general-global-" name))
@@ -940,6 +941,12 @@
                "" '(:ignore t :which-key ,name))
              (,(intern (concat "+general-global-" name))
               ,@body)))
+
+        (general-create-definer global-leader
+          :keymaps 'override
+          :states '(emacs normal hybrid motion visual operator)
+          :prefix "SPC m"
+          "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
 
         ;; Buffer commands.
         (+general-global-menu! "buffer" "b"
@@ -962,7 +969,7 @@
           "s" 'split-window-horizontally
           "m" 'delete-other-windows
           "d" 'delete-window)
-        )
+        (+general-global-menu! "project" "p"))
      #+end_src
 
 ** Completion framework
@@ -1101,9 +1108,8 @@
       #+begin_src emacs-lisp
         (use-package consult-projectile
           :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile" :branch "master")
-          :bind ("C-c p" . consult-projectile)
-          :config
-          (consult-customize consult-projectile consult-projectile--file :preview-key (kbd "M-.")))
+          :general (+general-global-project
+                    "f" 'consult-projectile))
       #+end_src
 
 ***** Consult-lsp
@@ -1975,6 +1981,11 @@
        :config
        (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
        (add-to-list 'projectile-project-root-files-bottom-up "BUILD")
+       (+general-global-project
+         "!" 'projectile-run-shell-command-in-root
+         "&" 'projectile-run-async-shell-command-in-root
+         "d" 'projectile-find-dir
+         "D" 'projectile-dired)
        (projectile-global-mode))
    #+end_src
 
