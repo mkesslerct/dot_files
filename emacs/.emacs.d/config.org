@@ -1,7 +1,6 @@
 +STARTUP: showeverything
 #+PROPERTY: header-args :results none
 
-* Emacs configuration
 ** Lexical binding
    #+begin_src emacs-lisp
      ;;; config.el --- apply lexical binding to all config  -*- lexical-binding: t -*-
@@ -1973,19 +1972,18 @@
 
      (use-package projectile
        :straight t
-       :after consult-projectile
-       :commands (projectile-remove-known-project projectile-find-file)
        :custom
        (projectile-generic-command (concat qk/fd-command " . -0 --type f --color=never"))
        (projectile-project-search-path '("~/Documents/"))
-       :config
-       (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
-       (add-to-list 'projectile-project-root-files-bottom-up "BUILD")
+       :general
        (+general-global-project
          "!" 'projectile-run-shell-command-in-root
          "&" 'projectile-run-async-shell-command-in-root
          "d" 'projectile-find-dir
          "D" 'projectile-dired)
+       :config
+       (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
+       (add-to-list 'projectile-project-root-files-bottom-up "BUILD")
        (projectile-global-mode))
    #+end_src
 
