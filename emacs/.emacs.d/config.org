@@ -1226,6 +1226,7 @@
                     ("C-c o t" . org-babel-tangle))
         :custom
         (org-directory "~/Documents/org_files")
+        (org-return-follows-link t)
         (org-default-notes-file (concat org-roam-directory "/pages/refile.org"))
         (org-agenda-files (list (concat org-directory "/org-agenda")))
         (org-archive-location (concat org-directory "/archive/%s_archive::"))
