@@ -87,6 +87,15 @@
     #+end_src
 
 ** Better defaults
+*** Pdf-tools
+    
+    #+begin_src emacs-lisp
+      (use-package pdf-tools
+        :straight t
+        :init (pdf-loader-install)
+        :hook (pdf-view-mode . (lambda () (linum-mode -1))))
+    #+end_src
+
 *** Sudo-edit
     Instead of installing the package, just add an interactive function to append the tramp string to the file name, adding the sudo-edit functionality.
     #+begin_src emacs-lisp
@@ -1705,7 +1714,7 @@
                                    (set-fill-column 72)))
         :general
         (minor-mode-definer
-          :keymaps git-commit-mode
+          :keymaps global-git-commit-mode
           "f" 'with-editor-finish
           "c" 'with-editor-cancel)
         :custom 

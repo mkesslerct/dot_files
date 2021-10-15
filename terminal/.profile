@@ -36,3 +36,5 @@ export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
 export PATH="/Library/TeX/texbin/:$PATH"
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/opt/lib64/pkgconfig:/usr/opt/lib/pkgconfig"

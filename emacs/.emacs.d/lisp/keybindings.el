@@ -86,12 +86,13 @@
 
   ;; File commands.
   (+general-global-menu! "file" "f"
+    "D" 'save-buffers-kill-terminal
+    "d" 'dired
     "E" 'sudo-edit
     "f" 'find-file
     "j" 'dired-jump
     "s" 'save-buffer
-    "S" 'save-some-buffers
-    "d" 'save-buffers-kill-terminal)
+    "S" 'save-some-buffers)
 
   ;; Search commands, currently using `consult' and `affe'.
   (+general-global-menu! "search" "s"))
