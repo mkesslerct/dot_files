@@ -795,6 +795,7 @@
          ("C-x b" . qk/stop-using-emacs-bindings)
          ("C-x k" . qk/stop-using-emacs-bindings)
          ("C-x e" . qk/stop-using-emacs-bindings)
+         ("M-x" . qk/stop-using-emacs-bindings)
          :custom
          (evil-want-integration t)
          (evil-want-keybinding nil)
@@ -833,16 +834,18 @@
      #+begin_src emacs-lisp
        (use-package evil-org
          :straight t
-         :commands evil-org-mode
          :after org
-         :init
-         (add-hook 'org-mode-hook 'evil-org-mode)
+         :custom 
+         (evil-org-special-o/O '(table-row item))
+         :hook
+         (org-mode . evil-org-mode)
          :config
          (require 'evil-org-agenda)
          (evil-org-agenda-set-keys)
-         (add-hook 'evil-org-mode-hook
-                   (lambda ()
-                     (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading)))))
+         (evil-org-set-key-theme '(textobjects insert navigation additional shift))
+
+         (evil-define-key 'motion org-agenda-mode-map
+           "ss" 'org-agenda-schedule))
      #+end_src
 
 *** which-key
@@ -859,72 +862,7 @@
 *** Personal bindings
     Here are the personal bindings that I control, having defined them using the =general-global-menu= macro, which makes the defining and configuration of key-pockets really easy and painless.
     #+begin_src emacs-lisp
-      (use-package general
-        :straight t
-        :after evil
-        :config
-        (general-create-definer global-definer
-          :keymaps 'override
-          :states  '(emacs normal hybrid motion visual operator)
-          :prefix  "SPC"
-          :non-normal-prefix "C-SPC")
-        (general-evil-setup)
-        (global-definer
-          ""     nil
-          "c"   (general-simulate-key "C-c")
-          "h"   (general-simulate-key "C-h" :which-key "help")
-          "SPC" 'execute-extended-command
-          "u"   (general-simulate-key "C-u")
-          "x"   (general-simulate-key "C-x"))
-
-        (defmacro +general-global-menu! (name infix-key &rest body)
-          "Create a definer named +general-global-NAME wrapping global-definer.
-            Create prefix map: +general-global-NAME. Prefix bindings in BODY with INFIX-KEY."
-          (declare (indent 2))
-          `(progn
-             (general-create-definer ,(intern (concat "+general-global-" name))
-               :wrapping global-definer
-               :prefix-map (quote ,(intern (concat "+general-global-" name "-map")))
-               :infix ,infix-key
-               :wk-full-keys nil
-               "" '(:ignore t :which-key ,name))
-             (,(intern (concat "+general-global-" name))
-              ,@body)))
-
-        (general-create-definer global-leader
-          :keymaps 'override
-          :states '(emacs normal hybrid motion visual operator)
-          :prefix "SPC m"
-          "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
-
-        ;; Buffer commands.
-        (+general-global-menu! "buffer" "b"
-          "d"  'kill-current-buffer
-          "b" 'switch-to-buffer
-          "r"  'rename-buffer
-          "R"  'revert-buffer)
-        ;; Evaluation commands.
-        (+general-global-menu! "eval" "e"
-          "b" 'eval-buffer
-          "d" 'eval-defun
-          "e" 'eval-expression
-          "s" 'eval-last-sexp)
-        ;; Window commands.
-        (+general-global-menu! "window" "w"
-          "=" 'balance-windows
-          "v" 'split-window-vertically
-          "s" 'split-window-horizontally
-          "m" 'delete-other-windows
-          "d" 'delete-window)
-        (+general-global-menu! "project" "p")
-        (+general-global-menu! "file" "f"
-          "E" 'sudo-edit
-          "f" 'find-file
-          "j" 'dired-jump
-          "s" 'save-buffer
-          "S" 'save-some-buffers
-          "d" 'save-buffers-kill-terminal)
-        (+general-global-menu! "search" "s"))
+      (require 'keybindings)
      #+end_src
 
 ** Window switching
@@ -1065,10 +1003,9 @@
                xref-show-definitions-function #'consult-xref)
          :custom
          (consult-narrow-key "<")
+         (consult-preview-key nil)
          :config
          (consult-customize
-          ;; Disable preview for `consult-theme' completely.
-          consult-theme :preview-key nil
           ;; Set preview for `consult-buffer' to key `M-.'n
           consult-buffer :preview-key (kbd "M-."))
          :preface
@@ -1224,6 +1161,19 @@
                     :map org-mode-map
                     ("C-," . nil)
                     ("C-c o t" . org-babel-tangle))
+        :general
+        (major-mode-definer
+          :major-modes '(org-mode)
+          :keymaps '(org-mode-map)
+          "d" 'org-deadline
+          "e" 'org-export-dispatch
+          "s" 'org-schedule
+          "r" 'org-refile)
+        (minor-mode-definer
+          :keymaps 'org-capture-mode
+          "c" 'org-capture-finalize
+          "k" 'org-capture-kill
+          "r" 'org-capture-refile)
         :custom
         (org-directory "~/Documents/org_files")
         (org-return-follows-link t)
@@ -1476,80 +1426,19 @@
 **** Hiding tags 
     Adding hiding the tags on org agenda.
     #+begin_src emacs-lisp
-      (setq org-agenda-hide-tags-regexp ".*")
-
       (use-package org-agenda
         :bind (:map org-agenda-mode-map
                     ("?" . qk/org-agenda-transient))
+        :general
+        (global-definer
+          "a" 'org-agenda)
         :custom
         (org-agenda-prefix-format "  %?-12t% s")
         (org-agenda-archives-mode nil)
         (org-agenda-skip-comment-trees nil)
         (org-agenda-skip-function nil)
-        (org-roam-v2-ack t)
-        :config
-        (transient-define-prefix qk/org-agenda-transient ()
-          "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
-          [
-           ["Entry"
-            ("e A" "Archive default" org-agenda-archive-default)
-            ("e k" "Remove entry" org-agenda-kill)
-            ("e r" "Refile" org-agenda-refile)
-            ("e p" "Set priority" org-agenda-priority)
-            ("e :" "Set tags" org-agenda-set-tags)
-            ("e t" "Set state" org-agenda-todo)
-            ("d d" "Set deadline" org-agenda-deadline)
-            ("d t" "Date prompt" org-agenda-date-prompt)
-            ("d s" "Schedule" org-agenda-schedule)
-            ("d +" "Next day" org-agenda-do-date-later)
-            ("d -" "Previous day" org-agenda-do-date-earlier)
-            ]
-           ["Show"
-            ("TAB" "Entry other buffer" org-agenda-goto)
-            ("SPC" "Show entry" org-agenda-show-and-scroll-up)
-            ("RET" "Switch to entry" org-agenda-switch-to)
-            "Calendar"
-            ("s o" "Show org calendar" qk/open-org-calendar)
-            ("s q" "Show qkessler calendar" qk/open-qk-calendar)
-            ("s e" "Show enrique.kesslerm calendar" qk/open-ekm-calendar)
-            ]
-           ["View"
-            ("v d" "Day view" org-agenda-day-view)
-            ("v w" "Week view" org-agenda-week-view)
-            ("v t" "Fortnight view" org-agenda-fortnight-view)
-            ("v m" "Month view" org-agenda-month-view)
-            ("v y" "Year view" org-agenda-year-view)
-            ("v n" "Next view" org-agenda-later)
-            ("v p" "Previous view" org-agenda-earlier)
-            ("v r" "Reset view" org-agenda-reset-view)
-            ("g d" "Go to date" org-agenda-goto-date)
-            ("g r" "Refresh" org-agenda-redo)
-            ("." "Go to today" org-agenda-goto-today)
-            ]
-           ]
-          [
-           ["Toggle"
-            ("t a" "Archives mode" org-agenda-archives-mode)
-            ("t r" "Clock report mode" org-agenda-clockreport-mode)
-            ("t f" "Follow mode" org-agenda-follow-mode)
-            ("t l" "Log mode" org-agenda-log-mode)
-            ("t d" "Diary" org-agenda-toggle-diary)
-            ]
-           ["Filter"
-            ("f c" "By category" org-agenda-filter-by-category)
-            ("f x" "By regexp" org-agenda-filter-by-regexp)
-            ("f t" "By tag" org-agenda-filter-by-tag)
-            ("f d" "Remove filters" org-agenda-filter-remove-all)
-            ]
-           ["Clock"
-            ("c q" "Cancel" org-agenda-clock-cancel)
-            ("c j" "Go to clock" org-agenda-clock-goto)
-            ("c i" "Clock in" org-agenda-clock-in)
-            ("c o" "Clock out" org-agenda-clock-out)
-            ("c p" "Clock pomodoro" org-pomodoro)
-            ]
-           ]))
-
+        (org-agenda-hide-tags-regexp ".*")
+        (org-roam-v2-ack t))
     #+end_src
 
 **** Refiling workflow 
