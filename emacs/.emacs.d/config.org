@@ -5,90 +5,201 @@
    #+begin_src emacs-lisp
      ;;; config.el --- apply lexical binding to all config  -*- lexical-binding: t -*-
    #+end_src
+   
+** Keybindings
+** Evil
+*** Evil-mode
+    [[https://github.com/emacs-evil/evil][Evil]] is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions. Also see our page on EmacsWiki.
+    #+begin_src emacs-lisp
+      (defun qk/set-quit-with-scape ()
+        (define-key evil-normal-state-map [escape] 'keyboard-quit)
+        (define-key evil-visual-state-map [escape] 'keyboard-quit)
+        (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+        (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+        (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+        (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+        (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
+
+      (defun qk/stop-using-emacs-bindings ()
+        "Function created to flash the screen if I'm using old Emacs bindings, and
+      not the evil ones I'm trying to learn."
+        (interactive)
+        (message "Stop using Emacs bindings: use evil-mode ones please."))
+
+      (use-package evil
+        :straight t
+        :demand t
+        :bind
+        ("C-x 0" . qk/stop-using-emacs-bindings)
+        ("C-x 1" . qk/stop-using-emacs-bindings)
+        ("C-x 2" . qk/stop-using-emacs-bindings)
+        ("C-x 3" . qk/stop-using-emacs-bindings)
+        ("C-x b" . qk/stop-using-emacs-bindings)
+        ("C-x k" . qk/stop-using-emacs-bindings)
+        ("C-x e" . qk/stop-using-emacs-bindings)
+        ("M-x" . qk/stop-using-emacs-bindings)
+        :custom
+        (evil-want-integration t)
+        (evil-want-keybinding nil)
+        (evil-want-C-u-scroll t)
+        (evil-want-C-i-jump nil)
+        (evil-respect-visual-line-mode t)
+        (evil-undo-system 'undo-tree)
+        :config
+        (qk/set-quit-with-scape)
+        ;; Use visual line motions even outside of visual-line-mode buffers
+        (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+        (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+        (evil-set-initial-state 'messages-buffer-mode 'normal)
+        (evil-set-initial-state 'magit-status-mode 'normal)
+        (evil-set-initial-state 'git-commit-mode 'insert)
+        (evil-set-initial-state 'dashboard-mode 'normal)
+        (evil-normalize-keymaps)
+        (evil-mode 1))
+    #+end_src
+
+*** Evil-collection
+    #+begin_src emacs-lisp
+      (use-package evil-collection
+        :straight t
+        :demand t
+        :custom
+        (evil-collection-outline-bind-tab-p nil)
+        (evil-collection-setup-minibuffer t)
+        :config
+        (evil-collection-init))
+    #+end_src
+
+*** Evil-org
+    Supplemental evil-mode key-bindings to Emacs org-mode. This project is a continuation of https://github.com/edwtjo/evil-org-mode/blob/master/evil-org.el by Edward Tjörnhammar.
+    #+begin_src emacs-lisp
+      (use-package evil-org
+        :straight t
+        :after org
+        :custom 
+        (evil-org-special-o/O '(table-row item))
+        :hook
+        (org-mode . evil-org-mode)
+        :config
+        (require 'evil-org-agenda)
+        (evil-org-agenda-set-keys)
+        (evil-org-set-key-theme '(textobjects insert navigation additional shift))
+
+        (evil-define-key 'motion org-agenda-mode-map
+          "ss" 'org-agenda-schedule))
+    #+end_src
+
+** which-key
+    =which-key= is a minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup. For example, after enabling the minor mode if you enter C-x and wait for the default of 1 second the minibuffer will expand with all of the available key bindings that follow C-x (or as many as space allows given your settings).
+    #+begin_src emacs-lisp
+      (use-package which-key
+        :straight t
+        :defer 1
+        :config
+        (which-key-setup-minibuffer)
+        (which-key-mode))
+#+end_src
+
+** Personal bindings
+   Here are the personal bindings that I control, having defined them using the =general-global-menu= macro, which makes the defining and configuration of key-pockets really easy and painless.
+   #+begin_src emacs-lisp
+     (require 'keybindings)
+    #+end_src
 
 ** Themes
-*** Initial theme list
-    I add the theme list here to be able to add to it when a theme is tangled, considering that I will most likely want to toggle two themes, the ones that are tangled: dark and light.
-    #+begin_src emacs-lisp
-      (setq qk/themes-list nil)
-      (setq qk/themes-index 1)
-    #+end_src
+** Initial theme list
+   I add the theme list here to be able to add to it when a theme is tangled, considering that I will most likely want to toggle two themes, the ones that are tangled: dark and light.
+   #+begin_src emacs-lisp
+     (setq qk/themes-list nil)
+     (setq qk/themes-index 1)
+   #+end_src
     
-*** Nord theme
-    #+begin_src emacs-lisp
-      (use-package doom-themes
-        :straight t
-        :init
-        (add-to-list 'qk/themes-list 'doom-nord))
-    #+end_src
+** Nord theme
+   #+begin_src emacs-lisp
+     (use-package doom-themes
+       :straight t
+       :init
+       (add-to-list 'qk/themes-list 'doom-nord))
+   #+end_src
 
-*** Solarized theme
-    This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
-    #+begin_src emacs-lisp
-      (use-package solarized-theme
-        :straight t
-        :custom
-        ;; make the fringe stand out from the background
-        (solarized-distinct-fringe-background t)
+** Solarized theme
+   This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
+   #+begin_src emacs-lisp
+     (use-package solarized-theme
+       :straight t
+       :custom
+       ;; make the fringe stand out from the background
+       (solarized-distinct-fringe-background t)
 
-        ;; Don't change the font for some headings and titles
-        (solarized-use-variable-pitch nil)
+       ;; Don't change the font for some headings and titles
+       (solarized-use-variable-pitch nil)
 
-        ;; Use less bolding
-        (solarized-use-less-bold t)
+       ;; Use less bolding
+       (solarized-use-less-bold t)
 
-        ;; Use more italics
-        (solarized-use-more-italic t)
+       ;; Use more italics
+       (solarized-use-more-italic t)
 
-        ;; Use less colors for indicators such as git:gutter, flycheck and similar
-        (solarized-emphasize-indicators nil)
+       ;; Use less colors for indicators such as git:gutter, flycheck and similar
+       (solarized-emphasize-indicators nil)
 
-        ;; Don't change size of org-mode headlines (but keep other size-changes)
-        (solarized-scale-org-headlines nil)
+       ;; Don't change size of org-mode headlines (but keep other size-changes)
+       (solarized-scale-org-headlines nil)
 
-        ;; Avoid all font-size changes
-        (solarized-height-minus-1 1.0)
-        (solarized-height-plus-1 1.0)
-        (solarized-height-plus-2 1.0)
-        (solarized-height-plus-3 1.0)
-        (solarized-height-plus-4 1.0)
-        :init
-        (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
-    #+end_src
+       ;; Avoid all font-size changes
+       (solarized-height-minus-1 1.0)
+       (solarized-height-plus-1 1.0)
+       (solarized-height-plus-2 1.0)
+       (solarized-height-plus-3 1.0)
+       (solarized-height-plus-4 1.0)
+       :init
+       (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
+   #+end_src
 
-*** Toggle theme
-    I found this function to cycle through a list of themes, which is defined before the function. In my opinion toggling from light to dark is key when working in the evenings.
-    #+begin_src emacs-lisp
-      (straight-use-package 'consult)
-      (defun qk/cycle-theme ()
-        "Change the theme to the next index in the `qk/themes-list'. I would normally use this for switching from light to dark modes."
-        (interactive)
-        (setq qk/themes-index (% (1+ qk/themes-index) (length qk/themes-list)))
-        (qk/load-indexed-theme))
+** Toggle theme
+   I found this function to cycle through a list of themes, which is defined before the function. In my opinion toggling from light to dark is key when working in the evenings.
+   #+begin_src emacs-lisp
+     (straight-use-package 'consult)
+     (defun qk/cycle-theme ()
+       "Change the theme to the next index in the `qk/themes-list'. I would normally use this for switching from light to dark modes."
+       (interactive)
+       (setq qk/themes-index (% (1+ qk/themes-index) (length qk/themes-list)))
+       (qk/load-indexed-theme))
 
-      (defun qk/load-indexed-theme ()
-        (consult-theme (nth qk/themes-index qk/themes-list)))
+     (defun qk/load-indexed-theme ()
+       (consult-theme (nth qk/themes-index qk/themes-list)))
 
-      (defun qk/try-load-theme (theme)
-        (if (ignore-errors (load-theme theme :no-confirm))
-            (mapcar #'disable-theme (remove theme custom-enabled-themes))
-          (message "Unable to find theme file for ‘%s’" theme)))
-      (qk/load-indexed-theme)
-    #+end_src
+     (defun qk/try-load-theme (theme)
+       (if (ignore-errors (load-theme theme :no-confirm))
+           (mapcar #'disable-theme (remove theme custom-enabled-themes))
+         (message "Unable to find theme file for ‘%s’" theme)))
+     (qk/load-indexed-theme)
+   #+end_src
 
-*** After-load-theme-hook
-    Emacs does not have an =after-load-theme-hook=, which a I find key for adding or changing some of the faces dinamically. Not everything is lost, we still have the =advice= sintax. We can advise the change-theme function to define a hook.
-    #+begin_src emacs-lisp
-      (defvar after-load-theme-hook nil
-        "Hook run after a color theme is loaded using `load-theme'.")
-      (defadvice consult-theme (after run-after-load-theme-hook activate)
-        "Run `after-load-theme-hook'."
-        (run-hooks 'after-load-theme-hook))
-    #+end_src
+** After-load-theme-hook
+   Emacs does not have an =after-load-theme-hook=, which a I find key for adding or changing some of the faces dinamically. Not everything is lost, we still have the =advice= sintax. We can advise the change-theme function to define a hook.
+   #+begin_src emacs-lisp
+     (defvar after-load-theme-hook nil
+       "Hook run after a color theme is loaded using `load-theme'.")
+     (defadvice consult-theme (after run-after-load-theme-hook activate)
+       "Run `after-load-theme-hook'."
+       (run-hooks 'after-load-theme-hook))
+   #+end_src
 
 ** Better defaults
+*** Winner-mode
+    Winner Mode is a global minor mode that allows you to “undo” and “redo” changes in WindowConfiguration. It is included in GNU Emacs, and documented as winner-mode.
+    #+begin_src emacs-lisp
+      (use-package winner
+        :init (winner-mode)
+        :general
+        (+general-global-window
+          "u" 'winner-undo
+          "r" 'winner-redo))
+    #+end_src
+
 *** Pdf-tools
-    
     #+begin_src emacs-lisp
       (use-package pdf-tools
         :straight t
@@ -772,107 +883,6 @@
         :demand t
         :config (global-undo-tree-mode 1))
     #+end_src
-
-** Keybindings
-*** Evil
-**** Evil-mode
-     [[https://github.com/emacs-evil/evil][Evil]] is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions. Also see our page on EmacsWiki.
-     #+begin_src emacs-lisp
-       (defun qk/set-quit-with-scape ()
-         (define-key evil-normal-state-map [escape] 'keyboard-quit)
-         (define-key evil-visual-state-map [escape] 'keyboard-quit)
-         (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
-         (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
-         (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
-         (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
-         (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit))
-
-       (defun qk/stop-using-emacs-bindings ()
-         "Function created to flash the screen if I'm using old Emacs bindings, and
-       not the evil ones I'm trying to learn."
-         (interactive)
-         (message "Stop using Emacs bindings: use evil-mode ones please."))
-
-       (use-package evil
-         :straight t
-         :demand t
-         :bind
-         ("C-x 0" . qk/stop-using-emacs-bindings)
-         ("C-x 1" . qk/stop-using-emacs-bindings)
-         ("C-x 2" . qk/stop-using-emacs-bindings)
-         ("C-x 3" . qk/stop-using-emacs-bindings)
-         ("C-x b" . qk/stop-using-emacs-bindings)
-         ("C-x k" . qk/stop-using-emacs-bindings)
-         ("C-x e" . qk/stop-using-emacs-bindings)
-         ("M-x" . qk/stop-using-emacs-bindings)
-         :custom
-         (evil-want-integration t)
-         (evil-want-keybinding nil)
-         (evil-want-C-u-scroll t)
-         (evil-want-C-i-jump nil)
-         (evil-respect-visual-line-mode t)
-         (evil-undo-system 'undo-tree)
-         :config
-         (qk/set-quit-with-scape)
-         ;; Use visual line motions even outside of visual-line-mode buffers
-         (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-         (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-         (evil-set-initial-state 'messages-buffer-mode 'normal)
-         (evil-set-initial-state 'magit-status-mode 'normal)
-         (evil-set-initial-state 'git-commit-mode 'insert)
-         (evil-set-initial-state 'dashboard-mode 'normal)
-         (evil-normalize-keymaps)
-         (evil-mode 1))
-     #+end_src
-
-**** Evil-collection
-     #+begin_src emacs-lisp
-       (use-package evil-collection
-         :straight t
-         :demand t
-         :custom
-         (evil-collection-outline-bind-tab-p nil)
-         (evil-collection-setup-minibuffer t)
-         :config
-         (evil-collection-init))
-     #+end_src
-
-**** Evil-org
-     Supplemental evil-mode key-bindings to Emacs org-mode. This project is a continuation of https://github.com/edwtjo/evil-org-mode/blob/master/evil-org.el by Edward Tjörnhammar.
-     #+begin_src emacs-lisp
-       (use-package evil-org
-         :straight t
-         :after org
-         :custom 
-         (evil-org-special-o/O '(table-row item))
-         :hook
-         (org-mode . evil-org-mode)
-         :config
-         (require 'evil-org-agenda)
-         (evil-org-agenda-set-keys)
-         (evil-org-set-key-theme '(textobjects insert navigation additional shift))
-
-         (evil-define-key 'motion org-agenda-mode-map
-           "ss" 'org-agenda-schedule))
-     #+end_src
-
-*** which-key
-    =which-key= is a minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup. For example, after enabling the minor mode if you enter C-x and wait for the default of 1 second the minibuffer will expand with all of the available key bindings that follow C-x (or as many as space allows given your settings).
-    #+begin_src emacs-lisp
-      (use-package which-key
-        :straight t
-        :defer 1
-        :config
-        (which-key-setup-minibuffer)
-        (which-key-mode))
-#+end_src
-
-*** Personal bindings
-    Here are the personal bindings that I control, having defined them using the =general-global-menu= macro, which makes the defining and configuration of key-pockets really easy and painless.
-    #+begin_src emacs-lisp
-      (require 'keybindings)
-     #+end_src
 
 ** Window switching
    I'm trying ace-window in order to allow faster window switching, when working with
