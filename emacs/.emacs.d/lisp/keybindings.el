@@ -9,7 +9,8 @@
 
   ;; Create SPC leader key, to be used in the macro.
   (general-create-definer global-definer
-    :keymaps  '(emacs normal hybrid motion visual operator)
+    :keymaps 'override
+    :states  '(emacs normal hybrid motion visual operator)
     :prefix  "SPC"
     :non-normal-prefix "C-SPC")
 
