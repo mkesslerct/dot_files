@@ -1714,7 +1714,7 @@
                                    (set-fill-column 72)))
         :general
         (minor-mode-definer
-          :keymaps global-git-commit-mode
+          :keymaps 'git-commit-mode
           "f" 'with-editor-finish
           "c" 'with-editor-cancel)
         :custom 
