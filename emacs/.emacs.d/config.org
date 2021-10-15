@@ -1165,6 +1165,7 @@
         (major-mode-definer
           :major-modes '(org-mode)
           :keymaps '(org-mode-map)
+          "c" 'org-capture
           "d" 'org-deadline
           "e" 'org-export-dispatch
           "s" 'org-schedule

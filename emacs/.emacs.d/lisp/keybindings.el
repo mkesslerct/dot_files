@@ -62,6 +62,7 @@
   (+general-global-menu! "buffer" "b"
     "d"  'kill-current-buffer
     "b" 'switch-to-buffer
+    "o" '(switch-to-buffer-other-window :which-key "other-window")
     "r"  'rename-buffer
     "R"  'revert-buffer)
 
