@@ -1731,11 +1731,12 @@
        (projectile-project-search-path '("~/Documents/"))
        :general
        (+general-global-project
-         "!" 'projectile-run-shell-command-in-root
-         "&" 'projectile-run-async-shell-command-in-root
+         "!" '(projectile-run-shell-command-in-root :which-key "shell-command")
+         "&" '(projectile-run-async-shell-command-in-root :which-key "async shell-command")
          "d" 'projectile-find-dir
          "D" 'projectile-dired
-         "k" 'projectile-kill-buffers)
+         "k" 'projectile-kill-buffers
+         "o" '(projectile-find-file-other-window :which-key "find-other-window"))
        :config
        (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
        (add-to-list 'projectile-project-root-files-bottom-up "BUILD")
