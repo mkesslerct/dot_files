@@ -1226,7 +1226,7 @@
      I followed the [[https://xenodium.com/emacs-dwim-do-what-i-mean/][xenodium blog post]] talking about DWIM and its interactive commands already in Emacs. He implements his DWIM changes to to org-insert-link, and I found his changes to be interesting enough to add them to my own command.
      #+begin_src emacs-lisp
        (use-package org
-         :init
+         :preface
          (defun ar/org-insert-link-dwim ()
            "Like `org-insert-link' but with personal dwim preferences."
            (interactive)
@@ -1450,8 +1450,9 @@
         :bind (:map org-agenda-mode-map
                     ("?" . qk/org-agenda-transient))
         :general
-        (global-definer
-          "a" 'org-agenda)
+        (+general-global-org
+         "a" 'org-agenda
+         "c" 'org-capture)
         :custom
         (org-agenda-prefix-format "  %?-12t% s")
         (org-agenda-archives-mode nil)

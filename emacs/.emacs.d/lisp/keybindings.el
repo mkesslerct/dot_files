@@ -95,7 +95,8 @@
     "S" 'save-some-buffers)
 
   ;; Search commands, currently using `consult' and `affe'.
-  (+general-global-menu! "search" "s"))
+  (+general-global-menu! "search" "s")
+  (+general-global-menu! "org" "o"))
 
 (provide 'keybindings)
 ;;; keybindings.el ends here.
