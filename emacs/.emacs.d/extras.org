@@ -748,7 +748,7 @@ Lsp-mode for server completion.
          (mu4e-get-mail-command "mbsync -a")
          (mu4e-change-filenames-when-moving t)
          (mu4e-headers-show-threads nil)
-         ;;         (mu4e-html2text-command 'mu4e-shr2text)
+         (mu4e-html2text-command 'mu4e-shr2text)
          (mu4e-update-interval (* 1 60))
          (mu4e-hide-index-messages t)
          (mu4e-compose-signature "Enrique Kessler Martínez\n")
@@ -776,6 +776,7 @@ Lsp-mode for server completion.
 
          (mu4e-bookmarks
           '(
+            (:name "All Unread" :query `,"g:unread" :key ?u)
             (:name "Last 7 days" :query `,"d:7d..now" :key ?w)
             (:name "Today's messages" :query "d:today..now" :key ?t)
             (:name "Work Unread"
@@ -786,7 +787,7 @@ Lsp-mode for server completion.
                    :key ?p)
             (:name "UMU Unread"
                    :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
-                   :key ?u)))
+                   :key ?U)))
          :config
          (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
          (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
