@@ -104,9 +104,6 @@
       (use-package org-agenda
         :hook (kill-emacs . org-save-all-org-buffers))
 
-      (advice-add 'vulpea-agenda-files-update :before #'org-save-all-org-buffers)
-      (advice-add 'vulpea-agenda-files-update :after #'org-save-all-org-buffers)
-      ;; (advice-add 'org-agenda :before #'org-save-all-org-buffers)
       (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
     #+end_src
 
