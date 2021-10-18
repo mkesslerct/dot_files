@@ -68,6 +68,12 @@
                                       (file+head "pages/${slug}.org" ":PROPERTIES:\n:ID:  %(org-id-uuid)\n:END:\n#+title: ${title}\n#+filetags: \n\n")
                                       :unnarrowed t)))
        (org-roam-v2-ack t)
+       :general
+       (+general-global-roam
+        "f" 'org-roam-node-find
+        "i" 'org-roam-node-insert
+        "I" 'org-roam-node-insert-immediate
+        "t" 'org-roam-buffer-toggle)
        :bind (:map global-map
                    ("C-c n f" . org-roam-node-find)
                    :map org-mode-map
