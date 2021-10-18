@@ -1855,7 +1855,22 @@
        ;; `completion-at-point' is often bound to M-TAB.
        (setq tab-always-indent 'complete))
    #+end_src
+** Programming
+*** Tree-sitter-mode
+    Tree-sitter is a parser generator tool and an incremental parsing library. It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited. It could be the next generation of sintax parsers, as it has been really accepted by the community and the Github's Atom team has been working on implementing a ton of languages.
 
+    Even though support has been scarce for the last months, the =emacs-tree-sitter= package now supports most of the most I work with, making the experience snappier, specially with big buffers. It doesn't really hurt to try, considering the sintax-highlighting already provided by =font-lock-mode=, which is not specially fast (it is regex based).
+
+    With the following documenation, tree-sitter-hl-mode will be enabled on all supported major modes, and you will be start to benefit from incremental parsing.
+    #+begin_src emacs-lisp
+      (use-package tree-sitter
+        :straight t
+        :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+        :config
+        (straight-use-package 'tree-sitter-langs)
+        :init (global-tree-sitter-mode))
+    #+end_src
+     
 ** Extras
    I have a separate file with all the extras, in order to avoid tangling info that is not needed. This source block should be untangled for a more minimalistic Emacs.
    #+begin_src emacs-lisp
