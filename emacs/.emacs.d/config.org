@@ -1210,6 +1210,7 @@
           "d" 'org-deadline
           "e" 'org-export-dispatch
           "s" 'org-schedule
+          "t" 'org-todo
           "r" 'org-refile)
         (minor-mode-definer
           :keymaps 'org-capture-mode
