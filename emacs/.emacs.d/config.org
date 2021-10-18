@@ -55,6 +55,7 @@
         (evil-set-initial-state 'magit-status-mode 'normal)
         (evil-set-initial-state 'git-commit-mode 'insert)
         (evil-set-initial-state 'dashboard-mode 'normal)
+        (evil-set-initial-state 'org-agenda-mode 'motion)
         (evil-normalize-keymaps)
         (evil-mode 1))
     #+end_src
@@ -204,7 +205,9 @@
       (use-package pdf-tools
         :straight t
         :init (pdf-loader-install)
-        :hook (pdf-view-mode . (lambda () (linum-mode -1))))
+        :hook (pdf-view-mode . (lambda ()
+                                 (linum-mode -1)
+                                 (display-line-numbers-mode -1))))
     #+end_src
 
 *** Sudo-edit
@@ -639,8 +642,26 @@
 
 **** Line numeration on left side
      #+begin_src emacs-lisp
-       (global-linum-mode t)
-       (put 'erase-buffer 'disabled nil)
+       (use-package display-line-numbers
+         :preface
+         (defcustom display-line-numbers-exempt-modes
+           '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode)
+           "Major modes on which to disable line numbers."
+           :group 'display-line-numbers
+           :type 'list
+           :version "green")
+
+         (defun display-line-numbers--turn-on ()
+           "Turn on line numbers except for certain major modes.
+       Exempt major modes are defined in `display-line-numbers-exempt-modes'."
+           (unless (or (minibufferp)
+                       (member major-mode display-line-numbers-exempt-modes))
+             (display-line-numbers-mode))))
+
+       (use-package emacs
+         :custom (display-line-numbers 'relative)
+         :config
+         (put 'erase-buffer 'disabled nil))
      #+end_src
 
 **** New lines
@@ -1211,7 +1232,6 @@
         (org-clock-persistence-insinuate t)
         (org-clock-persist t)
         (org-clock-in-resume t)
-        (org-startup-with-inline-images t)
         (org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
         :hook
         (org-capture-after-finalize . org-save-all-org-buffers)
@@ -1463,7 +1483,8 @@
         (+general-global-org
          "a" '(qk/silently-open-agenda :which-key "project agenda")
          "t" '(qk/silently-open-todo-agenda :which-key "day/week agenda")
-         "c" 'org-capture)
+         "c" 'org-capture
+         "h" 'qk/org-capture-here)
         :custom
         (org-agenda-prefix-format "  %?-12t% s")
         (org-agenda-archives-mode nil)

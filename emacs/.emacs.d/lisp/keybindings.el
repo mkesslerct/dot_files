@@ -92,6 +92,7 @@
     "f" 'find-file
     "j" 'dired-jump
     "s" 'save-buffer
+    "o" 'find-file-other-window
     "S" 'save-some-buffers)
 
   ;; Search commands, currently using `consult' and `affe'.
@@ -101,7 +102,7 @@
 ;; Configure "jk" to exit out of insert mode and enter normal mode.
 (use-package key-chord
   :straight t 
-  :after evil
+  :demand t
   :config
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
