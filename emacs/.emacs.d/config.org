@@ -189,6 +189,14 @@
    #+end_src
 
 ** Better defaults
+*** Smooth-scrolling
+    Smooth-scrolling inspired in the sublime editor.
+    #+begin_src emacs-lisp
+      (use-package sublimity-scroll
+        :straight sublimity
+        :init (sublimity-mode 1))
+    #+end_src
+
 *** Winner-mode
     Winner Mode is a global minor mode that allows you to “undo” and “redo” changes in WindowConfiguration. It is included in GNU Emacs, and documented as winner-mode.
     #+begin_src emacs-lisp
