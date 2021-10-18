@@ -1837,14 +1837,15 @@
      (use-package corfu
        :straight t
        :bind (:map corfu-map
-                   ("C-n" . corfu-next)
-                   ("C-p" . corfu-previous))
+                   ("C-j" . corfu-next)
+                   ("C-k" . corfu-previous))
        :custom
        (corfu-cycle t)
        (corfu-global-mode t)
        (corfu-quit-no-match t)
+       (corfu-auto t)
        (corfu-commit-predicate nil)
-       :config (corfu-global-mode))
+       :init (corfu-global-mode))
 
      (use-package emacs
        :init

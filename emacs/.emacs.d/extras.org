@@ -227,7 +227,7 @@
         (define-key java-mode-map (kbd "C-c C-o") 'open-code-amazon))
     #+end_src
 *** Language Server Protocol
-Lsp-mode for server completion.
+    Lsp-mode for server completion.
 **** Flycheck
      Sintax checking on the fly.
      #+begin_src emacs-lisp
@@ -270,17 +270,7 @@ Lsp-mode for server completion.
      #+begin_src emacs-lisp
        (use-package lsp-mode
          :straight t
-         :commands (lsp lsp-deferred)
-         :hook
-         (mhtml-mode . lsp-deferred)
-         (css-mode . lsp-deferred)
-         (python-mode . lsp-deferred)
-         (csharp-mode . lsp-deferred)
-         (js-mode . lsp-deferred)
-         (typescript-mode . lsp-deferred)
-         (tex-mode . lsp-deferred)
-         (latex-mode . lsp-deferred)
-         (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
+         :commands lsp-deferred
          :custom
          (read-process-output-max (* 1024 1024))
          (lsp-completion-provider :none)
@@ -288,6 +278,7 @@ Lsp-mode for server completion.
          (lsp-enable-file-watchers nil)
          (lsp-signature-auto-activate nil)
          (lsp-headerline-breadcrumb-enable nil)
+         (lsp-ui-sideline-show-code-actions nil)
          (lsp-enable-links nil)
          :config
          (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
@@ -311,7 +302,7 @@ Lsp-mode for server completion.
         (use-package lsp-ui
           :requires (flycheck)
           :straight t
-          :commands lsp-ui-mode
+          :after lsp-mode
           :custom (lsp-ui-sideline-show-code-actions nil))
       #+end_src
 
@@ -343,35 +334,6 @@ Lsp-mode for server completion.
            (:map c++-mode-map
                  ("TAB" . nil)))
        #+end_src
-
-***** Dart/Flutter programming
-      #+begin_src emacs-lisp
-        (use-package lsp-dart 
-          :straight t
-          :hook (dart-mode . lsp-deferred)
-          :custom
-          (dart-sdk-path "~/.local/flutter/bin/cache/dart-sdk")
-          (lsp-dart-sdk-dir "~/.local/flutter/bin/cache/dart-sdk")
-          ;; (lsp-dart-flutter-sdk-dir "~/.local/flutter")
-          (lsp-dart-flutter-sdk-dir "/home/qkessler/.local/flutter")
-          (lsp-dart-main-code-lens nil)
-          (lsp-dart-dap-flutter-hot-reload-on-save t)
-          (dart-format-on-save t))
-
-      #+end_src
-
-      Adding hover to emulate running flutter mobile application on dekstop.
-      #+begin_src emacs-lisp
-        (use-package hover
-          :straight t
-          :after dart-mode
-          :custom (hover-hot-reload-on-save t)
-          (hover-clear-buffer-on-hot-restart t)
-          (hover-command-path "~/go/bin/hover")
-          :bind (:map dart-mode-map
-                      ("C-c h z" . #'hover-run-or-hot-reload)
-                      ("C-c h x" . #'hover-run-or-hot-restart)))
-      #+end_src
 
 ***** Java Programming
       Works with the eclipse server, not really sure if it is what I'm looking for.
@@ -448,39 +410,7 @@ Lsp-mode for server completion.
                                      (when (f-exists? venv-path)
                                        (pyvenv-activate venv-path)))))))
        #+end_src
-
-****** Conda
-       Conda is an easy to use, packaged set of libraries that comes with package versioning, environments and different kernels, containing the set of packages that you need. Conda contains all the major Machine Learning and Data Science libraries.
-       #+begin_src emacs-lisp
-         (use-package conda
-           :straight t
-           :commands conda-env-activate
-           :custom (conda-anaconda-home "/Users/enrikes/opt/anaconda3/")
-           :config (conda-env-initialize-interactive-shells))
-       #+end_src
-
-****** Jupyter
-       Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. Uses include: data cleaning and transformation, numerical simulation, statistical modeling, data visualization, machine learning, and much more.
-       #+begin_src emacs-lisp :tangle no
-         (use-package jupyter
-           :straight t
-           :custom
-           (jupyter-repl-echo-eval-p t)
-           (org-babel-default-header-args:jupyter-python '((:async . "yes")
-                                                                   (:session . "py"))))
-         (use-package ob-jupyter
-           :commands (org-babel-execute:jupyter org-babel-expand-body:jupyter))
-       #+end_src
-
-***** C# programming
-      C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support, for syntax highlighting and more, which uses [[*Tree-sitter-mode][Tree-sitter-mode]].
-      #+begin_src emacs-lisp
-        (use-package csharp-mode
-          :straight t
-          :mode "\\.cs\\'"
-          :hook (csharp-mode . csharp-tree-sitter-mode))
-      #+end_src
-    
+       
 ***** Web programming
 ****** CSS
        Css programming is helped with the lsp-mode server: css-ls, installed with
@@ -501,14 +431,6 @@ Lsp-mode for server completion.
          (use-package mhtml-mode
            :mode ("\\.html\\'" "\\.hbs\\'")
            :straight nil)
-       #+end_src
-       
-****** PHP
-       PHP programming is not included in the default emacs implementation. For that reason, we can use the wonderful =php-mode= package, which is everything we can look for for a major mode.
-       #+begin_src emacs-lisp
-         (use-package php-mode
-           :straight t
-           :mode "\\.php\\'")
        #+end_src
        
 ****** Emmet-mode
@@ -857,30 +779,7 @@ Lsp-mode for server completion.
           (mu4e-alert-enable-mode-line-display)
           )
       #+end_src
-***** mu4e-thread-folding
-      #+begin_quote
-      =mu4e-thread-folding.el= is a small library to enable threads folding in mu4e. This works by using overlays with an invisible property and setting hooks at the right place. It is possible to configure colors to better highlight a thread and also to have a prefix string indicating if a thread is folded or not. Note that when a thread is folded, any unread child remains visible.
-      #+end_quote
-      [[https://github.com/rougier/mu4e-thread-folding][- link]]
-      #+begin_src emacs-lisp :tangle no
-        (use-package mu4e-thread-folding
-          :straight (mu4e-thread-folding :type git :host github :repo "rougier/mu4e-thread-folding")
-          :after mu4e
-          :init
-          (add-to-list 'mu4e-header-info-custom
-                       '(:empty . (:name "Empty"
-                                         :shortname ""
-                                         :function (lambda (msg) "  "))))
-          :custom (mu4e-headers-fields '((:empty         .    2)
-                                          (:human-date    .   12)
-                                          (:flags         .    6)
-                                          (:mailing-list  .   10)
-                                          (:from          .   22)
-                                          (:subject       .   nil)))
-          :bind (:map mu4e-headers-mode-map
-                      ("<tab>" . mu4e-headers-toggle-at-point)))
-      #+end_src
-
+      
 **** Message package
      Adding the configuration for the message package, in order to allow for
      easier sending and composing of emails. The package comes already installed
@@ -942,6 +841,12 @@ Lsp-mode for server completion.
       (use-package ledger-mode
         :straight t
         :mode "\\.ledger\\'"
+        :general
+        (major-mode-definer
+          :major-modes '(ledger-mode)
+          :keymaps '(ledger-mode-map)
+          "y" 'ledger-copy-transaction-at-point
+          "r" 'ledger-report)
         :custom
         (ledger-clear-whole-transactions t)
         (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
