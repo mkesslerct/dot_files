@@ -458,29 +458,30 @@
      When at the beginning or middle of the line, comments line.
      When pointing at region, comments full region.
 
-     #+begin_src emacs-lisp
-       (use-package smart-comment
-         :straight t
-         :bind ("M-;" . smart-comment))
-     #+end_src
-
-**** Copy and comment
      Custom function created with the intention of using the commented
      lines in order to make sure that we are not forgetting any additional
      code. I used to have a package that did all of the comment stuff, but
      it seems to have been deprecated.
      #+begin_src emacs-lisp
-       (defun dr/copy-and-comment-region (beg end &optional arg)
-         "Duplicate the region and comment-out the copied text.
-         See `comment-region' for behavior of a prefix arg."
-         (interactive "r\nP")
-         (copy-region-as-kill beg end)
-         (goto-char end)
-         (yank)
-         (comment-region beg end arg))
-       (global-set-key (kbd "C-M-;") 'dr/copy-and-comment-region)
+       (use-package smart-comment
+         :straight t
+         :preface
+         (defun dr/copy-and-comment-region (beg end &optional arg)
+           "Duplicate the region and comment-out the copied text.
+                See `comment-region' for behavior of a prefix arg."
+           (interactive "r\nP")
+           (copy-region-as-kill beg end)
+           (goto-char end)
+           (yank)
+           (comment-region beg end arg))
+         :general
+         (general-def 'motion
+           "gc" '(nil :which-key "comment")
+           "gcc" 'smart-comment
+           "gcy" 'dr/copy-and-comment-region)
+         :bind ("M-;" . smart-comment))
      #+end_src
-
+     
 *** Buffers
 **** Visiting-buffer
      #+begin_quote
