@@ -1284,6 +1284,11 @@
                                                                    'title))))))))
                    (t
                     (call-interactively 'org-insert-link)))))
+         :general
+         (major-mode-definer
+           :major-modes '(org-mode)
+           :keymaps '(org-mode-map)
+           "l" 'ar/org-insert-link-dwim)
          :bind (:map org-mode-map
                      ("C-c C-l" . ar/org-insert-link-dwim)))
      #+end_src
