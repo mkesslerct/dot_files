@@ -270,16 +270,27 @@
      #+begin_src emacs-lisp
        (use-package lsp-mode
          :straight t
-         :commands lsp-deferred
+         :commands (lsp lsp-deferred)
+         :general
+         (minor-mode-definer
+           :keymaps 'lsp-mode
+           "f" 'lsp-format-buffer
+           "a" 'lsp-code-actions-at-point
+           "s" 'lsp-signature-activate
+           "e" 'lsp-treemacs-errors-list)
          :custom
          (read-process-output-max (* 1024 1024))
-         (lsp-completion-provider :none)
          (lsp-idle-delay 0.500)
          (lsp-enable-file-watchers nil)
+
          (lsp-signature-auto-activate nil)
-         (lsp-headerline-breadcrumb-enable nil)
+         (lsp-completion-provider :none)
+         (lsp-completion-show-detail nil)
          (lsp-ui-sideline-show-code-actions nil)
+         (lsp-ui-doc-enable nil)
          (lsp-enable-links nil)
+         (lsp-lens-enable nil)
+         (lsp-headerline-breadcrumb-enable nil)
          :config
          (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
      #+end_src
@@ -302,8 +313,7 @@
         (use-package lsp-ui
           :requires (flycheck)
           :straight t
-          :after lsp-mode
-          :custom (lsp-ui-sideline-show-code-actions nil))
+          :after lsp-mode)
       #+end_src
 
 ***** C++/C programming.
@@ -311,13 +321,8 @@
       #+begin_src emacs-lisp
         (use-package ccls
           :straight t
-          :disabled
-          :config (progn
-                    (setq ccls-executable "ccls")
-                    (setq lsp-prefer-flymake nil)
-                    (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
-          :hook ((c-mode c++-mode objc-mode) .
-                 (lambda () (require 'ccls) (lsp-deferred))))
+          :custom (ccls-executable "ccls")
+          :hook ((c-mode c++-mode) . lsp))
       #+end_src
 
 ****** Keybindings
@@ -340,7 +345,7 @@
       #+begin_src emacs-lisp
         (use-package lsp-java
           :straight t
-          :hook (java-mode . lsp-deferred))
+          :hook (java-mode . lsp))
       #+end_src
 
 ***** Python programming
