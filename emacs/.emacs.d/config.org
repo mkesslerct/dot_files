@@ -1219,7 +1219,9 @@
           "d" 'org-deadline
           "e" 'org-export-dispatch
           "s" 'org-schedule
-          "t" 'org-todo
+          "t" '(nil :which-key "todo/tangle")
+          "tt" 'org-todo
+          "ta" 'org-babel-tangle
           "r" 'org-refile)
         (minor-mode-definer
           :keymaps 'org-capture-mode
@@ -1495,6 +1497,7 @@
          "a" '(qk/silently-open-agenda :which-key "project agenda")
          "t" '(qk/silently-open-todo-agenda :which-key "day/week agenda")
          "c" 'org-capture
+         "s" 'org-save-all-org-buffers
          "h" 'qk/org-capture-here)
         :custom
         (org-agenda-prefix-format "  %?-12t% s")
