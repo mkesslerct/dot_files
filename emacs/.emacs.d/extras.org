@@ -40,7 +40,8 @@
        (vterm-max-scrollback 10000)
        (vterm-timer-delay 0.01)
        :config
-       (add-to-list 'vterm-keymap-exceptions "M-m"))
+       (add-to-list 'vterm-keymap-exceptions "M-m")
+       (evil-set-initial-state 'vterm-mode 'emacs))
    #+end_src
 
 *** Vterm toggle
@@ -602,6 +603,16 @@
          :bind (("C-c m" . mu4e)
                 :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message)
                 :map mu4e-view-mode-map ("C-h b" . nil))
+         :general
+         (general-def 'motion
+           :keymaps '(mu4e-headers-mode-map)
+           "M-k" 'mu4e-headers-prev
+           "M-j" 'mu4e-headers-next)
+         (general-def 'motion
+           :keymaps '(mu4e-view-mode-map)
+           "C-h b" nil
+           "M-k" 'mu4e-headers-prev
+           "M-j" 'mu4e-headers-next)
          :hook (mu4e-compose-mode . flyspell-mode)
          :custom
          (mu4e-maildir "~/.Mail")

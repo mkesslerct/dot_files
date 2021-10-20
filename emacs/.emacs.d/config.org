@@ -1841,7 +1841,7 @@
     #+end_src
 
 ** Corfu
-   As I mentioned in the company configuration update. I can't seem to come around using company for its heavy weight obsession. Instead of trying to create a completion API, let Emacs do its work (using =completion-at-point-functions=, which are normally defined by programming modes), improving the performance in the process.
+   As I mentioned in the company configuration update. I can't seem to come around using company for its heavy weight obsession. Instead of trying to create a completion API, let Emacs do its work (using =completion-at-point-functions=, which are normally defined by programming modes), improving the performance in the process. 
 
    Corfu also uses a child-frame, which is one of the star features of Emacs 26. One of the possible user downsides of using Corfu is that at the moment it doesn't support idle-completion, which could be interesting for programming. I personally find that is just a matter of getting used to the new workflow of completing if you need it.
 
