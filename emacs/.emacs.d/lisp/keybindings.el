@@ -37,7 +37,6 @@
   (global-definer
     ""     nil
     "c"   (general-simulate-key "C-c")
-    "h"   (general-simulate-key "C-h" :which-key "help")
     "SPC" 'execute-extended-command
     "u"   (general-simulate-key "C-u")
     "x"   (general-simulate-key "C-x"))

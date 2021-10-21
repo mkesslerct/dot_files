@@ -256,7 +256,7 @@
 
 ***** C++/C programming.
       Always works on C++, sometimes wrong on C programming.
-      #+begin_src emacs-lisp
+      #+begin_src emacs-lisp :tangle no
         (use-package ccls
           :straight t
           :custom (ccls-executable "ccls")

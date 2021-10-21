@@ -48,7 +48,7 @@
 
 (setq dired-use-ls-dired nil)
 
-(org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
+(org-babel-load-file (expand-file-name "config.org" user-emacs-directory) t)
 
 (setq custom-file "~/.emacs.d/var/custom.el")
 ;; (load custom-file)

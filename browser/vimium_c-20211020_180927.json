@@ -1,0 +1,16 @@
+{
+	"name": "Vimium C",
+	"@time": "10/20/2021, 6:09:27 PM",
+	"time": 1634746167908,
+	"environment": {
+		"extension": "1.92.4",
+		"platform": "linux",
+		"chrome": 95
+	},
+	"keyMappings": [
+		"#! no-check",
+		"map K previousTab",
+		"map J nextTab",
+		""
+	]
+}
