@@ -19,7 +19,9 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Always defer use-package packages. This means that if I really need a package, I will go to my config and edit the use-package recipe to lazy load it. This reduces my startup time significantly.
+;; Always defer use-package packages. This means that if I really need
+;; a package, I will go to my config and edit the use-package recipe
+;;to lazy load it. This reduces my startup time significantly.
 (setq use-package-always-defer t)
 (straight-use-package 'use-package)
 (eval-when-compile
@@ -28,30 +30,16 @@
 ;; Add personal lisp directory to load-path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
-;; Core variable setting and gcmh controller.
-(require 'core)
-
-;; Start-up time profiler
-(use-package esup
-  :straight t)
-
-(use-package exec-path-from-shell
-  :straight t
-  :custom (exec-path-from-shell-arguments '("-l"))
-  :init 
-  (when (daemonp)
-    (exec-path-from-shell-initialize))
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
-
 (straight-use-package '(org :type built-in))
-
-(setq dired-use-ls-dired nil)
-
-(org-babel-load-file (expand-file-name "config.org" user-emacs-directory) t)
+(defmacro qk--load-org-file (file-name)
+  "Macro for loading and byte-compiling config org-files. We avoid
+writing the full function all the time"
+  (org-babel-load-file (expand-file-name file-name user-emacs-directory) t)
+(qk--load-org-file "core.org")
+(qk--load-org-file "config.org")
+(qk--load-org-file "extras.org")
 
 (setq custom-file "~/.emacs.d/var/custom.el")
-;; (load custom-file)
 (message "*** Emacs loaded in %s with %d garbage collections."
          (format "%.2f seconds"
                  (float-time
