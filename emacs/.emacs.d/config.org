@@ -1856,13 +1856,14 @@
      (use-package corfu
        :straight t
        :bind (:map corfu-map
-                   ("C-j" . corfu-next)
-                   ("C-k" . corfu-previous))
+                   ("M-j" . corfu-next)
+                   ("M-k" . corfu-previous))
        :custom
        (corfu-cycle t)
-       (corfu-global-mode t)
        (corfu-quit-no-match t)
        (corfu-auto t)
+       (corfu-auto-delay 0.1)
+       (corfu-auto-prefix 1)
        (corfu-commit-predicate nil)
        :init (corfu-global-mode))
 

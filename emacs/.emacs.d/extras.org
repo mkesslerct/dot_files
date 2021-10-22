@@ -283,13 +283,13 @@
       #+begin_src emacs-lisp
         (use-package lsp-java
           :straight t
-          :hook (java-mode . lsp))
+          :hook (java-mode . lsp-deferred))
       #+end_src
 
 ***** LaTeX programming
       #+begin_src emacs-lisp
         (use-package tex
-          :hook (LaTeX-mode . lsp))
+          :hook (LaTeX-mode . lsp-deferred))
       #+end_src
 
 ***** Python programming
@@ -299,12 +299,13 @@
       in your path, check the "echo $PATH" output.
       #+begin_src emacs-lisp
         (use-package python
+          :hook (python-mode . lsp-deferred)
           :custom
           (python-shell-interpreter "python3")
           (compilation-ask-about-save nil)
           (python-indent-guess-indent-offset-verbose nil)
           (compilation-scroll-output t)
-          :init
+          :preface
           (defun mk/compile-python-buffer ()
             "Use compile to run python programs."
             (interactive)
@@ -608,11 +609,11 @@
            :keymaps '(mu4e-headers-mode-map)
            "M-k" 'mu4e-headers-prev
            "M-j" 'mu4e-headers-next)
-         (general-def 'motion
-           :keymaps '(mu4e-view-mode-map)
-           "C-h b" nil
-           "M-k" 'mu4e-headers-prev
-           "M-j" 'mu4e-headers-next)
+         ;; (general-def 'motion
+         ;;   :keymaps '(mu4e-view-mode-map)
+         ;;   "C-h b" nil
+         ;;   "M-k" 'mu4e-headers-prev
+         ;;   "M-j" 'mu4e-headers-next)
          :hook (mu4e-compose-mode . flyspell-mode)
          :custom
          (mu4e-maildir "~/.Mail")
