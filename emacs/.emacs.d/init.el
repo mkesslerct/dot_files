@@ -34,7 +34,8 @@
 (defmacro qk--load-org-file (file-name)
   "Macro for loading and byte-compiling config org-files. We avoid
 writing the full function all the time"
-  (org-babel-load-file (expand-file-name file-name user-emacs-directory) t)
+  (org-babel-load-file (expand-file-name file-name user-emacs-directory)))
+
 (qk--load-org-file "core.org")
 (qk--load-org-file "config.org")
 (qk--load-org-file "extras.org")

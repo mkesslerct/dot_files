@@ -97,6 +97,7 @@
   ;; Search commands, currently using `consult' and `affe'.
   (+general-global-menu! "search" "s")
   (+general-global-menu! "org" "o")
+  (+general-global-menu! "toggle" "t")
   (+general-global-menu! "roam" "r"))
 
 ;; Configure "jk" to exit out of insert mode and enter normal mode.

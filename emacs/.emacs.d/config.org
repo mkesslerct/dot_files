@@ -176,6 +176,9 @@
            (mapcar #'disable-theme (remove theme custom-enabled-themes))
          (message "Unable to find theme file for ‘%s’" theme)))
      (qk/load-indexed-theme)
+
+     (+general-global-toggle
+      "T" 'qk/cycle-theme)
    #+end_src
 
 ** After-load-theme-hook
@@ -189,6 +192,15 @@
    #+end_src
 
 ** Better defaults
+*** Smooth-scrolling
+    Smooth-scrolling inspired in the sublime editor.
+    #+begin_src emacs-lisp
+      (use-package sublimity-scroll
+        :straight sublimity
+        :custom (scroll-margin 10)
+        :init (sublimity-mode 1))
+    #+end_src
+
 *** Winner-mode
     Winner Mode is a global minor mode that allows you to “undo” and “redo” changes in WindowConfiguration. It is included in GNU Emacs, and documented as winner-mode.
     #+begin_src emacs-lisp
@@ -595,6 +607,11 @@
     normally bound to the flyspell word correction keys.
     #+begin_src emacs-lisp
       (use-package flyspell
+        :general
+        (+general-global-toggle
+         "f" '(nil :which-key "flyspell")
+         "fm" 'flyspell-mode
+         "fd" 'ispell-change-dictionary)
         :bind (:map flyspell-mode-map (("C-." . nil)
                                        ("C-," . nil))))
     #+end_src
@@ -784,24 +801,6 @@
       (advice-add 'ispell-pdict-save :after #'flyspell-buffer-after-pdict-save)
     #+end_src
 
-*** Syncing .profile env variables
-    Emacs daemon doesn't seem to look for environment variables in the
-    usual places like .profile and such. Installing the package
-    exec-path-from-shell, we make sure that those important config files
-    are loaded.
-
-    :warning: WARNING: The configuration of the exec-path-from-shell-initialize from shell should be in the init.el file, which is run before tangling this whole org file. I'm just adding this for completion of the configuration.
-    #+begin_src emacs-lisp :tangle no
-      (use-package exec-path-from-shell
-        :straight t
-        :custom (exec-path-from-shell-arguments '("-l"))
-        :init 
-        (when (daemonp)
-          (exec-path-from-shell-initialize))
-        (when (memq window-system '(mac ns x))
-          (exec-path-from-shell-initialize)))
-    #+end_src
-
 *** Special characters
     There are some writing characters that are used in org-mode when exporting,
     but when trying to check the file's html, the -- is exported as two individual
@@ -882,6 +881,16 @@
        (use-package emacs
          :bind ("C-c e" . qk/insert-euro-symbol))
      #+end_src
+
+*** Typo
+    Typo.el mode is a mode to change the default behaviour of special character pressing, like ", ' or more.
+    #+begin_src emacs-lisp
+      (use-package typo
+        :straight t
+        :general
+        (+general-global-toggle
+          "t" 'typo-mode))
+    #+end_src
 
 *** Browse-url
     Browse url is the package that controls the information that is passed to the browser when forwarded from emacs. I find that cookies are important when accessing chrome, might need to check again if I can select to save cookies only for Chrome browsing.
