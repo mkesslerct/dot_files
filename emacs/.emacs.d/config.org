@@ -450,6 +450,19 @@
          (display-time-update))
      #+end_src
 
+**** Count search matches
+     There are different packages providing this kind of functionality, but =anzu= seems to be pretty popular.
+     #+begin_src emacs-lisp
+       (use-package anzu
+         :straight t
+         :after evil
+         :config (global-anzu-mode t))
+
+       (use-package evil-anzu
+         :straight t
+         :after (evil anzu))
+     #+end_src
+
 **** All-the-icons
      #+begin_src emacs-lisp
        (use-package all-the-icons
