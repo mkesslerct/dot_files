@@ -503,22 +503,14 @@
 
 *** Directories
 **** Dired
-     Dired is the "package" that gives us all the functionality
-     to a dired buffer which in essence is the same as the output
-     of ls. Adding an especial command for dired-up-directory as 
-     the default keybinding is ^ which I find difficult to reach.
-
+     Dired is the "package" that gives us all the functionality to a dired buffer which in essence is the same as the output of ls. 
      #+begin_src emacs-lisp
        (use-package dired
          :custom 
+         (dired-listing-switches "-aBhl")
          (dired-use-ls-dired nil)
          :bind (:map dired-mode-map 
                      ("b" . dired-up-directory)))
-     #+end_src
-
-**** Directories first on dired.
-     #+begin_src emacs-lisp
-       (setq dired-listing-switches "-aBhl")
      #+end_src
 
 **** Backup directory
@@ -547,8 +539,6 @@
         :general
         (global-definer
           "h" 'qk/help-transient)
-        ;; :bind (:map global-map
-        ;;             ("C-h" . qk/help-transient))
         :config
         (straight-use-package 'transient)
         (transient-define-prefix qk/help-transient ()
