@@ -99,6 +99,7 @@
   (+general-global-menu! "org" "o")
   (+general-global-menu! "toggle" "t")
   (+general-global-menu! "roam" "r"))
+  (+general-global-menu! "applications" "a")
 
 ;; Configure "jk" to exit out of insert mode and enter normal mode.
 (use-package key-chord

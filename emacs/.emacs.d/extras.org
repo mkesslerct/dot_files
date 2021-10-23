@@ -7,6 +7,9 @@
      (use-package rg
        :straight t
        :bind ("C-c s" . rg-menu)
+       :general
+       (+general-global-project
+         "r" 'rg-project)
        :config (rg-enable-default-bindings))
    #+end_src
 
@@ -212,8 +215,8 @@
            :keymaps 'lsp-mode
            "f" 'lsp-format-buffer
            "a" 'lsp-execute-code-action
-           "d" 'lsp-ui-doc-glance
-           "r" 'lsp-rename
+           "R" 'lsp-rename
+           "r" 'lsp-find-references
            "e" 'lsp-treemacs-errors-list)
          :custom
          (read-process-output-max (* 1024 1024))
@@ -256,6 +259,11 @@
 
 ***** C++/C programming.
       Always works on C++, sometimes wrong on C programming.
+      #+begin_src emacs-lisp
+        (use-package cc-mode
+          :hook ((cc-mode c++-mode c-mode) . lsp-deferred))
+      #+end_src
+
       #+begin_src emacs-lisp :tangle no
         (use-package ccls
           :straight t
@@ -503,11 +511,16 @@
 *** DevDocs
     Instead of having to search for online documentation for each of the modes a certain buffer is in, we can now browse API documentations provided by [[https://devdocs.io/][devdocs.io]] inside emacs using EWW, improving formatting, highlighting code blocks, using the package [[https://github.com/blahgeek/emacs-devdocs-browser][emacs-devdocs-browser]]. We can also install, upgrade docsets, even adding new jumping functions and default browser support. Overall I find that this packages takes a really interesting take at documentation, and I love when they force me to stay inside Emacs.
     #+begin_src emacs-lisp
-      (use-package emacs-devdocs-browser
-        :straight (emacs-devdocs-browser :type git :host github :repo "blahgeek/emacs-devdocs-browser" )
+      (use-package devdocs-browser
+        :straight t
         :custom
         (devdocs-browser-cache-directory (no-littering-expand-var-file-name "devdocs-browser"))
-        :bind ("C-c d" . devdocs-browser-open-in))
+        :general
+        (major-mode-definer
+          :keymaps '(prog-mode-map)
+          :major-modes '(prog-mode)
+          "d" 'devdocs-browser-open
+          "l" '(devdocs-browser-open-in :which-key "list languages")))
     #+end_src
 
 *** Yaml-mode
@@ -609,11 +622,12 @@
            :keymaps '(mu4e-headers-mode-map)
            "M-k" 'mu4e-headers-prev
            "M-j" 'mu4e-headers-next)
-         ;; (general-def 'motion
-         ;;   :keymaps '(mu4e-view-mode-map)
-         ;;   "C-h b" nil
-         ;;   "M-k" 'mu4e-headers-prev
-         ;;   "M-j" 'mu4e-headers-next)
+         (major-mode-definer
+           :major-modes '(mu4e-compose-mode)
+           :keymaps '(mu4e-compose-mode-map) 
+           "f" 'message-send-and-exit
+           "c" 'message-dont-send
+           "a" 'mail-add-attachment)
          :hook (mu4e-compose-mode . flyspell-mode)
          :custom
          (mu4e-maildir "~/.Mail")

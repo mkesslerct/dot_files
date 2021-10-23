@@ -378,7 +378,7 @@
      Smart-parens is a package that improves on the previous package,
      now deprecated: autopair. Smart-parens has the plus of being maintained,
      considering that they usually merge pull requests and responde to issues.
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (use-package smartparens
          :straight t
          :hook (prog-mode . smartparens-mode))
@@ -1638,14 +1638,21 @@
     If for some reason the language on the source tag doesn't exist
     add 4 spaces.
     #+begin_src emacs-lisp
-      (add-hook 'org-tab-first-hook
-                (lambda ()
-                  (when (org-in-src-block-p t)
-                    (let* ((elt (org-element-at-point))
-                           (lang (intern (org-element-property :language elt)))
-                           (langs org-babel-load-languages))
-                      (unless (alist-get lang langs)
-                        (indent-to 4))))))
+      (use-package org
+        :hook
+        (org-tab-first . 
+                       (lambda ()
+                         (when (org-in-src-block-p t)
+                           (let* ((elt (org-element-at-point))
+                                  (lang (intern (org-element-property :language elt)))
+                                  (langs org-babel-load-languages))
+                             (unless (alist-get lang langs)
+                               (indent-to 4))))))
+        :general
+        (minor-mode-definer
+         :keymaps 'org-src-mode
+         "f" 'org-edit-src-exit
+         "c" 'org-edit-src-abort))
     #+end_src
 
     Remove the annoying warnings when you compile a source block. 
@@ -1876,6 +1883,41 @@
        ;; `completion-at-point' is often bound to M-TAB.
        (setq tab-always-indent 'complete))
    #+end_src
+** Browser
+   “EWW”, the Emacs Web Wowser, is a web browser for GNU Emacs.  It can load, parse, and display various web pages using “shr.el”.  However a GNU Emacs with ‘libxml2’ support is required.
+   #+begin_src emacs-lisp
+     (use-package shr
+       :custom
+       (shr-use-colors nil)             ; t is bad for accessibility
+       (shr-use-fonts nil)              ; t is not for me
+       (shr-max-image-proportion 0.6)
+       (shr-image-animate nil)          ; No GIFs, thank you!
+       (shr-width nil)                  ; check `prot-eww-readable'
+       (shr-discard-aria-hidden t)
+       (shr-cookie-policy nil))
+
+     (use-package eww
+       :custom
+       (eww-restore-desktop t)
+       (eww-desktop-remove-duplicates t)
+       (eww-header-line-format nil)
+       (eww-download-directory (expand-file-name "~/Documents/eww-downloads"))
+       (eww-suggest-uris
+             '(eww-links-at-point
+               thing-at-point-url-at-point))
+       (eww-bookmarks-directory (locate-user-emacs-file "eww-bookmarks/"))
+       (eww-history-limit 150)
+       (eww-use-external-browser-for-content-type
+             "\\`\\(video/\\|audio\\)") ; On GNU/Linux check your mimeapps.list
+       (eww-browse-url-new-window-is-tab nil)
+       (eww-form-checkbox-selected-symbol "[X]")
+       (eww-form-checkbox-symbol "[ ]")
+       (eww-retrieve-command nil)
+       :general
+       (+general-global-applications
+         "s" 'eww))
+   #+end_src
+
 ** Programming
 *** Tree-sitter-mode
     Tree-sitter is a parser generator tool and an incremental parsing library. It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited. It could be the next generation of sintax parsers, as it has been really accepted by the community and the Github's Atom team has been working on implementing a ton of languages.
