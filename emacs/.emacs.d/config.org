@@ -1871,6 +1871,7 @@
        :custom
        (corfu-cycle t)
        (corfu-quit-no-match t)
+       (corfu-quit-at-boundary t)
        (corfu-auto t)
        (corfu-auto-delay 0.1)
        (corfu-auto-prefix 1)
