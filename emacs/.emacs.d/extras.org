@@ -642,10 +642,6 @@
                 :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message)
                 :map mu4e-view-mode-map ("C-h b" . nil))
          :general
-         (general-def 'motion
-           :keymaps '(mu4e-headers-mode-map)
-           "M-k" 'mu4e-headers-prev
-           "M-j" 'mu4e-headers-next)
          (major-mode-definer
            :major-modes '(mu4e-compose-mode)
            :keymaps '(mu4e-compose-mode-map) 

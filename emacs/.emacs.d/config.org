@@ -8,6 +8,15 @@
    
 ** Keybindings
 ** Evil
+*** Undo-tree
+    Instead of treating undo/redo as a linear sequence of changes, undo-tree-mode treats undo history as a branching tree of changes, similar to the way Vim handles it. This makes it substantially easier to undo and redo any change, while preserving the entire history of past states.
+    #+begin_src emacs-lisp
+      (use-package undo-tree
+        :straight t
+        :demand t
+        :config (global-undo-tree-mode 1))
+    #+end_src
+
 *** Evil-mode
     [[https://github.com/emacs-evil/evil][Evil]] is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions. Also see our page on EmacsWiki.
     #+begin_src emacs-lisp
@@ -913,15 +922,6 @@
       (use-package whole-line-or-region
         :straight t
         :init (whole-line-or-region-global-mode))
-    #+end_src
-
-*** Undo-tree
-    Instead of treating undo/redo as a linear sequence of changes, undo-tree-mode treats undo history as a branching tree of changes, similar to the way Vim handles it. This makes it substantially easier to undo and redo any change, while preserving the entire history of past states.
-    #+begin_src emacs-lisp
-      (use-package undo-tree
-        :straight t
-        :demand t
-        :config (global-undo-tree-mode 1))
     #+end_src
 
 ** Window switching
