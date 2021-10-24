@@ -1,4 +1,4 @@
-+STARTUP: showeverything
+#+STARTUP: overview
 #+PROPERTY: header-args :results none
 
 ** Lexical binding
