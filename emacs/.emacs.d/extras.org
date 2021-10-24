@@ -1,5 +1,7 @@
-* Extras
-  In this file I intend to add all the extras that I use in my config, in order to only import them when I really need them. An special scenario that comes to mind is when changing between configs. I intend to have a minimal configuration that I can replicate easily in =config.org= and all the rest here: in =extras.org=.
+#+STARTUP: overview
+#+PROPERTY: header-args :results none
+
+In this file I intend to add all the extras that I use in my config, in order to only import them when I really need them. An special scenario that comes to mind is when changing between configs. I intend to have a minimal configuration that I can replicate easily in =config.org= and all the rest here: in =extras.org=.
 
 ** Ripgrep
    Adding ripgrep configuration to be able to access the functionality from emacs.
@@ -816,7 +818,6 @@
          :config (mu4e-icalendar-setup))
      #+end_src
      
-
 ** Emojify
    Adding emoji support in order to be able to use it in
     org-mode files, with using them in a blog post in sight.
