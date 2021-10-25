@@ -872,6 +872,7 @@ In this file I intend to add all the extras that I use in my config, in order to
    #+begin_src emacs-lisp
      (use-package emacs-everywhere
        :straight t
+       :commands emacs-everywhere
        :general
        (minor-mode-definer
          :keymaps 'emacs-everywhere-mode

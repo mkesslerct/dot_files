@@ -100,6 +100,17 @@
           "ss" 'org-agenda-schedule))
     #+end_src
 
+*** Drag region
+    Remap certain visual-state-mode keys to move regions (and lines around).
+    #+begin_src emacs-lisp
+      (use-package evil
+        :config 
+        (define-key evil-normal-state-map (kbd "M-k")   (concat ":m -2" (kbd "RET") "=="))
+        (define-key evil-visual-state-map (kbd "J") (concat ":m '>+1" (kbd "RET") "gv=gv"))
+        (define-key evil-visual-state-map (kbd "K")   (concat ":m '<-2" (kbd "RET") "gv=gv"))
+        (define-key evil-normal-state-map (kbd "M-j") (concat ":m +1" (kbd "RET") "==")))
+    #+end_src
+
 ** which-key
     =which-key= is a minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup. For example, after enabling the minor mode if you enter C-x and wait for the default of 1 second the minibuffer will expand with all of the available key bindings that follow C-x (or as many as space allows given your settings).
     #+begin_src emacs-lisp
