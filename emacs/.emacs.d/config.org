@@ -59,6 +59,9 @@
         ;; Use visual line motions even outside of visual-line-mode buffers
         (evil-global-set-key 'motion "j" 'evil-next-visual-line)
         (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  
+        ;; Remove the K binding on the 'motion state, which is bound to evil-lookup
+        (evil-global-set-key 'motion "K" nil)
 
         (evil-set-initial-state 'messages-buffer-mode 'normal)
         (evil-set-initial-state 'magit-status-mode 'normal)
@@ -105,10 +108,8 @@
     #+begin_src emacs-lisp
       (use-package evil
         :config 
-        (define-key evil-normal-state-map (kbd "M-k")   (concat ":m -2" (kbd "RET") "=="))
         (define-key evil-visual-state-map (kbd "J") (concat ":m '>+1" (kbd "RET") "gv=gv"))
-        (define-key evil-visual-state-map (kbd "K")   (concat ":m '<-2" (kbd "RET") "gv=gv"))
-        (define-key evil-normal-state-map (kbd "M-j") (concat ":m +1" (kbd "RET") "==")))
+        (define-key evil-visual-state-map (kbd "K")   (concat ":m '<-2" (kbd "RET") "gv=gv")))
     #+end_src
 
 ** which-key
@@ -129,87 +130,87 @@
     #+end_src
 
 ** Themes
-** Initial theme list
-   I add the theme list here to be able to add to it when a theme is tangled, considering that I will most likely want to toggle two themes, the ones that are tangled: dark and light.
-   #+begin_src emacs-lisp
-     (setq qk/themes-list nil)
-     (setq qk/themes-index 1)
-   #+end_src
+*** Initial theme list
+    I add the theme list here to be able to add to it when a theme is tangled, considering that I will most likely want to toggle two themes, the ones that are tangled: dark and light.
+    #+begin_src emacs-lisp
+      (setq qk/themes-list nil)
+      (setq qk/themes-index 1)
+    #+end_src
     
-** Nord theme
-   #+begin_src emacs-lisp
-     (use-package doom-themes
-       :straight t
-       :init
-       (add-to-list 'qk/themes-list 'doom-nord))
-   #+end_src
+*** Dark theme
+     #+begin_src emacs-lisp
+       (use-package doom-themes
+         :straight t
+         :init
+         (add-to-list 'qk/themes-list 'doom-gruvbox))
+     #+end_src
+    
+*** Light theme
+    This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
+    #+begin_src emacs-lisp
+      (use-package solarized-theme
+        :straight t
+        :custom
+        ;; make the fringe stand out from the background
+        (solarized-distinct-fringe-background t)
 
-** Solarized theme
-   This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
-   #+begin_src emacs-lisp
-     (use-package solarized-theme
-       :straight t
-       :custom
-       ;; make the fringe stand out from the background
-       (solarized-distinct-fringe-background t)
+        ;; Don't change the font for some headings and titles
+        (solarized-use-variable-pitch nil)
 
-       ;; Don't change the font for some headings and titles
-       (solarized-use-variable-pitch nil)
+        ;; Use less bolding
+        (solarized-use-less-bold t)
 
-       ;; Use less bolding
-       (solarized-use-less-bold t)
+        ;; Use more italics
+        (solarized-use-more-italic t)
 
-       ;; Use more italics
-       (solarized-use-more-italic t)
+        ;; Use less colors for indicators such as git:gutter, flycheck and similar
+        (solarized-emphasize-indicators nil)
 
-       ;; Use less colors for indicators such as git:gutter, flycheck and similar
-       (solarized-emphasize-indicators nil)
+        ;; Don't change size of org-mode headlines (but keep other size-changes)
+        (solarized-scale-org-headlines nil)
 
-       ;; Don't change size of org-mode headlines (but keep other size-changes)
-       (solarized-scale-org-headlines nil)
+        ;; Avoid all font-size changes
+        (solarized-height-minus-1 1.0)
+        (solarized-height-plus-1 1.0)
+        (solarized-height-plus-2 1.0)
+        (solarized-height-plus-3 1.0)
+        (solarized-height-plus-4 1.0)
+        :init
+        (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
+    #+end_src
 
-       ;; Avoid all font-size changes
-       (solarized-height-minus-1 1.0)
-       (solarized-height-plus-1 1.0)
-       (solarized-height-plus-2 1.0)
-       (solarized-height-plus-3 1.0)
-       (solarized-height-plus-4 1.0)
-       :init
-       (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
-   #+end_src
+*** Toggle theme
+    I found this function to cycle through a list of themes, which is defined before the function. In my opinion toggling from light to dark is key when working in the evenings.
+    #+begin_src emacs-lisp
+      (straight-use-package 'consult)
+      (defun qk/cycle-theme ()
+        "Change the theme to the next index in the `qk/themes-list'. I would normally use this for switching from light to dark modes."
+        (interactive)
+        (setq qk/themes-index (% (1+ qk/themes-index) (length qk/themes-list)))
+        (qk/load-indexed-theme))
 
-** Toggle theme
-   I found this function to cycle through a list of themes, which is defined before the function. In my opinion toggling from light to dark is key when working in the evenings.
-   #+begin_src emacs-lisp
-     (straight-use-package 'consult)
-     (defun qk/cycle-theme ()
-       "Change the theme to the next index in the `qk/themes-list'. I would normally use this for switching from light to dark modes."
-       (interactive)
-       (setq qk/themes-index (% (1+ qk/themes-index) (length qk/themes-list)))
-       (qk/load-indexed-theme))
+      (defun qk/load-indexed-theme ()
+        (consult-theme (nth qk/themes-index qk/themes-list)))
 
-     (defun qk/load-indexed-theme ()
-       (consult-theme (nth qk/themes-index qk/themes-list)))
+      (defun qk/try-load-theme (theme)
+        (if (ignore-errors (load-theme theme :no-confirm))
+            (mapcar #'disable-theme (remove theme custom-enabled-themes))
+          (message "Unable to find theme file for ‘%s’" theme)))
+      (qk/load-indexed-theme)
 
-     (defun qk/try-load-theme (theme)
-       (if (ignore-errors (load-theme theme :no-confirm))
-           (mapcar #'disable-theme (remove theme custom-enabled-themes))
-         (message "Unable to find theme file for ‘%s’" theme)))
-     (qk/load-indexed-theme)
+      (+general-global-toggle
+       "T" 'qk/cycle-theme)
+    #+end_src
 
-     (+general-global-toggle
-      "T" 'qk/cycle-theme)
-   #+end_src
-
-** After-load-theme-hook
-   Emacs does not have an =after-load-theme-hook=, which a I find key for adding or changing some of the faces dinamically. Not everything is lost, we still have the =advice= sintax. We can advise the change-theme function to define a hook.
-   #+begin_src emacs-lisp
-     (defvar after-load-theme-hook nil
-       "Hook run after a color theme is loaded using `load-theme'.")
-     (defadvice consult-theme (after run-after-load-theme-hook activate)
-       "Run `after-load-theme-hook'."
-       (run-hooks 'after-load-theme-hook))
-   #+end_src
+*** After-load-theme-hook
+    Emacs does not have an =after-load-theme-hook=, which a I find key for adding or changing some of the faces dinamically. Not everything is lost, we still have the =advice= sintax. We can advise the change-theme function to define a hook.
+    #+begin_src emacs-lisp
+      (defvar after-load-theme-hook nil
+        "Hook run after a color theme is loaded using `load-theme'.")
+      (defadvice consult-theme (after run-after-load-theme-hook activate)
+        "Run `after-load-theme-hook'."
+        (run-hooks 'after-load-theme-hook))
+    #+end_src
 
 ** Better defaults
 *** Smooth-scrolling
