@@ -1,3 +1,4 @@
 *~
 /emacs/.emacs.d/straight/*
 var/
+/emacs/.emacs.d/*.el
