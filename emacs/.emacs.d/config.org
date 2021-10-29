@@ -141,8 +141,7 @@
      #+begin_src emacs-lisp
        (use-package doom-themes
          :straight t
-         :init
-         (add-to-list 'qk/themes-list 'doom-gruvbox))
+         :init (add-to-list 'qk/themes-list 'doom-nord))
      #+end_src
     
 *** Light theme
