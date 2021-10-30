@@ -84,6 +84,16 @@
         (evil-collection-init))
     #+end_src
 
+*** Fix evil-redirect-digit-argument
+    Until upstream changes fix the evil-redirect-digit-argument function, we need to redefine it to avoid bugs in evil-org.
+    #+begin_src emacs-lisp
+      ;; (when (not (boundp 'evil-redirect-digit-argument))
+      ;;   (defmacro evil-redirect-digit-argument (map keys target)
+      ;;     `(define-key ,map ,keys ,target)))
+
+      (fset 'evil-redirect-digit-argument 'ignore)
+    #+end_src
+
 *** Evil-org
     Supplemental evil-mode key-bindings to Emacs org-mode. This project is a continuation of https://github.com/edwtjo/evil-org-mode/blob/master/evil-org.el by Edward Tjörnhammar.
     #+begin_src emacs-lisp
@@ -100,7 +110,9 @@
         (evil-org-set-key-theme '(textobjects insert navigation additional shift))
 
         (evil-define-key 'motion org-agenda-mode-map
-          "ss" 'org-agenda-schedule))
+          "ss" 'org-agenda-schedule)
+        (evil-define-key 'motion 'evil-org-mode
+          (kbd "0") 'evil-org-beginning-of-line))
     #+end_src
 
 *** Drag region
