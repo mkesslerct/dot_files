@@ -1,8 +1,8 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=$USERS/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/qkessler/.oh-my-zsh"
+export ZSH="/Users/mkessler/.oh-my-zsh"
 ZSH_DISABLE_COMPFIX=true
 
 # Set name of the theme to load --- if set to "random", it will
@@ -197,6 +197,7 @@ alias pkgget="bws use --package"
 alias init="mwinit; kinit -f"
 alias pip="pip3"
 alias i="init && sm"
+alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs-arm64-11"
 
 # RDE
 fpath=(~/.zsh/completion $fpath)

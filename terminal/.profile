@@ -26,15 +26,12 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-export PATH="/home/qkessler/.nvm/versions/node/v12.20.1/bin:/home/qkessler/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:~/go/bin:~/.yarn/bin"
-export DENO_INSTALL="/home/qkessler/.deno"
+export PATH="/home/mkessler/.nvm/versions/node/v12.20.1/bin:/home/mkessler/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:~/go/bin:~/.yarn/bin"
+export DENO_INSTALL="/home/mkessler/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="/usr/local/lib/ruby/gems/3.0.0/bin:$PATH"
 export PATH=$HOME/.toolbox/bin:$PATH
 export PATH="/Applications/Emacs.app/Contents/MacOS/bin:$PATH"
 export PATH="/Library/TeX/texbin/:$PATH"
-
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib64/pkgconfig:/usr/lib/pkgconfig:/usr/opt/lib64/pkgconfig:/usr/opt/lib/pkgconfig"
+export PATH="/opt/homebrew/opt/libtool/libexec/gnubin:$PATH"

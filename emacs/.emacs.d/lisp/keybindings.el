@@ -58,48 +58,48 @@
         ,@body)))
 
   ;; Buffer commands.
-  (+general-global-menu! "buffer" "b"
-    "d"  'kill-current-buffer
-    "b" 'switch-to-buffer
-    "o" '(switch-to-buffer-other-window :which-key "other-window")
-    "r"  'rename-buffer
-    "R"  'revert-buffer)
+  (+general-global-menu! "buffer" "b")
+    ;; "d"  'kill-current-buffer
+    ;; "b" 'switch-to-buffer
+    ;; "o" '(switch-to-buffer-other-window :which-key "other-window")
+    ;; "r"  'rename-buffer
+    ;; "R"  'revert-buffer)
 
   ;; Evaluation commands.
-  (+general-global-menu! "eval" "e"
-    "b" 'eval-buffer
-    "d" 'eval-defun
-    "e" 'eval-expression
-    "s" 'eval-last-sexp)
+  (+general-global-menu! "eval" "e")
+    ;; "b" 'eval-buffer
+    ;; "d" 'eval-defun
+    ;; "e" 'eval-expression
+    ;; "s" 'eval-last-sexp)
 
   ;; Window commands.
   (+general-global-menu! "window" "w"
-    "=" 'balance-windows
-    "v" 'split-window-vertically
-    "s" 'split-window-horizontally
-    "m" 'delete-other-windows
-    "d" 'delete-window)
+     "=" 'balance-windows
+     "v" 'split-window-vertically
+     "s" 'split-window-horizontally
+     "m" 'delete-other-windows
+     "d" 'delete-window)
 
   ;; Project commands, using `projectile' at the moment.
   (+general-global-menu! "project" "p")
 
   ;; File commands.
-  (+general-global-menu! "file" "f"
-    "D" 'save-buffers-kill-terminal
-    "d" 'dired
-    "E" 'sudo-edit
-    "f" 'find-file
-    "j" 'dired-jump
-    "s" 'save-buffer
-    "o" 'find-file-other-window
-    "S" 'save-some-buffers)
+  (+general-global-menu! "file" "f")
+    ;; "D" 'save-buffers-kill-terminal
+    ;; "d" 'dired
+    ;; "E" 'sudo-edit
+    ;; "f" 'find-file
+    ;; "j" 'dired-jump
+    ;; "s" 'save-buffer
+    ;; "o" 'find-file-other-window
+    ;; "S" 'save-some-buffers)
 
   ;; Search commands, currently using `consult' and `affe'.
   (+general-global-menu! "search" "s")
   (+general-global-menu! "org" "o")
   (+general-global-menu! "toggle" "t")
-  (+general-global-menu! "roam" "r"))
-  (+general-global-menu! "applications" "a")
+  (+general-global-menu! "roam" "r")
+  (+general-global-menu! "applications" "a"))
 
 ;; Configure "jk" to exit out of insert mode and enter normal mode.
 (use-package key-chord

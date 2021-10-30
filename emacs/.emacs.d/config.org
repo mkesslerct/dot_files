@@ -17,6 +17,13 @@
         :config (global-undo-tree-mode 1))
     #+end_src
 
+*** Evil-redirect-digit-argument removed from Evil
+#+begin_src emacs-lisp
+  (when (not (boundp 'evil-redirect-digit-argument))
+  (defmacro evil-redirect-digit-argument (map keys target)
+     `(define-key ,map ,keys ,target)))
+#+end_src
+
 *** Evil-mode
     [[https://github.com/emacs-evil/evil][Evil]] is an extensible vi layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions. Also see our page on EmacsWiki.
     #+begin_src emacs-lisp
@@ -38,15 +45,15 @@
       (use-package evil
         :straight t
         :demand t
-        :bind
-        ("C-x 0" . qk/stop-using-emacs-bindings)
-        ("C-x 1" . qk/stop-using-emacs-bindings)
-        ("C-x 2" . qk/stop-using-emacs-bindings)
-        ("C-x 3" . qk/stop-using-emacs-bindings)
-        ("C-x b" . qk/stop-using-emacs-bindings)
-        ("C-x k" . qk/stop-using-emacs-bindings)
-        ("C-x e" . qk/stop-using-emacs-bindings)
-        ("M-x" . qk/stop-using-emacs-bindings)
+        ;; :bind
+        ;; ("C-x 0" . qk/stop-using-emacs-bindings)
+        ;; ("C-x 1" . qk/stop-using-emacs-bindings)
+        ;; ("C-x 2" . qk/stop-using-emacs-bindings)
+        ;; ("C-x 3" . qk/stop-using-emacs-bindings)
+        ;; ("C-x b" . qk/stop-using-emacs-bindings)
+        ;; ("C-x k" . qk/stop-using-emacs-bindings)
+        ;; ("C-x e" . qk/stop-using-emacs-bindings)
+        ;; ("M-x" . qk/stop-using-emacs-bindings)
         :custom
         (evil-want-integration t)
         (evil-want-keybinding nil)
@@ -59,7 +66,7 @@
         ;; Use visual line motions even outside of visual-line-mode buffers
         (evil-global-set-key 'motion "j" 'evil-next-visual-line)
         (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-  
+
         ;; Remove the K binding on the 'motion state, which is bound to evil-lookup
         (evil-global-set-key 'motion "K" nil)
 
@@ -123,7 +130,7 @@
         (define-key evil-visual-state-map (kbd "J") (concat ":m '>+1" (kbd "RET") "gv=gv"))
         (define-key evil-visual-state-map (kbd "K")   (concat ":m '<-2" (kbd "RET") "gv=gv")))
     #+end_src
-
+    
 ** which-key
     =which-key= is a minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup. For example, after enabling the minor mode if you enter C-x and wait for the default of 1 second the minibuffer will expand with all of the available key bindings that follow C-x (or as many as space allows given your settings).
     #+begin_src emacs-lisp
@@ -537,9 +544,10 @@
 **** Dired
      Dired is the "package" that gives us all the functionality to a dired buffer which in essence is the same as the output of ls. 
      #+begin_src emacs-lisp
+       (setq insert-directory-program "gls")
        (use-package dired
          :custom 
-         (dired-listing-switches "-aBhl")
+         (dired-listing-switches "-ahl")
          (dired-use-ls-dired nil)
          :bind (:map dired-mode-map 
                      ("b" . dired-up-directory)))
@@ -1219,7 +1227,7 @@
     Initial configuration of org-directory and refile.org, with the
     intention of all capture created items to go there before correct refiling.
     #+begin_src emacs-lisp
-      (setq org-roam-directory "~/Documents/slipbox")
+      (setq org-roam-directory "~/OneDrive - Universidad Politécnica de Cartagena/slip-box")
       (setq org-roam-v2-ack t)
       (use-package org
         :defer 2
@@ -1720,6 +1728,12 @@
                                              (sc/org-hide-properties)))
       #+end_src
 
+** Org-babel
+ #+begin_src emacs-lisp
+   (use-package ob
+     :custom (org-confirm-babel-evaluate nil))
+ #+end_src
+    
 ** Version control
 *** Symlinks
     As part of this =dot_files= repo, my configuration philosofy uses
@@ -1886,6 +1900,7 @@
        (corfu-auto-delay 0.1)
        (corfu-auto-prefix 1)
        (corfu-commit-predicate nil)
+       (corfu-excluded-modes '(gud-mode))
        :init (corfu-global-mode))
 
      (use-package emacs
@@ -1940,10 +1955,86 @@
 
     With the following documenation, tree-sitter-hl-mode will be enabled on all supported major modes, and you will be start to benefit from incremental parsing.
     #+begin_src emacs-lisp
+      (use-package tsc
+        :straight `(:pre-build ,(when (and (memq window-system '(mac ns))
+                                           (string-match-p (rx string-start "arm-")
+                                                           system-configuration))
+                                               ;; required for tree-sitter
+                                  (unless (and (executable-find "cargo")
+                                               ;; required for building bindings
+                                               (executable-find "cask")
+                                               (executable-find "git")
+                                               ;; required for tree-sitter to generate
+                                               (executable-find "npm")
+                                               ;; required for bindings
+                                               (executable-find "llvm-gcc"))
+                                    (warn "tree-sitter build will fail"))
+                                  (setf lyn--self-compiled-tsc t)
+                                    ;; get tree-sitter v0.19.5 - last to put files in a reasonable place
+                                  '(("sh" "-c" "test -d rust-tree-sitter || git clone https://github.com/tree-sitter/tree-sitter rust-tree-sitter; cd rust-tree-sitter && git fetch && git checkout v0.19.5")
+                                    ("sh" "-c" "cd rust-tree-sitter/cli && cargo install --path .")
+                                    ;; needed or it will download x86_64 dylibs over the arm64 ones we just built
+                                    ("sh" "-c" "file core/tsc-dyn.dylib | grep -q arm64 || rm -f core/tsc-dyn.dylib")
+                                    ("sh" "-c" "grep -q LOCAL core/DYN-VERSION || printf LOCAL >core/DYN-VERSION")
+                                    ("sh" "-c" "grep -q DYN-VERSION bin/build && sed -e '/DYN-VERSION/d' bin/build >bin/build.tmp && mv bin/build.tmp bin/build && chmod +x bin/build || :")
+                                    ;; rebuild bindings
+                                    ("sh" "-c" "EMACS=emacs ./bin/setup && EMACS=emacs ./bin/build")
+                                    ;; ensure all language definitions
+                                    ("find" "langs/repos" "-type" "f" "-name" "grammar.js" "-not" "-path" "*/node_modules/*" "-not" "-path" "*/ocaml/interface/*" "-exec" "sh" "-c" "targets=''; for grammar_file in \"$@\"; do grammar_dir=\"${grammar_file%/*}\"; targets=\"$targets ensure/${grammar_dir##*/}\"; done; EMACS=emacs make -j7 $targets" "sh" "{}" "+")))
+                               :files ("core/DYN-VERSION" "core/tsc-dyn.*" "core/*.el")))
       (use-package tree-sitter
-        :straight t
-        :hook (tree-sitter-after-on . tree-sitter-hl-mode)
-        :config
-        (straight-use-package 'tree-sitter-langs)
-        :init (global-tree-sitter-mode))
+        :commands (tree-sitter-hl-mode))
+      (use-package tree-sitter-langs
+        ;; Don't clone the separate tree-sitter-langs repo, use the dylibs we
+        ;; already built
+        :straight (:host github :repo "ubolonton/emacs-tree-sitter"
+                   :files ("langs/*.el" ("bin" "langs/bin/*.dylib") ("queries" "langs/queries/*")))
+        :after tree-sitter
+        ;; If this isn't set then it'll download x86_64 dylibs over the arm64
+        ;; dylibs we built
+        :init (setf tree-sitter-langs--testing lyn--self-compiled-tsc))
     #+end_src
+
+* Python
+#+begin_src emacs-lisp
+  (use-package python
+        :straight t
+        :init
+        (defun my-compile ()
+          "Use compile to run python programs"
+          (interactive)
+          (compile (concat "python3 " (buffer-name))))
+        (setq compilation-scroll-output t)
+        :bind ("C-c C-u" . my-compile)
+        :custom (compilation-ask-about-save nil))
+#+end_src
+
+* Jupyter configuration
+  #+begin_src emacs-lisp  
+    (use-package jupyter
+      :straight t
+      )
+
+
+    (use-package ob
+      :custom (org-babel-default-header-args:jupyter-python '((:async . "yes")
+                                                                     (:session . "py")))
+      (jupyter-repl-echo-eval-p t)
+      :config (progn
+                (org-babel-do-load-languages 'org-babel-load-languages
+                                 (append org-babel-load-languages
+                                         '((jupyter . t))))))
+
+    (use-package jupyter
+      :init (org-babel-jupyter-override-src-block "python")
+      )
+#+end_src
+
+* ess for R
+  #+begin_src emacs-lisp
+     (use-package ess
+      :straight t)
+  #+end_src
+
+
+
