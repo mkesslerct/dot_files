@@ -58,12 +58,12 @@
         ,@body)))
 
   ;; Buffer commands.
-  (+general-global-menu! "buffer" "b")
-    ;; "d"  'kill-current-buffer
-    ;; "b" 'switch-to-buffer
-    ;; "o" '(switch-to-buffer-other-window :which-key "other-window")
-    ;; "r"  'rename-buffer
-    ;; "R"  'revert-buffer)
+  (+general-global-menu! "buffer" "b"
+     "d"  'kill-current-buffer
+     "b" 'switch-to-buffer
+     "o" '(switch-to-buffer-other-window :which-key "other-window")
+     "r"  'rename-buffer
+     "R"  'revert-buffer)
 
   ;; Evaluation commands.
   (+general-global-menu! "eval" "e")
@@ -84,14 +84,14 @@
   (+general-global-menu! "project" "p")
 
   ;; File commands.
-  (+general-global-menu! "file" "f")
+  (+general-global-menu! "file" "f"
     ;; "D" 'save-buffers-kill-terminal
-    ;; "d" 'dired
+     "d" 'dired
     ;; "E" 'sudo-edit
-    ;; "f" 'find-file
-    ;; "j" 'dired-jump
-    ;; "s" 'save-buffer
-    ;; "o" 'find-file-other-window
+     "f" 'find-file
+     "j" 'dired-jump
+     "s" 'save-buffer
+     "o" 'find-file-other-window)
     ;; "S" 'save-some-buffers)
 
   ;; Search commands, currently using `consult' and `affe'.
@@ -111,3 +111,5 @@
 
 (provide 'keybindings)
 ;;; keybindings.el ends here.
+
+
